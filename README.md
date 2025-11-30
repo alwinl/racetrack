@@ -14,6 +14,7 @@ My intent developing **racetrack** is two-fold. I want to learn OpenGL and learn
 - **CMake 3.21+**
 - **GLFW**
 - **GLAD**
+- **glm**
 
 ### Clone the repo
 ```bash
@@ -46,6 +47,10 @@ https://github.com/glfw/glfw
 ### GLAD
 
 **Low level OpenGL function access.** You can create the source using a generator. Instructions and samples are on github: https://github.com/Dav1dde/glad
+
+### glm
+
+**Header only utility library** for vector and matrix opererations. https://github.com/icaven/glm
 
 ## Roadmap
 ### ✔ Done
