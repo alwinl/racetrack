@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "shader.h"
+#include "point_renderer.h"
 
 struct GLFWwindow;
 class World;
@@ -44,7 +44,5 @@ public:
 private:
     GLFWwindow* window = nullptr;
 
-    unsigned vao = 0;
-    unsigned vbo = 0;
-    Shader shader;
+    PointRenderer points;
 };

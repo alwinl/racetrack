@@ -1,5 +1,5 @@
 /*
- * shader_point_vs.glsl Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * pointrenderer.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,25 @@
  * MA 02110-1301, USA.
  */
 
-#include <string>
+#pragma once
 
-std::string point_vs = R"(
-#version 330 core
+#include <vector>
 
-layout(location = 0) in vec3 aPos;
+#include "../world.h"
+#include "shader.h"
 
-uniform mat4 uMVP;
+class PointRenderer
+{
+public:
+    void init();
+    void upload( const World& world );
+    void draw();
+    void destroy();
 
-void main() {
-    gl_Position = uMVP * vec4(aPos, 1.0);
-    gl_PointSize = 10.0;
-}
-)";
+private:
+    Shader shader;
+    unsigned vao;
+    unsigned vbo;
+
+    std::vector<float> cpu_buffer;
+};

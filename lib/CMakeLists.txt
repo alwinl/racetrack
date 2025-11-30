@@ -27,6 +27,7 @@ add_library(
 
     rendering/system_renderer.cc
     rendering/shader.cc
+    rendering/point_renderer.cc
     
     system_input.cc
 )
