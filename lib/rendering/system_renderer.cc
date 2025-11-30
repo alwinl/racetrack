@@ -26,7 +26,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "system_renderer.h"
-#include "world.h"
+#include "../world.h"
 
 #include "shader_point_vs.glsl"
 #include "shader_point_fs.glsl"

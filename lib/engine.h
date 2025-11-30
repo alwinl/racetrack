@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "system_renderer.h"
+#include "rendering/system_renderer.h"
 #include "system_input.h"
 #include "world.h"
 
