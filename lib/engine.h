@@ -1,5 +1,5 @@
 /*
- * racetrack.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * engine.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,21 @@
  * MA 02110-1301, USA.
  */
 
-#include "engine.h"
+#pragma once
 
-int main( int argc, char** argv )
+#include "renderer.h"
+#include "input.h"
+
+class Engine
 {
-    Engine engine;
+public:
+    void init();
+    void run();
+    void shutdown();
 
-    engine.init();
-    engine.run();
-    engine.shutdown();
+private:
+    // bool running = true;
 
-    return 0;
-}
+    RenderSystem renderer;
+    InputSystem inputter;
+};

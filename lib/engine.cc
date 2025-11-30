@@ -16,3 +16,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
  */
+
+#include "engine.h"
+
+void Engine::init()
+{
+    if( !renderer.init() )
+        return;
+
+    inputter.init( renderer.get_window() );
+}
+
+void Engine::run()
+{
+    while( ! renderer.should_close() ) {
+
+        inputter.process();
+        renderer.draw_frame();
+
+    }
+}
+
+void Engine::shutdown()
+{
+    inputter.shutdown();
+    renderer.shutdown();
+}

@@ -1,5 +1,5 @@
 /*
- * racetrack.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * renderer.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,24 @@
  * MA 02110-1301, USA.
  */
 
-#include "engine.h"
+#pragma once
 
-int main( int argc, char** argv )
+struct GLFWwindow;
+
+class RenderSystem
 {
-    Engine engine;
+public:
+    RenderSystem() = default;
+    RenderSystem(const RenderSystem&) = delete;
+    RenderSystem& operator=(const RenderSystem&) = delete;
 
-    engine.init();
-    engine.run();
-    engine.shutdown();
+    bool init();
+    void draw_frame();
+    void shutdown();
 
-    return 0;
-}
+    GLFWwindow * get_window() { return window; };
+    bool should_close() const;
+
+private:
+    GLFWwindow* window = nullptr;
+};

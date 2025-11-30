@@ -17,15 +17,10 @@
 # MA 02110-1301, USA.
 #
 
-find_package( glfw3 )
-
 add_library(
-    racetrack_lib
+    glad
 
-    engine.cc
-    renderer.cc
-    input.cc
+    glad/gl.c
 )
 
-target_link_libraries(racetrack_lib PRIVATE glad glfw)
-target_include_directories(racetrack_lib INTERFACE ./)
+target_include_directories(glad PUBLIC ./)

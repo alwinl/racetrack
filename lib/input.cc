@@ -1,5 +1,5 @@
 /*
- * racetrack.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * input.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,35 @@
  * MA 02110-1301, USA.
  */
 
-#include "engine.h"
+#include "input.h"
 
-int main( int argc, char** argv )
+#include <GLFW/glfw3.h>
+
+void InputSystem::init( GLFWwindow* win )
 {
-    Engine engine;
+    window = win;
 
-    engine.init();
-    engine.run();
-    engine.shutdown();
+    glfwSetWindowUserPointer( window, this );
 
-    return 0;
+    glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int scancode, int action, int mods){
+        auto* self = static_cast<InputSystem*>(glfwGetWindowUserPointer(win));
+        self->process_key(key, action);
+    });
+}
+
+void InputSystem::process()
+{
+    glfwPollEvents();
+
+}
+
+void InputSystem::shutdown()
+{
+
+}
+
+void InputSystem::process_key( int key, int action )
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose( window, GLFW_TRUE );
 }

@@ -1,5 +1,5 @@
 /*
- * racetrack.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * input.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,18 @@
  * MA 02110-1301, USA.
  */
 
-#include "engine.h"
+#pragma once
 
-int main( int argc, char** argv )
+struct GLFWwindow;
+
+class InputSystem
 {
-    Engine engine;
+public:
+    void init( GLFWwindow* win );
+    void process();
+    void shutdown();
 
-    engine.init();
-    engine.run();
-    engine.shutdown();
-
-    return 0;
-}
+private:
+    GLFWwindow* window;
+    void process_key( int key, int action );    
+};
