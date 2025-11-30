@@ -21,7 +21,8 @@
 
 void Engine::init()
 {
-    if( !renderer.init() )
+    running = renderer.init();
+    if( !running )
         return;
 
     inputter.init( renderer.get_window() );
@@ -29,11 +30,16 @@ void Engine::init()
 
 void Engine::run()
 {
-    while( ! renderer.should_close() ) {
+    while( running ) {
 
         inputter.process();
-        renderer.draw_frame();
 
+        renderer.begin_frame();
+        renderer.render();
+        renderer.end_frame();
+
+        if( renderer.should_close() )
+            running = false;
     }
 }
 

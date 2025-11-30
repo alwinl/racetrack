@@ -29,8 +29,11 @@ public:
     RenderSystem& operator=(const RenderSystem&) = delete;
 
     bool init();
-    void draw_frame();
     void shutdown();
+
+    void begin_frame();
+    void render();
+    void end_frame();
 
     GLFWwindow * get_window() { return window; };
     bool should_close() const;

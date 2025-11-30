@@ -30,7 +30,7 @@ public:
     void shutdown();
 
 private:
-    // bool running = true;
+    bool running = true;
 
     RenderSystem renderer;
     InputSystem inputter;

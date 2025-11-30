@@ -45,20 +45,28 @@ bool RenderSystem::init()
     return true;
 }
 
-void RenderSystem::draw_frame()
-{
-	glClearColor( 0.0F, 0.0F, 0.6F, 1.0F );
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    glfwSwapBuffers(window);        
-}
-
 void RenderSystem::shutdown()
 {
     if( window )
         glfwDestroyWindow(window);
 
     glfwTerminate();
+}
+
+void RenderSystem::begin_frame()
+{
+	glClearColor( 0.0F, 0.0F, 0.6F, 1.0F );
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+}
+
+void RenderSystem::render()
+{
+
+}
+
+void RenderSystem::end_frame()
+{
+    glfwSwapBuffers(window);        
 }
 
 bool RenderSystem::should_close() const
