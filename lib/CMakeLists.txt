@@ -23,9 +23,12 @@ add_library(
     racetrack_lib
 
     engine.cc
-    renderer.cc
-    input.cc
     world.cc
+
+    system_renderer.cc
+    system_input.cc
+
+    shader.cc
 )
 
 target_link_libraries(racetrack_lib PRIVATE glad glfw)

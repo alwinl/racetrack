@@ -1,5 +1,5 @@
 /*
- * renderer.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * shader_point_vs.glsl Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,17 @@
  * MA 02110-1301, USA.
  */
 
-#pragma once
+#include <string>
 
-struct GLFWwindow;
-class World;
+std::string point_vs = R"(
+#version 330 core
 
-class RenderSystem
-{
-public:
-    RenderSystem() = default;
-    RenderSystem(const RenderSystem&) = delete;
-    RenderSystem& operator=(const RenderSystem&) = delete;
+layout(location = 0) in vec3 aPos;
 
-    bool init();
-    void shutdown();
+uniform mat4 uMVP;
 
-    void begin_frame();
-    void render( const World& world );
-    void end_frame();
-
-    GLFWwindow * get_window() { return window; };
-    bool should_close() const;
-
-private:
-    GLFWwindow* window = nullptr;
-};
+void main() {
+    gl_Position = uMVP * vec4(aPos, 1.0);
+    gl_PointSize = 10.0;
+}
+)";

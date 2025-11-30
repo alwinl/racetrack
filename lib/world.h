@@ -19,12 +19,36 @@
 
 #pragma once
 
+#include <cstdint>
+#include <unordered_map>
+
+#include "component_transform.h"
+#include "component_velocity.h"
+
+
 class World
 {
-public:    
+public:
+    using Entity = std::uint32_t;
+
     void init();
     void update( double dt );
     void cleanup();
 
+    Entity create_entity() { return next_id++; }
+
+    Transform& add_transform( Entity e ) { return transforms[e]; }
+    Velocity& add_velocity( Entity e ) { return velocities[e]; }
+
+    bool has_transform(Entity e) const { return transforms.count(e); }
+    bool has_velocity(Entity e) const { return velocities.count(e); }
+
+    const std::unordered_map<Entity, Transform>& get_transforms() const { return transforms; }
+    const std::unordered_map<Entity, Velocity>& get_velocities() const { return velocities; }
+
 private:
+    Entity next_id = 1;
+
+    std::unordered_map<Entity, Transform> transforms;
+    std::unordered_map<Entity, Velocity> velocities;
 };

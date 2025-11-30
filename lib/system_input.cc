@@ -1,5 +1,5 @@
 /*
- * engine.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * input.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,24 +17,35 @@
  * MA 02110-1301, USA.
  */
 
-#pragma once
-
-#include "system_renderer.h"
 #include "system_input.h"
-#include "world.h"
 
-class Engine
+#include <GLFW/glfw3.h>
+
+void InputSystem::init( GLFWwindow* win )
 {
-public:
-    void init();
-    void run();
-    void shutdown();
+    window = win;
 
-private:
-    bool running = true;
+    glfwSetWindowUserPointer( window, this );
 
-    RenderSystem renderer;
-    InputSystem inputter;
+    glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int scancode, int action, int mods){
+        auto* self = static_cast<InputSystem*>(glfwGetWindowUserPointer(win));
+        self->process_key(key, action);
+    });
+}
 
-    World world;
-};
+void InputSystem::process()
+{
+    glfwPollEvents();
+
+}
+
+void InputSystem::shutdown()
+{
+
+}
+
+void InputSystem::process_key( int key, int action )
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose( window, GLFW_TRUE );
+}

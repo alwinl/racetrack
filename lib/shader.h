@@ -1,5 +1,5 @@
 /*
- * input.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * shader.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,35 +17,31 @@
  * MA 02110-1301, USA.
  */
 
-#include "input.h"
+#pragma once
 
-#include <GLFW/glfw3.h>
+#include <string>
 
-void InputSystem::init( GLFWwindow* win )
+#include <glm/glm.hpp>
+
+class Shader
 {
-    window = win;
+public:
+    void init( std::string vs_source, std::string fs_source );
 
-    glfwSetWindowUserPointer( window, this );
+    void set_vertex_source( std::string source ) { vertex_source = source; is_compiled = false; }
+    void set_fragment_source( std::string source ) { fragment_source = source; is_compiled = false; }
 
-    glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int scancode, int action, int mods){
-        auto* self = static_cast<InputSystem*>(glfwGetWindowUserPointer(win));
-        self->process_key(key, action);
-    });
-}
+    void activate();
 
-void InputSystem::process()
-{
-    glfwPollEvents();
+	void set_uniform( const std::string &name, glm::mat4 matrix );
 
-}
+private:
+    unsigned id;
+    bool is_compiled = false;
 
-void InputSystem::shutdown()
-{
+    std::string vertex_source;
+    std::string fragment_source;
 
-}
-
-void InputSystem::process_key( int key, int action )
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose( window, GLFW_TRUE );
-}
+    void compile( unsigned id,  std::string source );
+    void link( unsigned vs_id, unsigned fs_id );
+};

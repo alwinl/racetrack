@@ -1,5 +1,5 @@
 /*
- * engine.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * renderer.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,22 +19,32 @@
 
 #pragma once
 
-#include "system_renderer.h"
-#include "system_input.h"
-#include "world.h"
+#include "shader.h"
 
-class Engine
+struct GLFWwindow;
+class World;
+
+class RenderSystem
 {
 public:
-    void init();
-    void run();
+    RenderSystem() = default;
+    RenderSystem(const RenderSystem&) = delete;
+    RenderSystem& operator=(const RenderSystem&) = delete;
+
+    bool init();
     void shutdown();
 
+    void begin_frame();
+    void render( const World& world );
+    void end_frame();
+
+    GLFWwindow * get_window() { return window; };
+    bool should_close() const;
+
 private:
-    bool running = true;
+    GLFWwindow* window = nullptr;
 
-    RenderSystem renderer;
-    InputSystem inputter;
-
-    World world;
+    unsigned vao = 0;
+    unsigned vbo = 0;
+    Shader shader;
 };

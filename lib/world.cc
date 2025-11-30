@@ -21,12 +21,33 @@
 
 void World::init()
 {
+    // --- Create a sample entity ---
+    auto e = create_entity();
 
+    auto& t = add_transform(e);
+    t.x = 0.f;
+    t.y = 0.f;
+    t.z = 0.f;
+
+    auto& v = add_velocity(e);
+    v.dx = 1.f;
+    v.dy = 0.f;
+    v.dz = 0.f;
 }
 
 void World::update( double dt )
 {
+    // Move all entities that have both Transform and Velocity
+    for( auto& [entity, t] : transforms ) {
 
+        if( velocities.count(entity) ) {
+            auto& v = velocities[entity];
+            t.x += v.dx * dt;
+            t.y += v.dy * dt;
+            t.z += v.dz * dt;
+        }
+
+    }
 }
 
 void World::cleanup()

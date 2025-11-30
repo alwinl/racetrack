@@ -17,12 +17,21 @@
  * MA 02110-1301, USA.
  */
 
-
-#include "renderer.h"
-#include "world.h"
+ #include <vector>
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "system_renderer.h"
+#include "world.h"
+
+#include "shader_point_vs.glsl"
+#include "shader_point_fs.glsl"
+
+constexpr int max_objects = 10000;
 
 bool RenderSystem::init()
 {
@@ -43,11 +52,39 @@ bool RenderSystem::init()
 	if( gladLoadGL( glfwGetProcAddress ) == 0 )
         return false;
 
+    shader.init( point_vs, point_fs);
+    {
+        glm::mat4 proj = glm::ortho(-10.f, 10.f, -10.f, 10.f);
+        glm::mat4 view = glm::mat4(1.0f);
+        glm::mat4 mvp = proj * view;
+
+        shader.set_uniform( "uMVP", mvp );
+    }
+
+    glGenVertexArrays( 1, &vao );
+    glGenBuffers( 1, &vbo );
+
+    glBindVertexArray( vao );
+    glBindBuffer( GL_ARRAY_BUFFER, vbo );
+
+    glBufferData( GL_ARRAY_BUFFER, sizeof( float) * 3 * max_objects, nullptr, GL_DYNAMIC_DRAW );
+
+    glEnableVertexAttribArray( 0 );
+    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0 );
+
+    glBindVertexArray(0);
+
     return true;
 }
 
 void RenderSystem::shutdown()
 {
+    if (vbo)
+        glDeleteBuffers(1, &vbo);
+
+    if (vao) 
+        glDeleteVertexArrays(1, &vao);
+
     if( window )
         glfwDestroyWindow(window);
 
@@ -62,7 +99,25 @@ void RenderSystem::begin_frame()
 
 void RenderSystem::render( const World& world )
 {
+    std::vector<float> positions;
+    positions.reserve( 3 * world.get_transforms().size() );
 
+    for( auto& [entity, transform] : world.get_transforms() ) {
+        positions.push_back( transform.x );
+        positions.push_back( transform.y );
+        positions.push_back( transform.z );
+    }
+
+    glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    glBufferSubData( GL_ARRAY_BUFFER, 0, positions.size() * sizeof(float), (void*)positions.data() );
+
+    shader.activate();
+
+    glBindVertexArray( vao );
+
+    glDrawArrays( GL_POINTS, 0, positions.size() / 3 );
+
+    glBindVertexArray( 0 );
 }
 
 void RenderSystem::end_frame()

@@ -1,5 +1,5 @@
 /*
- * engine.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * component_transform.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,22 +19,9 @@
 
 #pragma once
 
-#include "system_renderer.h"
-#include "system_input.h"
-#include "world.h"
-
-class Engine
+struct Transform
 {
-public:
-    void init();
-    void run();
-    void shutdown();
-
-private:
-    bool running = true;
-
-    RenderSystem renderer;
-    InputSystem inputter;
-
-    World world;
+    float x = 0.f;
+    float y = 0.f;
+    float z = 0.f;
 };

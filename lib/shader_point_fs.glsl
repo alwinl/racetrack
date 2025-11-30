@@ -1,5 +1,5 @@
 /*
- * engine.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * shader_point_fs.glsl Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,24 +17,14 @@
  * MA 02110-1301, USA.
  */
 
-#pragma once
+#include <string>
 
-#include "system_renderer.h"
-#include "system_input.h"
-#include "world.h"
+std::string point_fs = R"(
+#version 330 core
 
-class Engine
-{
-public:
-    void init();
-    void run();
-    void shutdown();
+out vec4 FragColor;
 
-private:
-    bool running = true;
-
-    RenderSystem renderer;
-    InputSystem inputter;
-
-    World world;
-};
+void main() {
+    FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+}
+)";
