@@ -18,6 +18,7 @@ My intent developing **racetrack** is two-fold. I want to learn OpenGL and learn
 ### Clone the repo
 ```bash
 git clone http://github.com/alwinl/racetrack
+cd racetrack
 ```
 
 ### Build
