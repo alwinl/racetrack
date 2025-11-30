@@ -50,12 +50,13 @@ https://github.com/glfw/glfw
 ## Roadmap
 ### ✔ Done
 - Setting up the project
+- Built a basic framework that displays a window
 
 ### 🔜 In Progress
-- Getting a window on screen
+- Hand roll a simple ECS
 
 ### 🚀 Future Ideas
-- Convert to simple ESC 
+- Convert to EnTT
 
 ## Contributing
 

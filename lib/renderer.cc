@@ -19,6 +19,7 @@
 
 
 #include "renderer.h"
+#include "world.h"
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
@@ -59,7 +60,7 @@ void RenderSystem::begin_frame()
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
-void RenderSystem::render()
+void RenderSystem::render( const World& world )
 {
 
 }

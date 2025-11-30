@@ -20,6 +20,7 @@
 #pragma once
 
 struct GLFWwindow;
+class World;
 
 class RenderSystem
 {
@@ -32,7 +33,7 @@ public:
     void shutdown();
 
     void begin_frame();
-    void render();
+    void render( const World& world );
     void end_frame();
 
     GLFWwindow * get_window() { return window; };

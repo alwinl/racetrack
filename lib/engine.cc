@@ -19,6 +19,8 @@
 
 #include "engine.h"
 
+#include <GLFW/glfw3.h>
+
 void Engine::init()
 {
     running = renderer.init();
@@ -26,16 +28,25 @@ void Engine::init()
         return;
 
     inputter.init( renderer.get_window() );
+    world.init();
 }
 
 void Engine::run()
 {
+    double last = glfwGetTime();
+
     while( running ) {
+
+        double now = glfwGetTime();
+        double elapsed = now - last;
+        last = now;
 
         inputter.process();
 
+        world.update( elapsed );
+
         renderer.begin_frame();
-        renderer.render();
+        renderer.render( world );
         renderer.end_frame();
 
         if( renderer.should_close() )
@@ -47,4 +58,5 @@ void Engine::shutdown()
 {
     inputter.shutdown();
     renderer.shutdown();
+    world.cleanup();
 }

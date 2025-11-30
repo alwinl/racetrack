@@ -1,5 +1,5 @@
 /*
- * engine.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * world.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,22 +19,12 @@
 
 #pragma once
 
-#include "renderer.h"
-#include "input.h"
-#include "world.h"
-
-class Engine
+class World
 {
-public:
+public:    
     void init();
-    void run();
-    void shutdown();
+    void update( double dt );
+    void cleanup();
 
 private:
-    bool running = true;
-
-    RenderSystem renderer;
-    InputSystem inputter;
-
-    World world;
 };
