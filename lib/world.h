@@ -24,6 +24,7 @@
 
 #include "component_transform.h"
 #include "component_velocity.h"
+#include "component_triangle.h"
 
 
 class World
@@ -39,16 +40,19 @@ public:
 
     Transform& add_transform( Entity e ) { return transforms[e]; }
     Velocity& add_velocity( Entity e ) { return velocities[e]; }
+    TriangleComponent& add_triangle( Entity e ) { return triangles[e]; }
 
     bool has_transform(Entity e) const { return transforms.count(e); }
     bool has_velocity(Entity e) const { return velocities.count(e); }
 
     const std::unordered_map<Entity, Transform>& get_transforms() const { return transforms; }
     const std::unordered_map<Entity, Velocity>& get_velocities() const { return velocities; }
+    const std::unordered_map<Entity, TriangleComponent>& get_triangles() const { return triangles; }
 
 private:
     Entity next_id = 1;
 
     std::unordered_map<Entity, Transform> transforms;
     std::unordered_map<Entity, Velocity> velocities;
+    std::unordered_map<Entity, TriangleComponent> triangles;
 };

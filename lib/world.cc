@@ -33,6 +33,14 @@ void World::init()
     v.dx = 1.f;
     v.dy = 0.f;
     v.dz = 0.f;
+
+    e = create_entity();
+
+    auto& triangle = add_triangle(e);
+    triangle.a = { -0.5f, -0.5f, 0.0f };
+    triangle.b = {  0.5f, -0.5f, 0.0f };
+    triangle.c = {  0.0f,  0.5f, 0.0f };
+
 }
 
 void World::update( double dt )

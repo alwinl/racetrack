@@ -1,5 +1,5 @@
 /*
- * pointrenderer.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
+ * baserenderer.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,25 +19,14 @@
 
 #pragma once
 
-#include <vector>
-
-#include "base_renderer.h"
 #include "../world.h"
-#include "shader.h"
 
-class PointRenderer : public BaseRenderer
+class BaseRenderer
 {
 public:
-    void init();
+    virtual ~BaseRenderer() = default;
 
-    void destroy() override;
-    void upload( const World& world ) override;
-    void draw() override;
-
-private:
-    Shader shader;
-    unsigned vao;
-    unsigned vbo;
-
-    std::vector<float> cpu_buffer;
+    virtual void destroy() = 0;
+    virtual void upload( const World& world ) = 0;
+    virtual void draw() = 0;
 };

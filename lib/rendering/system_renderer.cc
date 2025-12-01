@@ -23,6 +23,9 @@
 #include "system_renderer.h"
 #include "../world.h"
 
+#include "point_renderer.h"
+#include "triangle_renderer.h"
+
 bool RenderSystem::init()
 {
     if (!glfwInit())
@@ -44,14 +47,22 @@ bool RenderSystem::init()
 
     glEnable(GL_PROGRAM_POINT_SIZE);
 
-    points.init();
+    auto points = std::make_unique<PointRenderer>();
+    points->init();
+
+    auto triangles = std::make_unique<TriangleRenderer>();
+    triangles->init();
+
+    renderers.push_back(std::move(points));
+    renderers.push_back(std::move(triangles));
 
     return true;
 }
 
 void RenderSystem::shutdown()
 {
-    points.destroy();
+    for( auto& renderer : renderers )
+        renderer->destroy();
 
     if( window )
         glfwDestroyWindow(window);
@@ -67,8 +78,11 @@ void RenderSystem::begin_frame()
 
 void RenderSystem::render( const World& world )
 {
-    points.upload( world );
-    points.draw();
+    for( auto& renderer : renderers )
+        renderer->upload( world );
+
+    for( auto& renderer : renderers )
+        renderer->draw();
 }
 
 void RenderSystem::end_frame()

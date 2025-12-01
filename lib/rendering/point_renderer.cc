@@ -97,9 +97,7 @@ void PointRenderer::draw()
     shader.activate();
 
     glBindVertexArray( vao );
-
     glDrawArrays( GL_POINTS, 0, cpu_buffer.size() / 3 );
-
     glBindVertexArray( 0 );
 }
 

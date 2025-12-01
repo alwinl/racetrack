@@ -19,7 +19,10 @@
 
 #pragma once
 
-#include "point_renderer.h"
+#include <vector>
+#include <memory>
+
+#include "base_renderer.h"
 
 struct GLFWwindow;
 class World;
@@ -44,5 +47,5 @@ public:
 private:
     GLFWwindow* window = nullptr;
 
-    PointRenderer points;
+    std::vector<std::unique_ptr<BaseRenderer>> renderers; 
 };

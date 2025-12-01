@@ -1,5 +1,5 @@
 /*
- * pointrenderer.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
+ * triangle_renderer.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,13 @@
 
 #include <vector>
 
+#include <glm/glm.hpp>
+
 #include "base_renderer.h"
 #include "../world.h"
 #include "shader.h"
 
-class PointRenderer : public BaseRenderer
+class TriangleRenderer : public BaseRenderer
 {
 public:
     void init();
@@ -36,8 +38,10 @@ public:
 
 private:
     Shader shader;
-    unsigned vao;
-    unsigned vbo;
+    unsigned vao = 0;
+    unsigned vbo = 0;
 
-    std::vector<float> cpu_buffer;
+    glm::vec3 vertices[3];
+
+    std::vector<glm::vec3> cpu_buffer;
 };
