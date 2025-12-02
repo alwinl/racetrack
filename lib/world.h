@@ -19,40 +19,55 @@
 
 #pragma once
 
-#include <cstdint>
-#include <unordered_map>
+#include "entity.h"
+#include "component_storage.h"
+
+#include "components/point.h"
+#include "components/triangle.h"
 
 #include "components/transform.h"
 #include "components/velocity.h"
-#include "components/triangle.h"
 
 
 class World
 {
 public:
-    using Entity = std::uint32_t;
-
     void init();
     void update( double dt );
     void cleanup();
 
     Entity create_entity() { return next_id++; }
 
-    Transform& add_transform( Entity e ) { return transforms[e]; }
-    Velocity& add_velocity( Entity e ) { return velocities[e]; }
-    TriangleComponent& add_triangle( Entity e ) { return triangles[e]; }
+    template<typename T>
+    T& add_component( Entity e, const T& component )
+        { return *get_storage<T>().add(e, component ); }
 
-    bool has_transform(Entity e) const { return transforms.count(e); }
-    bool has_velocity(Entity e) const { return velocities.count(e); }
+    template<typename T> 
+    T* get_component( Entity e )
+        { return get_storage<T>().get(e ); }
 
-    const std::unordered_map<Entity, Transform>& get_transforms() const { return transforms; }
-    const std::unordered_map<Entity, Velocity>& get_velocities() const { return velocities; }
-    const std::unordered_map<Entity, TriangleComponent>& get_triangles() const { return triangles; }
+    template<typename T>
+    ComponentStorage<T>& storage()
+        { return get_storage<T>(); }
+
+    template<typename T>
+    const ComponentStorage<T>& storage() const
+        { return get_storage<T>(); }
 
 private:
     Entity next_id = 1;
 
-    std::unordered_map<Entity, Transform> transforms;
-    std::unordered_map<Entity, Velocity> velocities;
-    std::unordered_map<Entity, TriangleComponent> triangles;
+    template<typename T>
+    ComponentStorage<T>& get_storage()
+    {
+        static ComponentStorage<T> storage;
+        return storage;
+    }
+
+    template<typename T>
+    const ComponentStorage<T>& get_storage() const
+    {
+        static ComponentStorage<T> storage;
+        return storage;
+    }
 };

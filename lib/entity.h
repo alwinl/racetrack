@@ -1,5 +1,5 @@
 /*
- * component_triangle.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * entity.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,14 +19,7 @@
 
 #pragma once
 
-#include <glm/glm.hpp>
+#include <cstdint>
 
-struct TriangleComponent
-{
-    glm::vec3 vertices[3] {
-        {-1.0f, 0.0f, 0.0f},
-        {0.0f, 1.0f, 0.0f},
-        {1.0f, 0.0f, 0.0f}
-    };
-    glm::vec3 colour {1.0f};
-};
+using Entity = std::uint32_t;
+const Entity INVALID_ENTRY = 0;

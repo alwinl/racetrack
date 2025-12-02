@@ -30,20 +30,25 @@ static const char* triangle_vs = R"(
 #version 330 core
 
 layout(location = 0) in vec3 aPos;
+layout(location = 1) in vec3 aCol;
 uniform mat4 uMVP;
+
+out vec3 col;
 
 void main() {
     gl_Position = uMVP * vec4(aPos, 1.0);
+    col = aCol;
 }
 )";
 
 static const char* triangle_fs = R"(
 #version 330 core
 
+in vec3 col;
 out vec4 FragColor;
 
 void main() {
-    FragColor = vec4(1.0, 0.4, 0.2, 1.0); // orange-ish
+    FragColor = vec4(col, 1.0);
 }
 )";
 
@@ -64,8 +69,13 @@ void TriangleRenderer::init()
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 2 * 3 * 1000, nullptr, GL_DYNAMIC_DRAW);
+
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)0);
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)(sizeof(glm::vec3)) );
 
     glBindVertexArray(0);
 }
@@ -74,14 +84,23 @@ void TriangleRenderer::upload( const World& world )
 {
     cpu_buffer.clear();
 
-    for( auto [ entity, t] : world.get_triangles() ) {
-        cpu_buffer.push_back(t.a);
-        cpu_buffer.push_back(t.b);
-        cpu_buffer.push_back(t.c);
+    const auto& tris = world.storage<TriangleComponent>();
+    const auto& transforms = world.storage<Transform>();
+
+    for( auto& [entity, tri] : tris.all() )
+    {
+        if( const auto* transform = transforms.get(entity) ) {
+
+            for( int i = 0; i < 3; i++ )
+            {
+                cpu_buffer.push_back( tri.vertices[i] + transform->translation );
+                cpu_buffer.push_back( tri.colour );
+            }
+        }
     }
 
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    glBufferData( GL_ARRAY_BUFFER, cpu_buffer.size() * sizeof(glm::vec3), (void*)cpu_buffer.data(), GL_DYNAMIC_DRAW );
+    glBufferSubData( GL_ARRAY_BUFFER, 0, cpu_buffer.size() * sizeof(glm::vec3), (void*)cpu_buffer.data() );
 }
 
 void TriangleRenderer::destroy()
@@ -95,7 +114,7 @@ void TriangleRenderer::draw()
     shader.activate();
 
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, cpu_buffer.size());
+    glDrawArrays(GL_TRIANGLES, 0, cpu_buffer.size() / 2);
     glBindVertexArray(0);
 
 }

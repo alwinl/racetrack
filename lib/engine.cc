@@ -29,6 +29,25 @@ void Engine::init()
 
     inputter.init( renderer.get_window() );
     world.init();
+
+    // --- Create a sample entity ---
+    Entity e = world.create_entity();
+    world.add_component<PointComponent>(e, PointComponent{ glm::vec3(1,1,0) } );
+    world.add_component<Transform>(e, Transform{ glm::vec3(0.f, 0.f, 0.f) } );
+    world.add_component<Velocity>(e, Velocity{ glm::vec3(1.f, 0.f, 0.f) } );
+
+    // --- Create a second entity ---
+    e = world.create_entity();
+    auto& triangle = world.add_component<TriangleComponent>(e, TriangleComponent {
+        {
+            glm::vec3(-1.f, 0.f, 0.f ),
+            glm::vec3( 1.f, 0.f, 0.f ),
+            glm::vec3( 0.f, 2.f, 0.f )
+        },
+        glm::vec3( 0.0f,  1.f, 0.0f )
+    } );
+    world.add_component<Transform>(e, Transform{ glm::vec3(0.5f, 1.f, 0.f) } );
+    world.add_component<Velocity>(e, Velocity{ glm::vec3(0.5f, 1.f, 0.f) } );
 }
 
 void Engine::run()

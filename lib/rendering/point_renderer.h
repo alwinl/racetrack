@@ -39,5 +39,5 @@ private:
     unsigned vao;
     unsigned vbo;
 
-    std::vector<float> cpu_buffer;
+    std::vector<glm::vec3> cpu_buffer;
 };

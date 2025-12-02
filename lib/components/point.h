@@ -1,5 +1,5 @@
 /*
- * component_triangle.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * point.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,16 +17,11 @@
  * MA 02110-1301, USA.
  */
 
-#pragma once
+ #pragma once
 
-#include <glm/glm.hpp>
+ #include <glm/glm.hpp>
 
-struct TriangleComponent
-{
-    glm::vec3 vertices[3] {
-        {-1.0f, 0.0f, 0.0f},
-        {0.0f, 1.0f, 0.0f},
-        {1.0f, 0.0f, 0.0f}
-    };
+ struct PointComponent
+ {
     glm::vec3 colour {1.0f};
-};
+ };

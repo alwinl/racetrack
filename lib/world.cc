@@ -21,39 +21,18 @@
 
 void World::init()
 {
-    // --- Create a sample entity ---
-    auto e = create_entity();
-
-    auto& t = add_transform(e);
-    t.x = 0.f;
-    t.y = 0.f;
-    t.z = 0.f;
-
-    auto& v = add_velocity(e);
-    v.dx = 1.f;
-    v.dy = 0.f;
-    v.dz = 0.f;
-
-    e = create_entity();
-
-    auto& triangle = add_triangle(e);
-    triangle.a = { -0.5f, -0.5f, 0.0f };
-    triangle.b = {  0.5f, -0.5f, 0.0f };
-    triangle.c = {  0.0f,  0.5f, 0.0f };
-
 }
 
 void World::update( double dt )
 {
-    // Move all entities that have both Transform and Velocity
-    for( auto& [entity, t] : transforms ) {
+    auto& transforms = storage<Transform>();
+    auto& velocities = storage<Velocity>();
 
-        if( velocities.count(entity) ) {
-            auto& v = velocities[entity];
-            t.x += v.dx * dt;
-            t.y += v.dy * dt;
-            t.z += v.dz * dt;
-        }
+    // Move all entities that have both Transform and Velocity
+    for( auto& [entity, v] : velocities.all() ) {
+
+        if( auto* transform = transforms.get(entity) )
+            transform->translation += v.speed * (float)dt;
 
     }
 }

@@ -36,6 +36,10 @@ cmake --build .build
 
 **racetrack** does not have any features yet
 
+## Resources
+
+[Wikipedia](https://en.wikipedia.org/wiki/Racetrack_(game))
+
 ## Libraries used
 
 ### GLFW
@@ -56,6 +60,7 @@ https://github.com/glfw/glfw
 ### ✔ Done
 - Setting up the project
 - Built a basic framework that displays a window
+- Beginings of an ECS. Got a render system that can render points and triangles and some components defining those points and triangles as well as transformation and velocity components
 
 ### 🔜 In Progress
 - Hand roll a simple ECS

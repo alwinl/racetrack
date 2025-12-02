@@ -19,9 +19,8 @@
 
 #pragma once
 
+#include <glm/glm.hpp>
 struct Transform
 {
-    float x = 0.f;
-    float y = 0.f;
-    float z = 0.f;
+    glm::vec3 translation {0.0f};
 };

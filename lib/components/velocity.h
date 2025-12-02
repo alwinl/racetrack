@@ -19,9 +19,8 @@
 
 #pragma once
 
+#include <glm/glm.hpp>
 struct Velocity
 {
-    float dx = 0.f;
-    float dy = 0.f;
-    float dz = 0.f;
+    glm::vec3 speed {0.0f};
 };
