@@ -21,7 +21,7 @@
 
 #include "base_system.h"
 
-class PhysicsSystem : public BaseSystem
+class PhysicsSystem : public BaseSystem<PhysicsSystem>
 {
 public:
     void update( World& world, double dt ) override;

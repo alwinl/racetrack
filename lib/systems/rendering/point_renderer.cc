@@ -24,6 +24,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "../../world.h"
+#include "../../components/point.h"
+#include "../../components/transform.h"
+
 static const char* point_vs = R"(
 #version 330 core
 

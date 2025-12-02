@@ -1,5 +1,5 @@
 /*
- * basesystem.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
+ * base_system.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,14 +19,32 @@
 
 #pragma once
 
-#include "../world.h"
+#include <typeindex>
 
-class BaseSystem
+class Engine;
+class World;
+
+class ISystem
 {
 public:
-    virtual ~BaseSystem() = default;
+    virtual ~ISystem() = default;
 
-    virtual void update( World& world, double dt ) {}
-    virtual void draw( World& world ) {}
-    virtual void shutdown() {}
+    virtual std::type_index type() const = 0;
+
+    virtual void init( Engine& engine ) = 0;
+    virtual void update( World& world, double dt ) = 0;
+    virtual void draw( World& world ) = 0;
+    virtual void shutdown() = 0;
+};
+
+template<typename T>
+class BaseSystem : public ISystem
+{
+public:
+    std::type_index type() const override { return typeid(T); }
+
+    void init( Engine& engine ) override {}
+    void update( World& world, double dt ) override {}
+    void draw( World& world ) override {}
+    void shutdown() override {}
 };

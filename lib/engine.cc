@@ -19,28 +19,25 @@
 
 #include "engine.h"
 
+#include <GLFW/glfw3.h>
+
 #include "systems/system_renderer.h"
 #include "systems/system_physics.h"
 #include "systems/system_input.h"
 
-#include <GLFW/glfw3.h>
+#include "components/point.h"
+#include "components/transform.h"
+#include "components/velocity.h"
+#include "components/triangle.h"
 
 void Engine::init()
 {
-    auto renderer = std::make_unique<RenderSystem>();
-    auto inputter = std::make_unique<InputSystem>();
-
-    running = renderer->init();
-    if( !running )
-        return;
-
-    inputter->init( renderer->get_window() );
-
-    systems.push_back( std::move( renderer ) );
-    systems.push_back( std::move( inputter ) );
+    systems.push_back( std::make_unique<RenderSystem>() );
+    systems.push_back( std::make_unique<InputSystem>() );
     systems.push_back( std::make_unique<PhysicsSystem>() );
 
-    world.init();
+    for( auto& system : systems )
+        system->init( *this );
 
     // --- Create a sample entity ---
     Entity e = world.create_entity();
@@ -72,8 +69,6 @@ void Engine::run()
         double elapsed = now - last;
         last = now;
 
-        world.update( elapsed );
-
         for( auto& system : systems )
             system->update( world, elapsed );
 
@@ -92,6 +87,4 @@ void Engine::shutdown()
 {
     for( auto& system : systems )
         system->shutdown();
-
-    world.cleanup();
 }

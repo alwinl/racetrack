@@ -22,20 +22,9 @@
 #include "entity.h"
 #include "component_storage.h"
 
-#include "components/point.h"
-#include "components/triangle.h"
-
-#include "components/transform.h"
-#include "components/velocity.h"
-
-
 class World
 {
 public:
-    void init();
-    void update( double dt );
-    void cleanup();
-
     Entity create_entity() { return next_id++; }
 
     template<typename T>

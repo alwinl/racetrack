@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "../../world.h"
+class World;
 
 class BaseRenderer
 {

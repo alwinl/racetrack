@@ -22,18 +22,19 @@
 
 #include "system_renderer.h"
 #include "../world.h"
+#include "../engine.h"
 
 #include "rendering/point_renderer.h"
 #include "rendering/triangle_renderer.h"
 
-bool RenderSystem::init()
+void RenderSystem::init( Engine& engine )
 {
-    if( !make_window() )
-        return false;
+    if( !make_window() ) {
+        engine.stop_running();
+        return;
+    }
 
     make_renderers();
-
-    return true;
 }
 
 void RenderSystem::shutdown()

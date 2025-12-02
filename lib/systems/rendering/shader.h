@@ -28,9 +28,6 @@ class Shader
 public:
     void init( std::string vs_source, std::string fs_source );
 
-    void set_vertex_source( std::string source ) { vertex_source = source; is_compiled = false; }
-    void set_fragment_source( std::string source ) { fragment_source = source; is_compiled = false; }
-
     void activate();
 
 	void set_uniform( const std::string &name, glm::mat4 matrix );
@@ -38,10 +35,9 @@ public:
 private:
     unsigned id;
     bool is_compiled = false;
-
     std::string vertex_source;
     std::string fragment_source;
 
-    void compile( unsigned id,  std::string source );
+    void compile( unsigned id, std::string source );
     void link( unsigned vs_id, unsigned fs_id );
 };

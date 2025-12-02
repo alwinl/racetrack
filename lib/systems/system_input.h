@@ -23,13 +23,10 @@
 
 struct GLFWwindow;
 
-class World;
-
-class InputSystem : public BaseSystem
+class InputSystem : public BaseSystem<InputSystem>
 {
 public:
-    void init( GLFWwindow* win );
-
+    void init( Engine& engine ) override;
     void update( World& world, double dt ) override;
 
 private:

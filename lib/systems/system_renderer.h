@@ -22,22 +22,17 @@
 #include <vector>
 #include <memory>
 
-#include "./base_system.h"
+#include "base_system.h"
 
 #include "rendering/base_renderer.h"
 
 struct GLFWwindow;
 class World;
 
-class RenderSystem : public BaseSystem
+class RenderSystem : public BaseSystem<RenderSystem>
 {
 public:
-    RenderSystem() = default;
-    RenderSystem(const RenderSystem&) = delete;
-    RenderSystem& operator=(const RenderSystem&) = delete;
-
-    bool init();
-
+    void init( Engine& engine ) override;
     void shutdown() override;
     void update( World& world, double dt ) override;
     void draw( World& world ) override;

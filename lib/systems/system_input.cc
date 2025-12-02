@@ -21,9 +21,16 @@
 
 #include <GLFW/glfw3.h>
 
-void InputSystem::init( GLFWwindow* win )
+#include "../engine.h"
+#include "system_renderer.h"
+
+void InputSystem::init( Engine& engine )
 {
-    window = win;
+    RenderSystem * renderer = engine.get_system<RenderSystem>();
+    if( !renderer )
+        return;
+
+    window = renderer->get_window();
 
     glfwSetWindowUserPointer( window, this );
 

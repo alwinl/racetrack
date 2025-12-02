@@ -23,9 +23,9 @@
 #include <memory>
 
 #include "systems/base_system.h"
-// #include "rendering/system_renderer.h"
-// #include "system_input.h"
 #include "world.h"
+
+class RenderSystem;
 
 class Engine
 {
@@ -34,13 +34,21 @@ public:
     void run();
     void shutdown();
 
+    void stop_running() { running = false; }
+
+    template<typename T>
+    T* get_system()
+    {
+        for( auto& sys : systems ) {
+            if( sys->type() == typeid(T) )
+                return static_cast<T*>(sys.get());
+        }
+        return nullptr;
+    }
+
 private:
     bool running = true;
-
-    // RenderSystem renderer;
-    // InputSystem inputter;
-
-    std::vector<std::unique_ptr<BaseSystem>> systems;
+    std::vector<std::unique_ptr<ISystem>> systems;
 
     World world;
 };

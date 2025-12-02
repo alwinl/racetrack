@@ -20,6 +20,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+
 struct Transform
 {
     glm::vec3 translation {0.0f};

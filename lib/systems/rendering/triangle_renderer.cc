@@ -24,6 +24,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "../../world.h"
+#include "../../components/triangle.h"
+#include "../../components/transform.h"
+
+
 static const char* triangle_vs = R"(
 #version 330 core
 

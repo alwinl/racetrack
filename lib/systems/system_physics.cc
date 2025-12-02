@@ -19,6 +19,12 @@
 
 #include "system_physics.h"
 
+#include "../world.h"
+
+#include "../components/transform.h"
+#include "../components/velocity.h"
+
+
 void PhysicsSystem::update( World &world, double dt )
 {
     auto& transforms = world.storage<Transform>();

@@ -23,7 +23,6 @@ add_library(
     racetrack_lib
 
     engine.cc
-    world.cc
 
     systems/rendering/shader.cc
     systems/rendering/point_renderer.cc
