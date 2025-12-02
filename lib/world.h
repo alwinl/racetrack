@@ -20,7 +20,7 @@
 #pragma once
 
 #include "entity.h"
-#include "component_storage.h"
+#include "components/component_storage.h"
 
 class World
 {

@@ -21,7 +21,7 @@
 
 #include <unordered_map>
 
-#include "entity.h"
+#include "../entity.h"
 
 template< typename T>
 class ComponentStorage
