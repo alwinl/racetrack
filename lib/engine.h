@@ -20,10 +20,11 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
-#include "base_system.h"
-#include "rendering/system_renderer.h"
-#include "system_input.h"
+#include "systems/base_system.h"
+// #include "rendering/system_renderer.h"
+// #include "system_input.h"
 #include "world.h"
 
 class Engine
@@ -36,8 +37,8 @@ public:
 private:
     bool running = true;
 
-    RenderSystem renderer;
-    InputSystem inputter;
+    // RenderSystem renderer;
+    // InputSystem inputter;
 
     std::vector<std::unique_ptr<BaseSystem>> systems;
 

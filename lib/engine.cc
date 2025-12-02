@@ -19,8 +19,9 @@
 
 #include "engine.h"
 
-#include "rendering/system_renderer.h"
-#include "system_physics.h"
+#include "systems/system_renderer.h"
+#include "systems/system_physics.h"
+#include "systems/system_input.h"
 
 #include <GLFW/glfw3.h>
 

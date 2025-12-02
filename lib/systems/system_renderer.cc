@@ -23,8 +23,8 @@
 #include "system_renderer.h"
 #include "../world.h"
 
-#include "point_renderer.h"
-#include "triangle_renderer.h"
+#include "rendering/point_renderer.h"
+#include "rendering/triangle_renderer.h"
 
 bool RenderSystem::init()
 {

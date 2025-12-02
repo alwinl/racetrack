@@ -1,5 +1,5 @@
 /*
- * baserenderer.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
+ * renderer.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,15 +19,37 @@
 
 #pragma once
 
-#include "../world.h"
+#include <vector>
+#include <memory>
 
-class BaseRenderer
+#include "./base_system.h"
+
+#include "rendering/base_renderer.h"
+
+struct GLFWwindow;
+class World;
+
+class RenderSystem : public BaseSystem
 {
 public:
-    virtual ~BaseRenderer() = default;
+    RenderSystem() = default;
+    RenderSystem(const RenderSystem&) = delete;
+    RenderSystem& operator=(const RenderSystem&) = delete;
 
-    virtual void init() = 0;
-    virtual void destroy() = 0;
-    virtual void upload( const World& world ) = 0;
-    virtual void draw() = 0;
+    bool init();
+
+    void shutdown() override;
+    void update( World& world, double dt ) override;
+    void draw( World& world ) override;
+
+    void begin_frame();
+    void end_frame();
+
+    GLFWwindow * get_window() { return window; };
+    bool should_close() const;
+
+private:
+    GLFWwindow* window = nullptr;
+
+    std::vector<std::unique_ptr<BaseRenderer>> renderers; 
 };

@@ -25,14 +25,14 @@ add_library(
     engine.cc
     world.cc
 
-    rendering/shader.cc
-    rendering/point_renderer.cc
-    rendering/triangle_renderer.cc
+    systems/rendering/shader.cc
+    systems/rendering/point_renderer.cc
+    systems/rendering/triangle_renderer.cc
     
-    base_system.cc
-    system_input.cc
-    rendering/system_renderer.cc
-    system_physics.cc
+    systems/base_system.cc
+    systems/system_input.cc
+    systems/system_renderer.cc
+    systems/system_physics.cc
 )
 
 target_link_libraries(racetrack_lib PRIVATE glad glfw)

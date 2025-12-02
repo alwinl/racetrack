@@ -1,5 +1,5 @@
 /*
- * basesystem.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
+ * baserenderer.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,14 +19,15 @@
 
 #pragma once
 
-#include "world.h"
+#include "../../world.h"
 
-class BaseSystem
+class BaseRenderer
 {
 public:
-    virtual ~BaseSystem() = default;
+    virtual ~BaseRenderer() = default;
 
-    virtual void update( World& world, double dt ) {}
-    virtual void draw( World& world ) {}
-    virtual void shutdown() {}
+    virtual void init() = 0;
+    virtual void destroy() = 0;
+    virtual void upload( const World& world ) = 0;
+    virtual void draw() = 0;
 };
