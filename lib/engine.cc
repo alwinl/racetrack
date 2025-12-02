@@ -21,6 +21,10 @@
 
 #include <GLFW/glfw3.h>
 
+#include <fstream>
+
+#include "nlohmann/json.hpp"
+
 #include "systems/system_renderer.h"
 #include "systems/system_physics.h"
 #include "systems/system_input.h"
@@ -38,29 +42,65 @@ void Engine::init()
 
     for( auto& system : systems )
         system->init( *this );
+}
 
-    // --- Create a sample entity ---
-    Entity e = world.create_entity();
-    world.add_component<PointComponent>(e, PointComponent{ glm::vec3(1,1,0) } );
-    world.add_component<Transform>(e, Transform{ glm::vec3(0.f, 0.f, 0.f) } );
-    world.add_component<Velocity>(e, Velocity{ glm::vec3(1.f, 0.f, 0.f) } );
+void Engine::load( const std::string &filename )
+{
+    auto read_vec3 = [](const nlohmann::json& j){ return glm::vec3(j[0], j[1], j[2]); };
 
-    // --- Create a second entity ---
-    e = world.create_entity();
-    auto& triangle = world.add_component<TriangleComponent>(e, TriangleComponent {
-        {
-            glm::vec3(-1.f, 0.f, 0.f ),
-            glm::vec3( 1.f, 0.f, 0.f ),
-            glm::vec3( 0.f, 2.f, 0.f )
-        },
-        glm::vec3( 0.0f,  1.f, 0.0f )
-    } );
-    world.add_component<Transform>(e, Transform{ glm::vec3(0.5f, 1.f, 0.f) } );
-    world.add_component<Velocity>(e, Velocity{ glm::vec3(0.5f, 1.f, 0.f) } );
+    std::ifstream datafile( filename );
+
+    if( !datafile.is_open() )
+        return;
+
+    nlohmann::json data;
+
+    datafile >> data;
+
+    for( auto& ent : data["entities"] ) {
+
+        Entity e = world.create_entity();
+
+        auto& comps = ent["components"];
+
+        if( comps.contains("Point") ) {
+            world.add_component<PointComponent>(e, PointComponent {
+                read_vec3( comps["Point"]["colour"] )
+            });
+        }
+
+        if( comps.contains("Triangle") ) {
+            world.add_component<TriangleComponent>(e, TriangleComponent {
+                {
+                    read_vec3( comps["Triangle"]["v1"] ),
+                    read_vec3( comps["Triangle"]["v2"] ),
+                    read_vec3( comps["Triangle"]["v3"] ),
+                },
+                read_vec3( comps["Triangle"]["colour"] )
+            });
+        }
+
+        if( comps.contains("Transform") ) {
+            world.add_component<Transform>(e, Transform {
+                read_vec3( comps["Transform"]["translation"] )
+            });
+        }
+
+        if( comps.contains("Velocity") ) {
+            world.add_component<Velocity>(e, Velocity {
+                read_vec3( comps["Velocity"]["speed"] )
+            });
+        }
+    }
+
 }
 
 void Engine::run()
 {
+    auto renderer = get_system<RenderSystem>();
+    if( !renderer )
+        return;
+
     double last = glfwGetTime();
 
     while( running ) {
@@ -75,11 +115,8 @@ void Engine::run()
         for( auto& system : systems )
             system->draw( world );
 
-        for( auto& system : systems ) {
-            if( auto renderer = dynamic_cast<RenderSystem*>(system.get()) )
-                if( renderer->should_close() )
-                    running = false;
-        }
+        if( renderer->should_close() )
+            running = false;
     }
 }
 
@@ -88,3 +125,4 @@ void Engine::shutdown()
     for( auto& system : systems )
         system->shutdown();
 }
+

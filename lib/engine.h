@@ -46,9 +46,12 @@ public:
         return nullptr;
     }
 
+    void load( const std::string& filename );
+    
 private:
     bool running = true;
     std::vector<std::unique_ptr<ISystem>> systems;
 
     World world;
+
 };

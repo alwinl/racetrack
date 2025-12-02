@@ -1,0 +1,49 @@
+{
+    "entities" : [
+        {
+            "components" : {
+                "Point" : {
+                    "colour" : [ 1.0, 0.0, 0.0]
+                },
+                "Transform" : {
+                    "translation" : [0.0, 0.0, 0.0]
+                },
+                "Velocity" : {
+                    "speed" : [1.0, 0.0, 0.0]
+                }
+            }
+        },
+        {
+            "components" : {
+                "Triangle" : {
+                    "v1" : [-1.0, 0.0, 0.0],
+                    "v2" : [1.0, 0.0, 0.0],
+                    "v3" : [0.0, 2.0, 0.0],
+                    "colour" : [ 0.0,  1.0, 0.0]
+                },
+                "Transform" : {
+                    "translation" : [0.5, 1.0, 0.0]
+                },
+                "Velocity" : {
+                    "speed" : [0.5, 1.0, 0.0]
+                }
+            }
+        },
+        {
+            "components" : {
+                "Triangle" : {
+                    "v1" : [1.0, 1.0, 0.0],
+                    "v2" : [1.0, 0.0, 0.0],
+                    "v3" : [0.0, 2.0, 0.0],
+                    "colour" : [ 1.0,  1.0, 1.0]
+                },
+                "Transform" : {
+                    "translation" : [0.5, -1.0, 0.0]
+                },
+                "Velocity" : {
+                    "speed" : [0.3, 0.2, 0.0]
+                }
+            }
+        }
+    ]
+}

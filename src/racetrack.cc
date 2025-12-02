@@ -24,6 +24,9 @@ int main( int argc, char** argv )
     Engine engine;
 
     engine.init();
+
+    engine.load( "/home/alwin/Documents/Programming/Graphics/racetrack/src/data.json");
+    
     engine.run();
     engine.shutdown();
 
