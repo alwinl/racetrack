@@ -28,4 +28,5 @@ public:
 
     virtual void update( World& world, double dt ) {}
     virtual void draw( World& world ) {}
+    virtual void shutdown() {}
 };

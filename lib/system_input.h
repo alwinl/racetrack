@@ -29,9 +29,8 @@ class InputSystem : public BaseSystem
 {
 public:
     void init( GLFWwindow* win );
-    void shutdown();
 
-    virtual void update( World& world, double dt ) override;
+    void update( World& world, double dt ) override;
 
 private:
     GLFWwindow* window;

@@ -33,11 +33,6 @@ void InputSystem::init( GLFWwindow* win )
     });
 }
 
-void InputSystem::shutdown()
-{
-
-}
-
 void InputSystem::update( World &world, double dt )
 {
     glfwPollEvents();

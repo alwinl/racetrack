@@ -37,8 +37,8 @@ public:
     RenderSystem& operator=(const RenderSystem&) = delete;
 
     bool init();
-    void shutdown();
 
+    void shutdown() override;
     void update( World& world, double dt ) override;
     void draw( World& world ) override;
 

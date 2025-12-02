@@ -1,5 +1,5 @@
 /*
- * engine.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * system_physics.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +17,18 @@
  * MA 02110-1301, USA.
  */
 
-#pragma once
+#include "system_physics.h"
 
-#include <vector>
-
-#include "base_system.h"
-#include "rendering/system_renderer.h"
-#include "system_input.h"
-#include "world.h"
-
-class Engine
+void PhysicsSystem::update( World &world, double dt )
 {
-public:
-    void init();
-    void run();
-    void shutdown();
+    auto& transforms = world.storage<Transform>();
+    auto& velocities = world.storage<Velocity>();
 
-private:
-    bool running = true;
+    // Move all entities that have both Transform and Velocity
+    for( auto& [entity, v] : velocities.all() ) {
 
-    RenderSystem renderer;
-    InputSystem inputter;
+        if( auto* transform = transforms.get(entity) )
+            transform->translation += v.speed * (float)dt;
 
-    std::vector<std::unique_ptr<BaseSystem>> systems;
-
-    World world;
-};
+    }
+}

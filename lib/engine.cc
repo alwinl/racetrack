@@ -19,15 +19,26 @@
 
 #include "engine.h"
 
+#include "rendering/system_renderer.h"
+#include "system_physics.h"
+
 #include <GLFW/glfw3.h>
 
 void Engine::init()
 {
-    running = renderer.init();
+    auto renderer = std::make_unique<RenderSystem>();
+    auto inputter = std::make_unique<InputSystem>();
+
+    running = renderer->init();
     if( !running )
         return;
 
-    inputter.init( renderer.get_window() );
+    inputter->init( renderer->get_window() );
+
+    systems.push_back( std::move( renderer ) );
+    systems.push_back( std::move( inputter ) );
+    systems.push_back( std::make_unique<PhysicsSystem>() );
+
     world.init();
 
     // --- Create a sample entity ---
@@ -60,21 +71,26 @@ void Engine::run()
         double elapsed = now - last;
         last = now;
 
-        inputter.update( world, elapsed );
-
         world.update( elapsed );
 
-        renderer.update( world, elapsed );
-        renderer.draw( world );
+        for( auto& system : systems )
+            system->update( world, elapsed );
 
-        if( renderer.should_close() )
-            running = false;
+        for( auto& system : systems )
+            system->draw( world );
+
+        for( auto& system : systems ) {
+            if( auto renderer = dynamic_cast<RenderSystem*>(system.get()) )
+                if( renderer->should_close() )
+                    running = false;
+        }
     }
 }
 
 void Engine::shutdown()
 {
-    inputter.shutdown();
-    renderer.shutdown();
+    for( auto& system : systems )
+        system->shutdown();
+
     world.cleanup();
 }

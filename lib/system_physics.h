@@ -1,5 +1,5 @@
 /*
- * engine.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * system_physics.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,27 +19,10 @@
 
 #pragma once
 
-#include <vector>
-
 #include "base_system.h"
-#include "rendering/system_renderer.h"
-#include "system_input.h"
-#include "world.h"
 
-class Engine
+class PhysicsSystem : public BaseSystem
 {
 public:
-    void init();
-    void run();
-    void shutdown();
-
-private:
-    bool running = true;
-
-    RenderSystem renderer;
-    InputSystem inputter;
-
-    std::vector<std::unique_ptr<BaseSystem>> systems;
-
-    World world;
+    void update( World& world, double dt ) override;
 };
