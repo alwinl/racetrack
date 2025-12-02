@@ -19,25 +19,19 @@
 
 #include "point_renderer.h"
 
-#include "../component_storage.h"
-
-#include <string>
-
 #include <glad/gl.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-
-std::string point_vs = R"(
+static const char* point_vs = R"(
 #version 330 core
 
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aCol;
+uniform mat4 uMVP;
 
 out vec3 col;
-
-uniform mat4 uMVP;
 
 void main() {
     gl_Position = uMVP * vec4(aPos, 1.0);
@@ -46,7 +40,7 @@ void main() {
 }
 )";
 
-std::string point_fs = R"(
+static const char* point_fs = R"(
 #version 330 core
 
 in vec3 col;
@@ -76,13 +70,13 @@ void PointRenderer::init()
     glBindVertexArray( vao );
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
 
-    glBufferData( GL_ARRAY_BUFFER, 2 * sizeof( glm::vec3 ) * max_objects, nullptr, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, 2 * sizeof(glm::vec3) * max_objects, nullptr, GL_DYNAMIC_DRAW );
 
     glEnableVertexAttribArray( 0 );
-    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 2 * sizeof( glm::vec3 ), (void *)0 );
+    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)0 );
 
     glEnableVertexAttribArray( 1 );
-    glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 2 * sizeof( glm::vec3 ), (void *)(sizeof( glm::vec3 )) );
+    glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)(sizeof(glm::vec3)) );
 
     glBindVertexArray( 0 );
 }
@@ -94,7 +88,7 @@ void PointRenderer::upload( const World& world )
     const auto& points = world.storage<PointComponent>();
     const auto& transforms = world.storage<Transform>();
 
-    for( auto& [entity, point] : points.all() ) {
+    for( const auto& [entity, point] : points.all() ) {
 
         if( const auto* transform = transforms.get(entity) ) {
 
@@ -118,9 +112,6 @@ void PointRenderer::draw()
 
 void PointRenderer::destroy()
 {
-    if( vbo )
-        glDeleteBuffers( 1, &vbo );
-
-    if( vao ) 
-        glDeleteVertexArrays( 1, &vao );
+    if( vbo ) glDeleteBuffers( 1, &vbo );
+    if( vao ) glDeleteVertexArrays( 1, &vao );
 }

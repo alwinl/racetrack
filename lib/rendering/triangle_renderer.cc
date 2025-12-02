@@ -19,8 +19,6 @@
 
 #include "triangle_renderer.h"
 
-#include <string>
-
 #include <glad/gl.h>
 
 #include <glm/glm.hpp>
@@ -52,6 +50,8 @@ void main() {
 }
 )";
 
+constexpr int max_objects = 10000;
+
 void TriangleRenderer::init()
 {
     shader.init(triangle_vs, triangle_fs);
@@ -63,21 +63,21 @@ void TriangleRenderer::init()
         shader.set_uniform( "uMVP", mvp );
     }
 
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
+    glGenVertexArrays( 1, &vao );
+    glGenBuffers( 1, &vbo );
 
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindVertexArray( vao );
+    glBindBuffer( GL_ARRAY_BUFFER, vbo );
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 2 * 3 * 1000, nullptr, GL_DYNAMIC_DRAW);
+    glBufferData( GL_ARRAY_BUFFER, 2 * sizeof(glm::vec3) * 3 * max_objects, nullptr, GL_DYNAMIC_DRAW );
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)0);
+    glEnableVertexAttribArray( 0 );
+    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)0 );
 
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)(sizeof(glm::vec3)) );
+    glEnableVertexAttribArray( 1 );
+    glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)(sizeof(glm::vec3)) );
 
-    glBindVertexArray(0);
+    glBindVertexArray( 0 );
 }
 
 void TriangleRenderer::upload( const World& world )
@@ -87,7 +87,7 @@ void TriangleRenderer::upload( const World& world )
     const auto& tris = world.storage<TriangleComponent>();
     const auto& transforms = world.storage<Transform>();
 
-    for( auto& [entity, tri] : tris.all() )
+    for( const auto& [entity, tri] : tris.all() )
     {
         if( const auto* transform = transforms.get(entity) ) {
 
@@ -103,18 +103,18 @@ void TriangleRenderer::upload( const World& world )
     glBufferSubData( GL_ARRAY_BUFFER, 0, cpu_buffer.size() * sizeof(glm::vec3), (void*)cpu_buffer.data() );
 }
 
-void TriangleRenderer::destroy()
-{
-    glDeleteBuffers(1, &vbo);
-    glDeleteVertexArrays(1, &vao);
-}
-
 void TriangleRenderer::draw()
 {
     shader.activate();
 
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, cpu_buffer.size() / 2);
+    glDrawArrays( GL_TRIANGLES, 0, cpu_buffer.size() / 2 );
     glBindVertexArray(0);
 
+}
+
+void TriangleRenderer::destroy()
+{
+    if( vbo ) glDeleteBuffers( 1, &vbo );
+    if( vao ) glDeleteVertexArrays( 1, &vao );
 }

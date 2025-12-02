@@ -19,14 +19,19 @@
 
 #pragma once
 
+#include "base_system.h"
+
 struct GLFWwindow;
 
-class InputSystem
+class World;
+
+class InputSystem : public BaseSystem
 {
 public:
     void init( GLFWwindow* win );
-    void process();
     void shutdown();
+
+    virtual void update( World& world, double dt ) override;
 
 private:
     GLFWwindow* window;

@@ -21,23 +21,23 @@
 
 #include <vector>
 
+#include <glm/glm.hpp>
+
 #include "base_renderer.h"
-#include "../world.h"
 #include "shader.h"
 
 class PointRenderer : public BaseRenderer
 {
 public:
-    void init();
-
+    void init() override;
     void destroy() override;
     void upload( const World& world ) override;
     void draw() override;
 
 private:
     Shader shader;
-    unsigned vao;
-    unsigned vbo;
+    unsigned vao = 0;
+    unsigned vbo = 0;
 
     std::vector<glm::vec3> cpu_buffer;
 };

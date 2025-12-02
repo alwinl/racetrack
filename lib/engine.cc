@@ -60,13 +60,12 @@ void Engine::run()
         double elapsed = now - last;
         last = now;
 
-        inputter.process();
+        inputter.update( world, elapsed );
 
         world.update( elapsed );
 
-        renderer.begin_frame();
-        renderer.render( world );
-        renderer.end_frame();
+        renderer.update( world, elapsed );
+        renderer.draw( world );
 
         if( renderer.should_close() )
             running = false;

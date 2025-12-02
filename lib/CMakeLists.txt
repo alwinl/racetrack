@@ -30,6 +30,7 @@ add_library(
     rendering/point_renderer.cc
     rendering/triangle_renderer.cc
     
+    base_system.cc
     system_input.cc
 )
 

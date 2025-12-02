@@ -26,6 +26,7 @@ class BaseRenderer
 public:
     virtual ~BaseRenderer() = default;
 
+    virtual void init() = 0;
     virtual void destroy() = 0;
     virtual void upload( const World& world ) = 0;
     virtual void draw() = 0;

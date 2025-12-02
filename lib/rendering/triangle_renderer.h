@@ -24,14 +24,12 @@
 #include <glm/glm.hpp>
 
 #include "base_renderer.h"
-#include "../world.h"
 #include "shader.h"
 
 class TriangleRenderer : public BaseRenderer
 {
 public:
-    void init();
-
+    void init() override;
     void destroy() override;
     void upload( const World& world ) override;
     void draw() override;

@@ -47,14 +47,11 @@ bool RenderSystem::init()
 
     glEnable(GL_PROGRAM_POINT_SIZE);
 
-    auto points = std::make_unique<PointRenderer>();
-    points->init();
+    renderers.push_back( std::make_unique<PointRenderer>() );
+    renderers.push_back( std::make_unique<TriangleRenderer>() );
 
-    auto triangles = std::make_unique<TriangleRenderer>();
-    triangles->init();
-
-    renderers.push_back(std::move(points));
-    renderers.push_back(std::move(triangles));
+    for( auto& renderer : renderers )
+        renderer->init();
 
     return true;
 }
@@ -70,20 +67,29 @@ void RenderSystem::shutdown()
     glfwTerminate();
 }
 
+void RenderSystem::update( World& world, double dt )
+{
+    for( auto& renderer : renderers )
+        renderer->upload( world );
+}
+
+void RenderSystem::draw( World& world )
+{
+    begin_frame();
+
+    for( auto& renderer : renderers )
+        renderer->draw();
+
+    end_frame();
+}
+
+
 void RenderSystem::begin_frame()
 {
 	glClearColor( 0.0F, 0.0F, 0.6F, 1.0F );
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
-void RenderSystem::render( const World& world )
-{
-    for( auto& renderer : renderers )
-        renderer->upload( world );
-
-    for( auto& renderer : renderers )
-        renderer->draw();
-}
 
 void RenderSystem::end_frame()
 {

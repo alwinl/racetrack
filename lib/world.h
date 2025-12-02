@@ -58,14 +58,7 @@ private:
     Entity next_id = 1;
 
     template<typename T>
-    ComponentStorage<T>& get_storage()
-    {
-        static ComponentStorage<T> storage;
-        return storage;
-    }
-
-    template<typename T>
-    const ComponentStorage<T>& get_storage() const
+    ComponentStorage<T>& get_storage() const
     {
         static ComponentStorage<T> storage;
         return storage;

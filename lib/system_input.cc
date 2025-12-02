@@ -33,15 +33,14 @@ void InputSystem::init( GLFWwindow* win )
     });
 }
 
-void InputSystem::process()
-{
-    glfwPollEvents();
-
-}
-
 void InputSystem::shutdown()
 {
 
+}
+
+void InputSystem::update( World &world, double dt )
+{
+    glfwPollEvents();
 }
 
 void InputSystem::process_key( int key, int action )
