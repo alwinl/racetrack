@@ -29,7 +29,6 @@ add_library(
     systems/rendering/point_renderer.cc
     systems/rendering/triangle_renderer.cc
     
-    systems/base_system.cc
     systems/system_input.cc
     systems/system_renderer.cc
     systems/system_physics.cc
