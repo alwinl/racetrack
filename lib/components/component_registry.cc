@@ -1,5 +1,5 @@
 /*
- * component_transform.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * component_registry.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,22 +17,14 @@
  * MA 02110-1301, USA.
  */
 
-#pragma once
+#include "point.h"
+#include "transform.h"
+#include "triangle.h"
+#include "velocity.h"
 
-#include <glm/glm.hpp>
+ComponentRegistrar<PointComponent> PointComponent::registrar("Point");
+ComponentRegistrar<TriangleComponent> TriangleComponent::registrar("Triangle");
+ComponentRegistrar<Transform> Transform::registrar("Transform");
+ComponentRegistrar<Velocity> Velocity::registrar("Velocity");
 
- #include "component_registry.h"
-
-struct Transform
-{
-    glm::vec3 translation {0.0f};
-
-    void from_json( const nlohmann::json& json )
-    {
-        auto translation_values = json["translation"];
-
-        translation = glm::vec3( translation_values[0], translation_values[1], translation_values[2] );
-    }
-
-    static ComponentRegistrar<Transform> registrar;
-};
+void force_component_registration() {}

@@ -31,6 +31,8 @@ add_library(
     systems/system_input.cc
     systems/system_renderer.cc
     systems/system_physics.cc
+
+    components/component_registry.cc
 )
 
 target_link_libraries(racetrack_lib PRIVATE glad glfw)

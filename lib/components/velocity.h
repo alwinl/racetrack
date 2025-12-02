@@ -21,7 +21,18 @@
 
 #include <glm/glm.hpp>
 
+#include "component_registry.h"
+
 struct Velocity
 {
     glm::vec3 speed {0.0f};
+
+    void from_json( const nlohmann::json& json )
+    {
+        auto speed_values = json["speed"];
+
+        speed = glm::vec3( speed_values[0], speed_values[1], speed_values[2] );
+    }
+
+    static ComponentRegistrar<Velocity> registrar;
 };

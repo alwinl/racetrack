@@ -21,6 +21,8 @@
 
 #include <glm/glm.hpp>
 
+ #include "component_registry.h"
+
 struct TriangleComponent
 {
     glm::vec3 vertices[3] {
@@ -29,4 +31,21 @@ struct TriangleComponent
         {1.0f, 0.0f, 0.0f}
     };
     glm::vec3 colour {1.0f};
+
+    void from_json( const nlohmann::json& json )
+    {
+        auto v1_values = json["v1"];
+        vertices[0] = glm::vec3( v1_values[0], v1_values[1], v1_values[2] );
+
+        auto v2_values = json["v2"];
+        vertices[1] = glm::vec3( v2_values[0], v2_values[1], v2_values[2] );
+
+        auto v3_values = json["v3"];
+        vertices[2] = glm::vec3( v3_values[0], v3_values[1], v3_values[2] );
+
+        auto colour_values = json["colour"];
+        colour = glm::vec3( colour_values[0], colour_values[1], colour_values[2] );
+    }
+
+    static ComponentRegistrar<TriangleComponent> registrar;
 };

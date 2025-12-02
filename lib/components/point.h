@@ -21,7 +21,19 @@
 
  #include <glm/glm.hpp>
 
+ #include "component_registry.h"
+
  struct PointComponent
  {
     glm::vec3 colour {1.0f};
+
+    void from_json( const nlohmann::json& json )
+    {
+      auto colour_values = json["colour"];
+
+      colour = glm::vec3( colour_values[0], colour_values[1], colour_values[2] );
+    }
+
+    static ComponentRegistrar<PointComponent> registrar;
  };
+
