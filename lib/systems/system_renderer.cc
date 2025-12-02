@@ -28,30 +28,10 @@
 
 bool RenderSystem::init()
 {
-    if (!glfwInit())
+    if( !make_window() )
         return false;
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    window = glfwCreateWindow( 640, 480, "Racetrack", NULL, NULL);
-    if( !window )
-        return false;
-
-    glfwSwapInterval(1);
-    glfwMakeContextCurrent(window);
-
-	if( gladLoadGL( glfwGetProcAddress ) == 0 )
-        return false;
-
-    glEnable(GL_PROGRAM_POINT_SIZE);
-
-    renderers.push_back( std::make_unique<PointRenderer>() );
-    renderers.push_back( std::make_unique<TriangleRenderer>() );
-
-    for( auto& renderer : renderers )
-        renderer->init();
+    make_renderers();
 
     return true;
 }
@@ -97,4 +77,35 @@ void RenderSystem::end_frame()
 bool RenderSystem::should_close() const
 {
 	return glfwWindowShouldClose(window);
+}
+
+bool RenderSystem::make_window()
+{
+    if (!glfwInit())
+        return false;
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    window = glfwCreateWindow( 640, 480, "Racetrack", NULL, NULL);
+    if( !window )
+        return false;
+
+    glfwSwapInterval(1);
+    glfwMakeContextCurrent(window);
+
+	if( gladLoadGL( glfwGetProcAddress ) == 0 )
+        return false;
+
+    return true;
+}
+
+void RenderSystem::make_renderers()
+{
+    renderers.push_back( std::make_unique<PointRenderer>() );
+    renderers.push_back( std::make_unique<TriangleRenderer>() );
+
+    for( auto& renderer : renderers )
+        renderer->init();
 }

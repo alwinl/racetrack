@@ -55,6 +55,8 @@ constexpr int max_objects = 10000;
 
 void PointRenderer::init()
 {
+    glEnable(GL_PROGRAM_POINT_SIZE);
+    
     shader.init( point_vs, point_fs );
     {
         glm::mat4 proj = glm::ortho( -10.f, 10.f, -10.f, 10.f );

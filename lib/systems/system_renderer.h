@@ -42,14 +42,15 @@ public:
     void update( World& world, double dt ) override;
     void draw( World& world ) override;
 
-    void begin_frame();
-    void end_frame();
-
     GLFWwindow * get_window() { return window; };
     bool should_close() const;
 
 private:
     GLFWwindow* window = nullptr;
-
     std::vector<std::unique_ptr<BaseRenderer>> renderers; 
+
+    void begin_frame();
+    void end_frame();
+    bool make_window();
+    void make_renderers();
 };
