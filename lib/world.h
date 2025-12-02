@@ -22,9 +22,9 @@
 #include <cstdint>
 #include <unordered_map>
 
-#include "component_transform.h"
-#include "component_velocity.h"
-#include "component_triangle.h"
+#include "components/transform.h"
+#include "components/velocity.h"
+#include "components/triangle.h"
 
 
 class World
