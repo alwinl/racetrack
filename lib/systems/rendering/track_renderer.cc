@@ -22,7 +22,6 @@
 #include <glad/gl.h>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include "../../world.h"
 #include "../../components/track.h"
@@ -61,16 +60,6 @@ constexpr int max_objects = 10000;
 
 void TrackRenderer::init()
 {
-    shader.init( track_vs, track_fs );
-    {
-        glm::mat4 proj = glm::ortho(-10.f, 10.f, -10.f, 10.f);
-        // glm::mat4 proj = glm::ortho(-100.f, 100.f, -100.f, 100.f, -100.f, 100.f);
-        glm::mat4 view = glm::mat4( 1.0f );
-        glm::mat4 mvp = proj * view;
-
-        shader.set_uniform( "uMVP", mvp );
-    }
-
     glGenVertexArrays( 1, &vao );
     glGenBuffers( 1, &vbo );
 
@@ -86,6 +75,8 @@ void TrackRenderer::init()
     glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, colour) );
 
     glBindVertexArray( 0 );
+
+    shader.init( track_vs, track_fs );
 }
 
 void TrackRenderer::upload( const World& world )
@@ -137,6 +128,11 @@ void TrackRenderer::draw()
     glBindVertexArray( vao );
     glDrawArrays( GL_TRIANGLES, 0, cpu_buffer.size() );
     glBindVertexArray( 0 );
+}
+
+void TrackRenderer::set_mvp( glm::mat4 &mvp )
+{
+    shader.set_uniform( "uMVP", mvp );
 }
 
 void TrackRenderer::destroy()

@@ -22,6 +22,7 @@
 #include <vector>
 #include <memory>
 
+#include <glm/mat4x4.hpp>
 #include "base_system.h"
 
 #include "rendering/base_renderer.h"
@@ -40,8 +41,11 @@ public:
     GLFWwindow * get_window() { return window; };
     bool should_close() const;
 
+    void set_camera( const glm::mat4& view, const glm::mat4& proj );
+
 private:
     GLFWwindow* window = nullptr;
+     glm::mat4 mvp;
     std::vector<std::unique_ptr<BaseRenderer>> renderers; 
 
     void begin_frame();

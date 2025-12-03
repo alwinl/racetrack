@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <glm/mat4x4.hpp>
+
 class World;
 
 class BaseRenderer
@@ -30,4 +32,6 @@ public:
     virtual void destroy() = 0;
     virtual void upload( const World& world ) = 0;
     virtual void draw() = 0;
+
+    virtual void set_mvp( glm::mat4& mvp ) = 0;
 };

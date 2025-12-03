@@ -19,6 +19,7 @@
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "system_renderer.h"
 #include "../world.h"
@@ -36,6 +37,7 @@ void RenderSystem::init( Engine& engine )
     }
 
     make_renderers();
+    set_camera( glm::mat4( 0.5f ), glm::ortho( -20.f, 20.f, -20.f, 20.f ) );
 }
 
 void RenderSystem::shutdown()
@@ -79,6 +81,14 @@ void RenderSystem::end_frame()
 bool RenderSystem::should_close() const
 {
 	return glfwWindowShouldClose(window);
+}
+
+void RenderSystem::set_camera( const glm::mat4 &view, const glm::mat4 &proj )
+{
+    mvp = view * proj;
+
+    for( auto& r : renderers )
+        r->set_mvp(mvp);
 }
 
 bool RenderSystem::make_window()

@@ -34,6 +34,8 @@ public:
     void upload( const World& world ) override;
     void draw() override;
 
+    void set_mvp( glm::mat4& mvp ) override;
+
 private:
     Shader shader;
     unsigned vao = 0;

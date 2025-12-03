@@ -22,7 +22,6 @@
 #include <glad/gl.h>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include "../../world.h"
 #include "../../components/point.h"
@@ -59,17 +58,6 @@ constexpr int max_objects = 10000;
 
 void PointRenderer::init()
 {
-    glEnable(GL_PROGRAM_POINT_SIZE);
-    
-    shader.init( point_vs, point_fs );
-    {
-        glm::mat4 proj = glm::ortho( -10.f, 10.f, -10.f, 10.f );
-        glm::mat4 view = glm::mat4( 1.0f );
-        glm::mat4 mvp = proj * view;
-
-        shader.set_uniform( "uMVP", mvp );
-    }
-
     glGenVertexArrays( 1, &vao );
     glGenBuffers( 1, &vbo );
 
@@ -85,6 +73,10 @@ void PointRenderer::init()
     glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof( vertex, colour ) );
 
     glBindVertexArray( 0 );
+
+    glEnable(GL_PROGRAM_POINT_SIZE);
+    
+    shader.init( point_vs, point_fs );
 }
 
 void PointRenderer::upload( const World& world )
@@ -111,6 +103,11 @@ void PointRenderer::draw()
     glBindVertexArray( vao );
     glDrawArrays( GL_POINTS, 0, cpu_buffer.size() );
     glBindVertexArray( 0 );
+}
+
+void PointRenderer::set_mvp( glm::mat4 &mvp )
+{
+    shader.set_uniform( "uMVP", mvp );
 }
 
 void PointRenderer::destroy()
