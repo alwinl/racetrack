@@ -26,6 +26,7 @@
 
 #include "rendering/point_renderer.h"
 #include "rendering/triangle_renderer.h"
+#include "rendering/track_renderer.h"
 
 void RenderSystem::init( Engine& engine )
 {
@@ -106,6 +107,7 @@ void RenderSystem::make_renderers()
 {
     renderers.push_back( std::make_unique<PointRenderer>() );
     renderers.push_back( std::make_unique<TriangleRenderer>() );
+    renderers.push_back( std::make_unique<TrackRenderer>() );
 
     for( auto& renderer : renderers )
         renderer->init();

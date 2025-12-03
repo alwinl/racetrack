@@ -1,5 +1,5 @@
 /*
- * triangle_renderer.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
+ * track_renderer.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 #include "base_renderer.h"
 #include "shader.h"
 
-class TriangleRenderer : public BaseRenderer
+class TrackRenderer : public BaseRenderer
 {
 public:
     void init() override;

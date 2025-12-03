@@ -76,13 +76,13 @@ void PointRenderer::init()
     glBindVertexArray( vao );
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
 
-    glBufferData( GL_ARRAY_BUFFER, 2 * sizeof(glm::vec3) * max_objects, nullptr, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, sizeof(vertex) * max_objects, nullptr, GL_DYNAMIC_DRAW );
 
     glEnableVertexAttribArray( 0 );
-    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)0 );
+    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof( vertex, position ) );
 
     glEnableVertexAttribArray( 1 );
-    glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)(sizeof(glm::vec3)) );
+    glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof( vertex, colour ) );
 
     glBindVertexArray( 0 );
 }
@@ -96,15 +96,12 @@ void PointRenderer::upload( const World& world )
 
     for( const auto& [entity, point] : points.all() ) {
 
-        if( const auto* transform = transforms.get(entity) ) {
-
-            cpu_buffer.push_back( transform->translation );
-            cpu_buffer.push_back( point.colour );
-        }
+        if( const auto* transform = transforms.get(entity) )
+            cpu_buffer.push_back( {transform->translation, point.colour } );
     }
 
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    glBufferSubData( GL_ARRAY_BUFFER, 0, cpu_buffer.size() * sizeof( glm::vec3 ), (void*)cpu_buffer.data() );
+    glBufferSubData( GL_ARRAY_BUFFER, 0, cpu_buffer.size() * sizeof( vertex ), (void*)cpu_buffer.data() );
 }
 
 void PointRenderer::draw()
@@ -112,7 +109,7 @@ void PointRenderer::draw()
     shader.activate();
 
     glBindVertexArray( vao );
-    glDrawArrays( GL_POINTS, 0, cpu_buffer.size() / 2 );
+    glDrawArrays( GL_POINTS, 0, cpu_buffer.size() );
     glBindVertexArray( 0 );
 }
 

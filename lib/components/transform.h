@@ -21,7 +21,7 @@
 
 #include <glm/glm.hpp>
 
- #include "component_registry.h"
+#include "component_registry.h"
 
 struct Transform
 {

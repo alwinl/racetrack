@@ -39,5 +39,11 @@ private:
     unsigned vao = 0;
     unsigned vbo = 0;
 
-    std::vector<glm::vec3> cpu_buffer;
+    struct vertex
+    {
+        glm::vec3 position;
+        glm::vec3 colour;
+    };
+
+    std::vector<vertex> cpu_buffer;
 };

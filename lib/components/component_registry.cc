@@ -21,9 +21,11 @@
 #include "transform.h"
 #include "triangle.h"
 #include "velocity.h"
+#include "track.h"
 
 ComponentRegistrar<PointComponent> PointComponent::registrar("Point");
 ComponentRegistrar<TriangleComponent> TriangleComponent::registrar("Triangle");
+ComponentRegistrar<TrackComponent> TrackComponent::registrar("Track");
 ComponentRegistrar<Transform> Transform::registrar("Transform");
 ComponentRegistrar<Velocity> Velocity::registrar("Velocity");
 

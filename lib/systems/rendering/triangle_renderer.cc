@@ -74,13 +74,13 @@ void TriangleRenderer::init()
     glBindVertexArray( vao );
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
 
-    glBufferData( GL_ARRAY_BUFFER, 2 * sizeof(glm::vec3) * 3 * max_objects, nullptr, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, 3 * max_objects * sizeof(vertex), nullptr, GL_DYNAMIC_DRAW );
 
     glEnableVertexAttribArray( 0 );
-    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)0 );
+    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof( vertex, position) );
 
     glEnableVertexAttribArray( 1 );
-    glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(glm::vec3), (void*)(sizeof(glm::vec3)) );
+    glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof( vertex, colour) );
 
     glBindVertexArray( 0 );
 }
@@ -97,15 +97,12 @@ void TriangleRenderer::upload( const World& world )
         if( const auto* transform = transforms.get(entity) ) {
 
             for( int i = 0; i < 3; i++ )
-            {
-                cpu_buffer.push_back( tri.vertices[i] + transform->translation );
-                cpu_buffer.push_back( tri.colour );
-            }
+                cpu_buffer.push_back( {tri.vertices[i] + transform->translation, tri.colour } );
         }
     }
 
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    glBufferSubData( GL_ARRAY_BUFFER, 0, cpu_buffer.size() * sizeof(glm::vec3), (void*)cpu_buffer.data() );
+    glBufferSubData( GL_ARRAY_BUFFER, 0, cpu_buffer.size() * sizeof(vertex), (void*)cpu_buffer.data() );
 }
 
 void TriangleRenderer::draw()
@@ -113,7 +110,7 @@ void TriangleRenderer::draw()
     shader.activate();
 
     glBindVertexArray(vao);
-    glDrawArrays( GL_TRIANGLES, 0, cpu_buffer.size() / 2 );
+    glDrawArrays( GL_TRIANGLES, 0, cpu_buffer.size() );
     glBindVertexArray(0);
 
 }
