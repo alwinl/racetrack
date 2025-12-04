@@ -28,6 +28,7 @@
 #include "rendering/point_renderer.h"
 #include "rendering/triangle_renderer.h"
 #include "rendering/track_renderer.h"
+#include "rendering/lake_renderer.h"
 
 void RenderSystem::init( Engine& engine )
 {
@@ -69,7 +70,7 @@ void RenderSystem::draw( World& world )
 
 void RenderSystem::begin_frame()
 {
-	glClearColor( 0.0F, 0.0F, 0.6F, 1.0F );
+	glClearColor( 0.2F, 0.8F, 0.2F, 1.0F );
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
@@ -115,9 +116,10 @@ bool RenderSystem::make_window()
 
 void RenderSystem::make_renderers()
 {
+    renderers.push_back( std::make_unique<LakeRenderer>() );
+    renderers.push_back( std::make_unique<TrackRenderer>() );
     renderers.push_back( std::make_unique<PointRenderer>() );
     renderers.push_back( std::make_unique<TriangleRenderer>() );
-    renderers.push_back( std::make_unique<TrackRenderer>() );
 
     for( auto& renderer : renderers )
         renderer->init();

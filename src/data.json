@@ -1,6 +1,19 @@
 {
     "entities" : [
         {
+            "components": {
+                "Lake" : {
+                    "lake_axis_length": [ 15.0, 25.0 ],
+                    "lake_freq": 4.0,
+                    "lake_amp": 0.15,
+                    "island_radius": 6.0,
+                    "island_freq": 3.0,
+                    "island_amp": 0.25,
+                    "segments": 200
+                }
+            }
+        },
+        {
             "components" : {
                 "Point" : {
                     "colour" : [ 1.0, 0.0, 0.0]
@@ -57,6 +70,6 @@
                     ]
                 }
             }
-        }        
+        }
     ]
 }

@@ -28,6 +28,7 @@ add_library(
     systems/rendering/point_renderer.cc
     systems/rendering/triangle_renderer.cc
     systems/rendering/track_renderer.cc
+    systems/rendering/lake_renderer.cc
     
     systems/system_input.cc
     systems/system_renderer.cc

@@ -1,5 +1,5 @@
 /*
- * component_registry.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * lake_renderer.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +17,37 @@
  * MA 02110-1301, USA.
  */
 
-#include "point.h"
-#include "transform.h"
-#include "triangle.h"
-#include "velocity.h"
-#include "track.h"
-#include "lake.h"
+#pragma once
 
-ComponentRegistrar<PointComponent> PointComponent::registrar("Point");
-ComponentRegistrar<TriangleComponent> TriangleComponent::registrar("Triangle");
-ComponentRegistrar<TrackComponent> TrackComponent::registrar("Track");
-ComponentRegistrar<LakeComponent> LakeComponent::registrar("Lake");
-ComponentRegistrar<Transform> Transform::registrar("Transform");
-ComponentRegistrar<Velocity> Velocity::registrar("Velocity");
+#include <vector>
 
-void force_component_registration() {}
+#include <glm/glm.hpp>
+
+#include "base_renderer.h"
+#include "shader.h"
+
+class LakeRenderer : public BaseRenderer
+{
+public:
+    void init() override;
+    void destroy() override;
+    void upload( const World& world ) override;
+    void draw() override;
+
+    void set_mvp( glm::mat4& mvp ) override;
+
+private:
+    Shader shader;
+    unsigned vao = 0;
+    unsigned vbo = 0;
+
+    struct vertex {
+        glm::vec3 position;
+        glm::vec3 colour;
+    };
+
+    size_t lake_vertices;
+    size_t island_vertices;
+
+    std::vector<vertex> cpu_buffer;
+};
