@@ -29,9 +29,8 @@
 
     void from_json( const nlohmann::json& json )
     {
-      auto colour_values = json["colour"];
-
-      colour = glm::vec3( colour_values[0], colour_values[1], colour_values[2] );
+        auto [r,g,b] = json.value( "colour", std::array<float,3> {1.0f, 0.0f, 0.0f} );
+        colour = glm::vec3( r, g, b );
     }
 
     static ComponentRegistrar<PointComponent> registrar;

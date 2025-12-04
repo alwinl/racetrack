@@ -29,8 +29,7 @@ struct LakeComponent
     std::vector<glm::vec2> lake_outline;
     std::vector<glm::vec2> island_outline;
 
-    float lake_axis_length[2] = { 10.0f, 15.0f };
-    float lake_radius = 1.0f;
+    std::array<float,2> lake_axis_length = { 1.0f, 1.0f };
     float lake_freq = 4.0f;        // jaggedness frequency
     float lake_amp  = 0.15f;       // jaggedness amount (15%)    
 
@@ -75,14 +74,13 @@ struct LakeComponent
 
     void from_json( const nlohmann::json& json )
     {
-        lake_axis_length[0] = json["lake_axis_length"][0];
-        lake_axis_length[1] = json["lake_axis_length"][1];
-        lake_freq = json["lake_freq"];
-        lake_amp  = json["lake_amp"];
-        island_radius = json["island_radius"];
-        island_freq = json["island_freq"];
-        island_amp  = json["island_amp"];
-        segments = json["segments"];
+        lake_axis_length = { json.value( "lake_axis_length", std::array<float,2> {15.0f, 25.0f} ) };
+        lake_freq = json.value("lake_freq", 4.0f );
+        lake_amp  = json.value("lake_amp", 0.15f );
+        island_radius = json.value("island_radius", 6.0f );
+        island_freq = json.value("island_freq", 3.0f );
+        island_amp  = json.value("island_amp", 0.25f );
+        segments = json.value("segments", 200);
 
         generate_lake();
     }

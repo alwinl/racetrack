@@ -33,6 +33,12 @@ struct TrackComponent
     {
         centreline_points.clear();
 
+        if( !json.contains("points") )
+            throw std::runtime_error("JSON error: missing required key 'points'");
+
+        if( !json["points"].is_array() )
+            throw std::runtime_error("JSON error: 'points' must be an array");
+
         for( auto& p : json["points"] )
             centreline_points.emplace_back( glm::vec3( p[0], p[1], p[2]) );
     }

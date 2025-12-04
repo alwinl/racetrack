@@ -34,17 +34,19 @@ struct TriangleComponent
 
     void from_json( const nlohmann::json& json )
     {
-        auto v1_values = json["v1"];
-        vertices[0] = glm::vec3( v1_values[0], v1_values[1], v1_values[2] );
+        std::array< std::array<float,3>, 3> defaults = {{
+            {{-1.0f, 0.0f, 0.0f}},
+            {{0.0f, 1.0f, 0.0f}},
+            {{1.0f, 0.0f, 0.0f}}
+        }};
 
-        auto v2_values = json["v2"];
-        vertices[1] = glm::vec3( v2_values[0], v2_values[1], v2_values[2] );
+        for( int i=0; i < 3; ++i ) {
+            auto [vx,vy,vz] = json.value( std::string( "v" + std::to_string(i+1) ).c_str(), defaults[i] );
+            vertices[i] = glm::vec3( vx,vy,vz );
+        }
 
-        auto v3_values = json["v3"];
-        vertices[2] = glm::vec3( v3_values[0], v3_values[1], v3_values[2] );
-
-        auto colour_values = json["colour"];
-        colour = glm::vec3( colour_values[0], colour_values[1], colour_values[2] );
+        auto [r,g,b] = json.value( "colour", std::array<float,3> {1.0f, 0.0f, 0.0f} );
+        colour = glm::vec3( r, g, b );
     }
 
     static ComponentRegistrar<TriangleComponent> registrar;

@@ -26,12 +26,19 @@
 struct Transform
 {
     glm::vec3 translation {0.0f};
+    glm::vec3 rotation {0.0f};
+    glm::vec3 scale {1.0f};
 
     void from_json( const nlohmann::json& json )
     {
-        auto translation_values = json["translation"];
+        auto [tx,ty,tz] = json.value( "translation", std::array<float, 3>{0.0f, 0.0f, 0.0f} );
+        translation = glm::vec3( tx, ty, tz );
 
-        translation = glm::vec3( translation_values[0], translation_values[1], translation_values[2] );
+        auto [rx,ry,rz] = json.value( "rotation", std::array<float, 3>{0.0f, 0.0f, 0.0f} );
+        rotation = glm::vec3( rx, ry, rz );
+
+        auto [sx,sy,sz] = json.value( "scale", std::array<float, 3>{1.0f, 1.0f, 1.0f} );
+        scale = glm::vec3( sx, sy, sz );
     }
 
     static ComponentRegistrar<Transform> registrar;

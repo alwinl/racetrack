@@ -29,9 +29,8 @@ struct Velocity
 
     void from_json( const nlohmann::json& json )
     {
-        auto speed_values = json["speed"];
-
-        speed = glm::vec3( speed_values[0], speed_values[1], speed_values[2] );
+        auto [vx,vy,vz] = json.value( "speed", std::array<float, 3>{0.0f, 0.0f, 0.0f} );
+        speed = glm::vec3( vx, vy, vz );
     }
 
     static ComponentRegistrar<Velocity> registrar;
