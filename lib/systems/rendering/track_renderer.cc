@@ -103,15 +103,15 @@ void TrackRenderer::upload( const World& world )
             glm::vec3 left1  = p1 + n * half_width;
             glm::vec3 right1 = p1 - n * half_width;
 
-            glm::vec3 black(0,0,0);
+            glm::vec3 track_colour(0,0,0);
 
-            cpu_buffer.push_back( {left0, black} );
-            cpu_buffer.push_back( {right0, black} );
-            cpu_buffer.push_back( {left1, black} );
+            cpu_buffer.push_back( {left0, track_colour} );
+            cpu_buffer.push_back( {right0, track_colour} );
+            cpu_buffer.push_back( {left1, track_colour} );
 
-            cpu_buffer.push_back( {right0, black} );
-            cpu_buffer.push_back( {right1, black} );
-            cpu_buffer.push_back( {left1, black} );
+            cpu_buffer.push_back( {right0, track_colour} );
+            cpu_buffer.push_back( {right1, track_colour} );
+            cpu_buffer.push_back( {left1, track_colour} );
         }
 
     }
