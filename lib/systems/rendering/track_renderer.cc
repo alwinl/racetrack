@@ -24,8 +24,8 @@
 #include <glm/glm.hpp>
 
 #include "../../world.h"
-#include "../../components/track.h"
-#include "../../components/transform.h"
+#include "../../components/track_component.h"
+#include "../../components/transform_component.h"
 
 static const char* track_vs = R"(
 #version 330 core

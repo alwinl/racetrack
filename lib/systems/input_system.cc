@@ -17,12 +17,12 @@
  * MA 02110-1301, USA.
  */
 
-#include "system_input.h"
+#include "input_system.h"
 
 #include <GLFW/glfw3.h>
 
 #include "../engine.h"
-#include "system_renderer.h"
+#include "render_system.h"
 
 void InputSystem::init( Engine& engine )
 {

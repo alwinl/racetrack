@@ -25,9 +25,9 @@
 
 #include "nlohmann/json.hpp"
 
-#include "systems/system_renderer.h"
-#include "systems/system_physics.h"
-#include "systems/system_input.h"
+#include "systems/render_system.h"
+#include "systems/physics_system.h"
+#include "systems/input_system.h"
 
 #include "components/component_registry.h"
 

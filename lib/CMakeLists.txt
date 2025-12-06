@@ -30,9 +30,9 @@ add_library(
     systems/rendering/track_renderer.cc
     systems/rendering/lake_renderer.cc
     
-    systems/system_input.cc
-    systems/system_renderer.cc
-    systems/system_physics.cc
+    systems/input_system.cc
+    systems/render_system.cc
+    systems/physics_system.cc
 
     components/component_registry.cc
 )

@@ -17,18 +17,18 @@
  * MA 02110-1301, USA.
  */
 
-#include "system_physics.h"
+#include "physics_system.h"
 
 #include "../world.h"
 
-#include "../components/transform.h"
-#include "../components/velocity.h"
+#include "../components/transform_component.h"
+#include "../components/velocity_component.h"
 
 
 void PhysicsSystem::update( World &world, double dt )
 {
-    auto& transforms = world.storage<Transform>();
-    auto& velocities = world.storage<Velocity>();
+    auto& transforms = world.storage<TransformComponent>();
+    auto& velocities = world.storage<VelocityComponent>();
 
     // Move all entities that have both Transform and Velocity
     for( auto& [entity, v] : velocities.all() ) {

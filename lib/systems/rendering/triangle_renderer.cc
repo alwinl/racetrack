@@ -24,8 +24,8 @@
 #include <glm/glm.hpp>
 
 #include "../../world.h"
-#include "../../components/triangle.h"
-#include "../../components/transform.h"
+#include "../../components/triangle_component.h"
+#include "../../components/transform_component.h"
 
 
 static const char* triangle_vs = R"(
@@ -82,7 +82,7 @@ void TriangleRenderer::upload( const World& world )
     cpu_buffer.clear();
 
     const auto& tris = world.storage<TriangleComponent>();
-    const auto& transforms = world.storage<Transform>();
+    const auto& transforms = world.storage<TransformComponent>();
 
     for( const auto& [entity, tri] : tris.all() )
     {

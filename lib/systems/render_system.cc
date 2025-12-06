@@ -21,7 +21,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "system_renderer.h"
+#include "render_system.h"
 #include "../world.h"
 #include "../engine.h"
 

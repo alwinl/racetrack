@@ -24,8 +24,8 @@
 #include <glm/glm.hpp>
 
 #include "../../world.h"
-#include "../../components/point.h"
-#include "../../components/transform.h"
+#include "../../components/point_component.h"
+#include "../../components/transform_component.h"
 
 static const char* point_vs = R"(
 #version 330 core
@@ -84,7 +84,7 @@ void PointRenderer::upload( const World& world )
     cpu_buffer.clear();
 
     const auto& points = world.storage<PointComponent>();
-    const auto& transforms = world.storage<Transform>();
+    const auto& transforms = world.storage<TransformComponent>();
 
     for( const auto& [entity, point] : points.all() ) {
 

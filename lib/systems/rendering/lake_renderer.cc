@@ -24,7 +24,7 @@
 #include <glm/glm.hpp>
 
 #include "../../world.h"
-#include "../../components/lake.h"
+#include "../../components/lake_component.h"
 
 
 static const char* lake_vs = R"(

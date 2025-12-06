@@ -23,7 +23,7 @@
 
 #include "component_registry.h"
 
-struct Transform
+struct TransformComponent
 {
     glm::vec3 translation {0.0f};
     glm::vec3 rotation {0.0f};
@@ -41,5 +41,5 @@ struct Transform
         scale = glm::vec3( sx, sy, sz );
     }
 
-    static ComponentRegistrar<Transform> registrar;
+    static ComponentRegistrar<TransformComponent> registrar;
 };

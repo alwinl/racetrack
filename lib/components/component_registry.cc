@@ -17,18 +17,18 @@
  * MA 02110-1301, USA.
  */
 
-#include "point.h"
-#include "transform.h"
-#include "triangle.h"
-#include "velocity.h"
-#include "track.h"
-#include "lake.h"
+#include "point_component.h"
+#include "transform_component.h"
+#include "triangle_component.h"
+#include "velocity_component.h"
+#include "track_component.h"
+#include "lake_component.h"
 
 ComponentRegistrar<PointComponent> PointComponent::registrar("Point");
 ComponentRegistrar<TriangleComponent> TriangleComponent::registrar("Triangle");
 ComponentRegistrar<TrackComponent> TrackComponent::registrar("Track");
 ComponentRegistrar<LakeComponent> LakeComponent::registrar("Lake");
-ComponentRegistrar<Transform> Transform::registrar("Transform");
-ComponentRegistrar<Velocity> Velocity::registrar("Velocity");
+ComponentRegistrar<TransformComponent> TransformComponent::registrar("Transform");
+ComponentRegistrar<VelocityComponent> VelocityComponent::registrar("Velocity");
 
 void force_component_registration() {}

@@ -23,7 +23,7 @@
 
 #include "component_registry.h"
 
-struct Velocity
+struct VelocityComponent
 {
     glm::vec3 speed {0.0f};
 
@@ -33,5 +33,5 @@ struct Velocity
         speed = glm::vec3( vx, vy, vz );
     }
 
-    static ComponentRegistrar<Velocity> registrar;
+    static ComponentRegistrar<VelocityComponent> registrar;
 };
