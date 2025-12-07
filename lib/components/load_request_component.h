@@ -1,5 +1,5 @@
 /*
- * resourcesystem.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
+ * load_request_component.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,18 +19,18 @@
 
 #pragma once
 
-#include <string>
+#include <glm/glm.hpp>
 
-#include "base_system.h"
+#include "component_registry.h"
 
-class ResourceSystem : public BaseSystem<ResourceSystem>
+struct LoadRequestComponent
 {
-public:    
-    ResourceSystem( Engine* eng ) : BaseSystem<ResourceSystem>( eng ) {};
+    std::string filename;
 
-    void update( World& world, double dt ) override;
-    void flush( World& world ) override;
+    void from_json( const nlohmann::json& json )
+    {
+        filename = json.value( "filename", "" );
+    }
 
-private:    
-    void load( World& world, const std::string &filename );
+    static ComponentRegistrar<LoadRequestComponent> registrar;
 };

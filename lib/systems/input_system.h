@@ -34,4 +34,6 @@ public:
 private:
     GLFWwindow* window;
     void process_key( int key, int action );    
+
+    bool load_level_0 = false;
 };

@@ -45,25 +45,6 @@ void Engine::init()
     force_component_registration();
 }
 
-void Engine::load( const std::string &filename )
-{
-    std::ifstream datafile( filename );
-
-    if( !datafile.is_open() )
-        return;
-
-    nlohmann::json data;
-    datafile >> data;
-
-    for( auto& ent : data["entities"] ) {
-
-        Entity e = world.create_entity();
-
-        for( auto [name, component_data] : ent["components"].items() )
-            ComponentRegistry::create( name, world, e, component_data );
-    }
-}
-
 void Engine::run()
 {
     double last = glfwGetTime();

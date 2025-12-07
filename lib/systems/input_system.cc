@@ -24,6 +24,8 @@
 #include "../engine.h"
 #include "render_system.h"
 
+#include "../components/load_request_component.h"
+
 void InputSystem::init()
 {
     RenderSystem * renderer = engine->get_system<RenderSystem>();
@@ -43,10 +45,25 @@ void InputSystem::init()
 void InputSystem::update( World &world, double dt )
 {
     glfwPollEvents();
+
+    if( load_level_0 ) {
+        Entity event = world.create_entity();
+
+        LoadRequestComponent comp;
+        comp.filename = "/home/alwin/Documents/Programming/Graphics/racetrack/src/data.json";
+
+        world.add_component( event, comp );
+
+        load_level_0 = false;
+    }
 }
 
 void InputSystem::process_key( int key, int action )
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose( window, GLFW_TRUE );
+
+    if( key == GLFW_KEY_0 && action == GLFW_PRESS ) {
+        load_level_0 = true;
+    }
 }
