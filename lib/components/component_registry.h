@@ -22,40 +22,96 @@
 #include <unordered_map>
 #include <string>
 #include <functional>
+#include <typeindex>
 
 #include "../entity.h"
 #include "../world.h"
 
 #include "nlohmann/json.hpp"
 
-using ComponentFactory = std::function<void(World&, Entity, const nlohmann::json&)>;
+using ComponentCreator = std::function<void(World&, Entity, const nlohmann::json&)>;
+using ComponentFlusher =  std::function<void(World&)>;
+using ComponentDestroyer =  std::function<void(World&, Entity)>;
 
 class ComponentRegistry
 {
 public:
-    static void register_factory( const std::string& name, ComponentFactory factory )
-        { get().factories[name] = factory; }
+    static void register_funcs( const std::string& name, std::type_index t, ComponentCreator creator, ComponentDestroyer destroyer, ComponentFlusher flusher )
+    {
+        get().creators.insert({name, creator});
+        get().type_lookup.insert({name, t});
+        get().destroyers.insert({t, destroyer});
+        get().flushers.insert({t, flusher});
+    }
 
     static bool create(const std::string& name, World& world, Entity e, const nlohmann::json& data)
     {
-        auto& map = get().factories;
+        auto& creators_map = get().creators;
+        auto& types_lookup = get().type_lookup; 
 
-        auto it = map.find(name);
-        if( it != map.end() ) {
-            it->second( world, e, data );
-            return true;
-        }
+        auto it = creators_map.find(name);
+        if( it == creators_map.end() )
+            return false;
 
-        return false;
+        auto it2 = types_lookup.find( name );
+        if( it2 == types_lookup.end() )
+            return false;
+
+        it->second( world, e, data );
+        get().entity_typelist[e].push_back( it2->second );
+
+        return true;
     }
 
+    static bool destroy( World& world, Entity e )
+    {
+        auto& map = get().entity_typelist;
+
+        auto it = map.find(e);
+        if( it == map.end() )
+            return false;
+
+        for( auto& t : it->second )
+            get().remove_component_by_type( world, e, t );
+
+        map.erase( it );
+        return true;
+    }
+
+    static bool flush_all( World& world )
+    {
+        for( auto flusher : get().flushers )
+            flusher.second( world );
+
+        return true;
+    }
+
+    static const std::unordered_map<Entity, std::vector<std::type_index>>& 
+        get_entity_typelist()
+    {
+        return get().entity_typelist;
+    }
+        
 private:
-    std::unordered_map<std::string, ComponentFactory> factories;
+    std::unordered_map<std::string, ComponentCreator> creators;
+    std::unordered_map<std::string, std::type_index> type_lookup;
+
+    std::unordered_map<Entity, std::vector<std::type_index>> entity_typelist;
+    std::unordered_map<std::type_index, ComponentDestroyer> destroyers;
+
+    std::unordered_map<std::type_index, ComponentFlusher> flushers;
 
     static ComponentRegistry& get()
     {
         static ComponentRegistry instance;
         return instance;
+    }
+
+    void remove_component_by_type( World& world, Entity e, std::type_index t )
+    {
+        auto it = destroyers.find(t);
+        if( it != destroyers.end() )
+            it->second( world, e );
     }
 };
 
@@ -64,7 +120,7 @@ struct ComponentRegistrar
 {
     ComponentRegistrar( const std::string& name )
     {
-        auto extraction_func = 
+        auto create_func = 
             []( World& world, Entity e, const nlohmann::json& json )
             {
                 T component;
@@ -72,7 +128,19 @@ struct ComponentRegistrar
                 world.add_component<T>(e, component);
             };
 
-        ComponentRegistry::register_factory( name, extraction_func );
+        auto destroy_func = 
+            []( World& world, Entity e )
+            {
+                world.remove_entity<T>( e );
+            };
+
+        auto flush_func = 
+            []( World& world )
+            {
+                world.flush_components<T>();
+            };
+
+        ComponentRegistry::register_funcs( name, typeid(T), create_func, destroy_func, flush_func );
     }
 };
 

@@ -48,6 +48,8 @@ void ResourceSystem::load( World& world, const std::string &filename )
     nlohmann::json data;
     datafile >> data;
 
+    world.clear_all_entities();
+
     for( auto& ent : data["entities"] ) {
 
         Entity e = world.create_entity();

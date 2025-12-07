@@ -60,6 +60,8 @@ public:
         list.clear();
     }
 
+    void clear_all_entities();
+
 private:
     Entity next_id = 1;
 
