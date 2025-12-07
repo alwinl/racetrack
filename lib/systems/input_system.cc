@@ -32,11 +32,11 @@ void InputSystem::init( Engine& engine )
 
     window = renderer->get_window();
 
-    glfwSetWindowUserPointer( window, this );
-
-    glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int scancode, int action, int mods){
-        auto* self = static_cast<InputSystem*>(glfwGetWindowUserPointer(win));
-        self->process_key(key, action);
+    glfwSetKeyCallback( window, [](GLFWwindow* win, int key, int scancode, int action, int mods)
+    {
+        Engine* eng = static_cast<Engine*>(glfwGetWindowUserPointer(win));
+        InputSystem* system = eng->get_system<InputSystem>();
+        system->process_key(key, action);
     });
 }
 
