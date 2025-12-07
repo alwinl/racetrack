@@ -39,13 +39,13 @@ public:
     void draw( World& world ) override;
 
     GLFWwindow * get_window() { return window; };
-    bool should_close() const;
 
     void set_camera( const glm::mat4& view, const glm::mat4& proj );
 
 private:
     GLFWwindow* window = nullptr;
-     glm::mat4 mvp;
+    glm::mat4 mvp;
+    Engine * engine;
     std::vector<std::unique_ptr<BaseRenderer>> renderers; 
 
     void begin_frame();

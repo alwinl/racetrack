@@ -64,10 +64,6 @@ void Engine::load( const std::string &filename )
 
 void Engine::run()
 {
-    auto renderer = get_system<RenderSystem>();
-    if( !renderer )
-        return;
-
     double last = glfwGetTime();
 
     while( running ) {
@@ -81,9 +77,6 @@ void Engine::run()
 
         for( auto& system : systems )
             system->draw( world );
-
-        if( renderer->should_close() )
-            running = false;
     }
 }
 

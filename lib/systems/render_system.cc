@@ -32,6 +32,8 @@
 
 void RenderSystem::init( Engine& engine )
 {
+    this->engine = &engine;
+
     if( !make_window() ) {
         engine.stop_running();
         return;
@@ -54,6 +56,11 @@ void RenderSystem::shutdown()
 
 void RenderSystem::update( World& world, double dt )
 {
+    if( glfwWindowShouldClose(window) ) {
+        engine->stop_running();
+        return;
+    }
+
     for( auto& renderer : renderers )
         renderer->upload( world );
 }
@@ -77,11 +84,6 @@ void RenderSystem::begin_frame()
 void RenderSystem::end_frame()
 {
     glfwSwapBuffers(window);        
-}
-
-bool RenderSystem::should_close() const
-{
-	return glfwWindowShouldClose(window);
 }
 
 void RenderSystem::set_camera( const glm::mat4 &view, const glm::mat4 &proj )
