@@ -24,5 +24,7 @@
 class PhysicsSystem : public BaseSystem<PhysicsSystem>
 {
 public:
+    PhysicsSystem( Engine* eng ) : BaseSystem<PhysicsSystem>( eng ) {};
+
     void update( World& world, double dt ) override;
 };

@@ -34,13 +34,13 @@
 
 void Engine::init()
 {
-    systems.push_back( std::make_unique<RenderSystem>() );
-    systems.push_back( std::make_unique<InputSystem>() );
-    systems.push_back( std::make_unique<ResourceSystem>() );
-    systems.push_back( std::make_unique<PhysicsSystem>() );
+    systems.push_back( std::make_unique<RenderSystem>( this ) );
+    systems.push_back( std::make_unique<InputSystem>( this ) );
+    systems.push_back( std::make_unique<ResourceSystem>( this ) );
+    systems.push_back( std::make_unique<PhysicsSystem>( this ) );
 
     for( auto& system : systems )
-        system->init( *this );
+        system->init();
 
     force_component_registration();
 }

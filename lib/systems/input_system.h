@@ -26,7 +26,9 @@ struct GLFWwindow;
 class InputSystem : public BaseSystem<InputSystem>
 {
 public:
-    void init( Engine& engine ) override;
+    InputSystem( Engine* eng ) : BaseSystem<InputSystem>( eng ) {};
+
+    void init() override;
     void update( World& world, double dt ) override;
 
 private:

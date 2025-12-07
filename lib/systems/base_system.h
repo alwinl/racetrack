@@ -31,7 +31,7 @@ public:
 
     virtual std::type_index type() const = 0;
 
-    virtual void init( Engine& engine ) = 0;
+    virtual void init() = 0;
     virtual void update( World& world, double dt ) = 0;
     virtual void draw( World& world ) = 0;
     virtual void shutdown() = 0;
@@ -41,10 +41,15 @@ template<typename T>
 class BaseSystem : public ISystem
 {
 public:
+    BaseSystem( Engine * eng) : engine(eng) {}
+
     std::type_index type() const override { return typeid(T); }
 
-    void init( Engine& engine ) override {}
+    void init() override {}
     void update( World& world, double dt ) override {}
     void draw( World& world ) override {}
     void shutdown() override {}
+
+protected:
+    Engine * engine;
 };

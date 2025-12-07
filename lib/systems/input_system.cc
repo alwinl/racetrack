@@ -24,9 +24,9 @@
 #include "../engine.h"
 #include "render_system.h"
 
-void InputSystem::init( Engine& engine )
+void InputSystem::init()
 {
-    RenderSystem * renderer = engine.get_system<RenderSystem>();
+    RenderSystem * renderer = engine->get_system<RenderSystem>();
     if( !renderer )
         return;
 

@@ -30,12 +30,10 @@
 #include "rendering/track_renderer.h"
 #include "rendering/lake_renderer.h"
 
-void RenderSystem::init( Engine& engine )
+void RenderSystem::init()
 {
-    this->engine = &engine;
-
     if( !make_window() ) {
-        engine.stop_running();
+        engine->stop_running();
         return;
     }
 

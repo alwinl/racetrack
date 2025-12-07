@@ -33,7 +33,9 @@ class World;
 class RenderSystem : public BaseSystem<RenderSystem>
 {
 public:
-    void init( Engine& engine ) override;
+    RenderSystem( Engine* eng ) : BaseSystem<RenderSystem>( eng ) {};
+
+    void init() override;
     void shutdown() override;
     void update( World& world, double dt ) override;
     void draw( World& world ) override;
