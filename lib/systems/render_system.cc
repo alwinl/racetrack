@@ -37,8 +37,6 @@ void RenderSystem::init()
         return;
     }
 
-    glfwSetWindowUserPointer( window, this->engine );
-
     make_renderers();
     set_camera( glm::mat4( 0.5f ), glm::ortho( -20.f, 20.f, -20.f, 20.f ) );
 }
@@ -112,6 +110,8 @@ bool RenderSystem::make_window()
 
 	if( gladLoadGL( glfwGetProcAddress ) == 0 )
         return false;
+
+    glfwSetWindowUserPointer( window, engine );
 
     glfwSetWindowSizeCallback( window, [](GLFWwindow* window, int width, int height )
     {
