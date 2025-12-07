@@ -28,6 +28,7 @@ class ComponentStorage
 {
 public:
     T* add( Entity e, const T& component ) { components[e] = component; return &(components[e]); }
+    void remove( Entity e ) { components.erase(e); }
     bool has(Entity e) const { return components.count(e); }
 
     T* get( Entity e ) { auto it = components.find(e); return it != components.end() ? &it->second : nullptr; }

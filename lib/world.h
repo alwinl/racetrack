@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "entity.h"
 #include "components/component_storage.h"
 
@@ -26,6 +28,9 @@ class World
 {
 public:
     Entity create_entity() { return next_id++; }
+
+    template<typename T>
+    void remove_entity( Entity e ) { mark_for_removal<T>( e ); }
 
     template<typename T>
     T& add_component( Entity e, const T& component )
@@ -43,6 +48,18 @@ public:
     const ComponentStorage<T>& storage() const
         { return get_storage<T>(); }
 
+    template<typename T>
+    void flush_components( ) 
+    {
+        auto& list = removal_queue<T>();
+        auto& store = get_storage<T>();
+
+        for( Entity e : list )
+            store.remove(e);
+
+        list.clear();
+    }
+
 private:
     Entity next_id = 1;
 
@@ -51,5 +68,18 @@ private:
     {
         static ComponentStorage<T> storage;
         return storage;
+    }
+
+    template<typename T>
+    std::vector<Entity>& removal_queue()
+    {
+        static std::vector<Entity> queue;
+        return queue;
+    }
+
+    template<typename T>
+    void mark_for_removal(Entity e)
+    {
+        removal_queue<T>().push_back(e);
     }
 };

@@ -34,6 +34,7 @@ public:
     virtual void init() = 0;
     virtual void update( World& world, double dt ) = 0;
     virtual void draw( World& world ) = 0;
+    virtual void flush( World& world ) = 0;
     virtual void shutdown() = 0;
 };
 
@@ -48,6 +49,7 @@ public:
     void init() override {}
     void update( World& world, double dt ) override {}
     void draw( World& world ) override {}
+    void flush( World& world ) override { }
     void shutdown() override {}
 
 protected:

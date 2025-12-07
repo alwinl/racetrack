@@ -79,6 +79,9 @@ void Engine::run()
 
         for( auto& system : systems )
             system->draw( world );
+
+        for( auto& system : systems )
+            system->flush( world );
     }
 }
 
