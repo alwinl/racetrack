@@ -47,7 +47,6 @@ public:
 private:
     GLFWwindow* window = nullptr;
     glm::mat4 mvp;
-    Engine * engine;
     std::vector<std::unique_ptr<BaseRenderer>> renderers; 
 
     void begin_frame();
