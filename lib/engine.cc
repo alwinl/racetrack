@@ -28,6 +28,7 @@
 #include "systems/render_system.h"
 #include "systems/physics_system.h"
 #include "systems/input_system.h"
+#include "systems/resource_system.h"
 
 #include "components/component_registry.h"
 
@@ -35,6 +36,7 @@ void Engine::init()
 {
     systems.push_back( std::make_unique<RenderSystem>() );
     systems.push_back( std::make_unique<InputSystem>() );
+    systems.push_back( std::make_unique<ResourceSystem>() );
     systems.push_back( std::make_unique<PhysicsSystem>() );
 
     for( auto& system : systems )

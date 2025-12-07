@@ -32,6 +32,7 @@ add_library(
     
     systems/input_system.cc
     systems/render_system.cc
+    systems/resource_system.cc
     systems/physics_system.cc
 
     components/component_registry.cc
