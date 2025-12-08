@@ -24,6 +24,8 @@
 #include "track_component.h"
 #include "lake_component.h"
 #include "load_request_component.h"
+#include "mesh_component.h"
+#include "geometry_component.h"
 
 ComponentRegistrar<PointComponent> PointComponent::registrar("Point");
 ComponentRegistrar<TriangleComponent> TriangleComponent::registrar("Triangle");
@@ -32,5 +34,7 @@ ComponentRegistrar<LakeComponent> LakeComponent::registrar("Lake");
 ComponentRegistrar<TransformComponent> TransformComponent::registrar("Transform");
 ComponentRegistrar<VelocityComponent> VelocityComponent::registrar("Velocity");
 ComponentRegistrar<LoadRequestComponent> LoadRequestComponent::registrar("Level");
+ComponentRegistrar<MeshComponent> MeshComponent::registrar("mesh");
+ComponentRegistrar<GeometryComponent> GeometryComponent::registrar("polygon");
 
 void force_component_registration() {}

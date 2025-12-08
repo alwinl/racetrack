@@ -29,6 +29,7 @@
 #include "rendering/triangle_renderer.h"
 #include "rendering/track_renderer.h"
 #include "rendering/lake_renderer.h"
+#include "rendering/mesh_renderer.h"
 
 void RenderSystem::init()
 {
@@ -127,6 +128,7 @@ void RenderSystem::make_renderers()
     renderers.push_back( std::make_unique<TrackRenderer>() );
     renderers.push_back( std::make_unique<PointRenderer>() );
     renderers.push_back( std::make_unique<TriangleRenderer>() );
+    renderers.push_back( std::make_unique<MeshRenderer>() );
 
     for( auto& renderer : renderers )
         renderer->init();
