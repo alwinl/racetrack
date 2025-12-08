@@ -30,7 +30,8 @@ public:
     Entity create_entity() { return next_id++; }
 
     template<typename T>
-    void remove_entity( Entity e ) { mark_for_removal<T>( e ); }
+    void remove_entity( Entity e )
+        { removal_queue<T>().push_back(e); }
 
     template<typename T>
     T& add_component( Entity e, const T& component )
@@ -77,11 +78,5 @@ private:
     {
         static std::vector<Entity> queue;
         return queue;
-    }
-
-    template<typename T>
-    void mark_for_removal(Entity e)
-    {
-        removal_queue<T>().push_back(e);
     }
 };
