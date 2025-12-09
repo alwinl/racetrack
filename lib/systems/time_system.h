@@ -1,5 +1,5 @@
 /*
- * engine.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * time_system.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,39 +19,20 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include "base_system.h"
 
-#include "systems/base_system.h"
-#include "world.h"
-
-class Engine
+class TimeSystem : public BaseSystem<TimeSystem>
 {
 public:
-    void init();
-    void run();
-    void shutdown();
+    TimeSystem( Engine* eng ) : BaseSystem<TimeSystem>( eng ) {};
 
-    void stop_running() { running = false; }
+    void init() override;
 
-    template<typename T> T* get_system();
+    void update( World& world, double ) override;
+
+    double delta() { return dt; }
 
 private:
-    World world;
-    std::vector<std::unique_ptr<ISystem>> systems;
-    bool running = true;
-
-    void make_systems();
+    double last = 0.0;
+    double dt = 0.0;
 };
-
-template<typename T>
-T* Engine::get_system()
-{
-    for( auto& sys : systems ) {
-        if( sys->type() == typeid(T) )
-            return static_cast<T*>(sys.get());
-    }
-
-    return nullptr;
-}
-

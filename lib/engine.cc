@@ -19,16 +19,11 @@
 
 #include "engine.h"
 
-#include <GLFW/glfw3.h>
-
-#include <fstream>
-
-#include "nlohmann/json.hpp"
-
 #include "systems/render_system.h"
-#include "systems/physics_system.h"
+#include "systems/time_system.h"
 #include "systems/input_system.h"
 #include "systems/resource_system.h"
+#include "systems/physics_system.h"
 #include "systems/geometry_system.h"
 
 #include "components/component_registry.h"
@@ -44,12 +39,12 @@ void Engine::init()
 
 void Engine::run()
 {
+    TimeSystem * time_system = get_system<TimeSystem>();
+
     while( running ) {
 
-        double elapsed = get_elapsed();
-
         for( auto& system : systems )
-            system->update( world, elapsed );
+            system->update( world, time_system->delta() );
 
         for( auto& system : systems )
             system->draw( world );
@@ -69,20 +64,9 @@ void Engine::make_systems()
 {
     // push systems in the order you need
     systems.push_back( std::make_unique<RenderSystem>( this ) );
+    systems.push_back( std::make_unique<TimeSystem>( this ) );
     systems.push_back( std::make_unique<InputSystem>( this ) );
     systems.push_back( std::make_unique<ResourceSystem>( this ) );
     systems.push_back( std::make_unique<PhysicsSystem>( this ) );
     systems.push_back( std::make_unique<GeometrySystem>( this ) );
 }
-
-double Engine::get_elapsed()
-{
-    static double last = glfwGetTime();
-
-    double now = glfwGetTime();
-    double elapsed = now - last;
-    last = now;
-
-    return elapsed;
-}
-

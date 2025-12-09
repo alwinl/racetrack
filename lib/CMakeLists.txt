@@ -32,8 +32,9 @@ add_library(
     systems/rendering/lake_renderer.cc
     systems/rendering/mesh_renderer.cc
     
-    systems/input_system.cc
     systems/render_system.cc
+    systems/time_system.cc
+    systems/input_system.cc
     systems/resource_system.cc
     systems/physics_system.cc
     systems/geometry_system.cc

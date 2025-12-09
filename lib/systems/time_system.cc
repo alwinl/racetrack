@@ -1,5 +1,5 @@
 /*
- * engine.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * system_physics.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,41 +17,19 @@
  * MA 02110-1301, USA.
  */
 
-#pragma once
+#include "time_system.h"
 
-#include <vector>
-#include <memory>
+#include <GLFW/glfw3.h>
 
-#include "systems/base_system.h"
-#include "world.h"
-
-class Engine
+void TimeSystem::init()
 {
-public:
-    void init();
-    void run();
-    void shutdown();
-
-    void stop_running() { running = false; }
-
-    template<typename T> T* get_system();
-
-private:
-    World world;
-    std::vector<std::unique_ptr<ISystem>> systems;
-    bool running = true;
-
-    void make_systems();
-};
-
-template<typename T>
-T* Engine::get_system()
-{
-    for( auto& sys : systems ) {
-        if( sys->type() == typeid(T) )
-            return static_cast<T*>(sys.get());
-    }
-
-    return nullptr;
+    last = glfwGetTime();
 }
 
+void TimeSystem::update( World &world, double )
+{
+    double now = glfwGetTime();
+
+    dt = now - last;
+    last = now;
+}

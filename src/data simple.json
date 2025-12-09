@@ -1,0 +1,40 @@
+{
+    "entities" : [
+        {
+            "components": {
+                "polygon" : {
+                    "axis_a" : 20.0,
+                    "axis_b" : 20.0,
+                    "segments" : 50.0,
+                    "closed" : true,
+                    "filled" : true,
+                    "colour" : [1.0, 0.0, 1.0]
+                }
+            }
+        },
+        {
+            "components": {
+                "polygon" : {
+                    "axis_a" : 15.0,
+                    "axis_b" : 15.0,
+                    "segments" : 50.0,
+                    "closed" : true,
+                    "filled" : true,
+                    "colour" : [0.0, 1.0, 1.0]
+                }
+            }
+        },
+        {
+            "components": {
+                "polygon" : {
+                    "axis_a" : 10.0,
+                    "axis_b" : 10.0,
+                    "segments" : 4.0,
+                    "closed" : true,
+                    "filled" : true,
+                    "colour" : [0.0, 0.0, 1.0]
+                }
+            }
+        }
+    ]
+}

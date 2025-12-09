@@ -40,6 +40,8 @@ void InputSystem::init()
         InputSystem* system = eng->get_system<InputSystem>();
         system->process_key(key, action);
     });
+
+    load_level_0 = true;
 }
 
 void InputSystem::update( World &world, double dt )
