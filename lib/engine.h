@@ -40,6 +40,8 @@ private:
     bool running = true;
     std::vector<std::unique_ptr<ISystem>> systems;
 
+    void make_systems();
+
     World world;
 };
 

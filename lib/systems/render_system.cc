@@ -39,6 +39,10 @@ void RenderSystem::init()
     }
 
     make_renderers();
+
+    for( auto& renderer : renderers )
+        renderer->init();
+
     set_camera( glm::mat4( 0.5f ), glm::ortho( -20.f, 20.f, -20.f, 20.f ) );
 }
 
@@ -124,12 +128,10 @@ bool RenderSystem::make_window()
 
 void RenderSystem::make_renderers()
 {
+    // renderers will be drawn in the order of insertion
     renderers.push_back( std::make_unique<LakeRenderer>() );
     renderers.push_back( std::make_unique<TrackRenderer>() );
     renderers.push_back( std::make_unique<PointRenderer>() );
     renderers.push_back( std::make_unique<TriangleRenderer>() );
     renderers.push_back( std::make_unique<MeshRenderer>() );
-
-    for( auto& renderer : renderers )
-        renderer->init();
 }

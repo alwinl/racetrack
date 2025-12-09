@@ -35,16 +35,11 @@
 
 void Engine::init()
 {
-    systems.push_back( std::make_unique<RenderSystem>( this ) );
-    systems.push_back( std::make_unique<InputSystem>( this ) );
-    systems.push_back( std::make_unique<ResourceSystem>( this ) );
-    systems.push_back( std::make_unique<PhysicsSystem>( this ) );
-    systems.push_back( std::make_unique<GeometrySystem>( this ) );
+    make_systems();
+    force_component_registration();
 
     for( auto& system : systems )
         system->init();
-
-    force_component_registration();
 }
 
 void Engine::run()
@@ -74,3 +69,12 @@ void Engine::shutdown()
         system->shutdown();
 }
 
+void Engine::make_systems()
+{
+    // push systems in the order you need
+    systems.push_back( std::make_unique<RenderSystem>( this ) );
+    systems.push_back( std::make_unique<InputSystem>( this ) );
+    systems.push_back( std::make_unique<ResourceSystem>( this ) );
+    systems.push_back( std::make_unique<PhysicsSystem>( this ) );
+    systems.push_back( std::make_unique<GeometrySystem>( this ) );
+}
