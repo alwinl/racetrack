@@ -41,6 +41,7 @@ private:
     std::vector<std::unique_ptr<ISystem>> systems;
 
     void make_systems();
+    double get_elapsed();
 
     World world;
 };

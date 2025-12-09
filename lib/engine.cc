@@ -44,13 +44,9 @@ void Engine::init()
 
 void Engine::run()
 {
-    double last = glfwGetTime();
-
     while( running ) {
 
-        double now = glfwGetTime();
-        double elapsed = now - last;
-        last = now;
+        double elapsed = get_elapsed();
 
         for( auto& system : systems )
             system->update( world, elapsed );
@@ -78,3 +74,15 @@ void Engine::make_systems()
     systems.push_back( std::make_unique<PhysicsSystem>( this ) );
     systems.push_back( std::make_unique<GeometrySystem>( this ) );
 }
+
+double Engine::get_elapsed()
+{
+    static double last = glfwGetTime();
+
+    double now = glfwGetTime();
+    double elapsed = now - last;
+    last = now;
+
+    return elapsed;
+}
+
