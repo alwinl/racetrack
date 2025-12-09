@@ -25,8 +25,6 @@
 #include "systems/base_system.h"
 #include "world.h"
 
-class RenderSystem;
-
 class Engine
 {
 public:
@@ -36,20 +34,23 @@ public:
 
     void stop_running() { running = false; }
 
-    template<typename T>
-    T* get_system()
-    {
-        for( auto& sys : systems ) {
-            if( sys->type() == typeid(T) )
-                return static_cast<T*>(sys.get());
-        }
-        return nullptr;
-    }
+    template<typename T> T* get_system();
 
 private:
     bool running = true;
     std::vector<std::unique_ptr<ISystem>> systems;
 
     World world;
-
 };
+
+template<typename T>
+T* Engine::get_system()
+{
+    for( auto& sys : systems ) {
+        if( sys->type() == typeid(T) )
+            return static_cast<T*>(sys.get());
+    }
+
+    return nullptr;
+}
+
