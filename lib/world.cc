@@ -19,22 +19,3 @@
 
 #include "world.h"
 
-#include "components/component_registry.h"
-
-void World::clear_all_entities()
-{
-    auto& typelist = ComponentRegistry::get_entity_typelist();
-
-    // We copy keys because destroy() mutates the typelist map
-    std::vector<Entity> to_delete;
-    to_delete.reserve(typelist.size());
-    for( auto& [entity, types] : typelist )
-        to_delete.push_back(entity);
-
-    for( Entity e : to_delete )
-        ComponentRegistry::destroy(*this, e);
-
-    ComponentRegistry::flush_all(*this);
-
-    next_id = 1;
-}

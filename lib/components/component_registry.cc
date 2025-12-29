@@ -37,4 +37,89 @@ ComponentRegistrar<LoadRequestComponent> LoadRequestComponent::registrar("Level"
 ComponentRegistrar<MeshComponent> MeshComponent::registrar("mesh");
 ComponentRegistrar<GeometryComponent> GeometryComponent::registrar("polygon");
 
-void force_component_registration() {}
+void ComponentRegistry::register_funcs( const std::string& name, std::type_index t, ComponentCreator creator, ComponentDestroyer destroyer, ComponentFlusher flusher )
+{
+    get().creators.insert({name, creator});
+    get().destroyers.insert({t, destroyer});
+    get().flushers.insert({t, flusher});
+
+    get().type_lookup.insert({name, t});
+}
+
+bool ComponentRegistry::create( World& world, Entity e, const std::string& name, const nlohmann::json& data)
+{
+    auto& creators_map = get().creators;
+
+    auto it = creators_map.find(name);
+    if( it == creators_map.end() )
+        return false;
+
+    auto& types_lookup = get().type_lookup; 
+
+    auto it2 = types_lookup.find( name );
+    if( it2 == types_lookup.end() )
+        return false;
+
+    {
+        auto [_,creator] = *it;
+        creator( world, e, data );
+    }
+    {
+        auto [_,type] = *it2;
+        get().entity_typelist[e].push_back( type );
+    }
+
+    return true;
+}
+
+bool ComponentRegistry::destroy( World& world, Entity e )
+{
+    auto& typelist_map = get().entity_typelist;
+
+    auto it = typelist_map.find(e);
+    if( it == typelist_map.end() )
+        return false;
+
+    auto [_,type_list] = *it;
+
+    auto& destroyers_map = get().destroyers;
+
+    for( auto& type : type_list ) {
+
+        auto it = destroyers_map.find( type );
+        if( it == destroyers_map.end() )
+            continue;
+
+        auto [_,destroyer] = *it;
+
+        destroyer( world, e );
+    }
+
+    typelist_map.erase( it );
+    return true;
+}
+
+bool ComponentRegistry::flush_all( World& world )
+{
+    for( auto [_, flush_type] : get().flushers )
+        flush_type( world );
+
+    return true;
+}
+
+void ComponentRegistry::clear_all( World& world )
+{
+    auto& typelist = get().entity_typelist;
+
+    // We copy keys because destroy() mutates the typelist map
+    std::vector<Entity> to_delete;
+    to_delete.reserve( typelist.size() );
+
+    for( auto& [entity, types] : typelist )
+        to_delete.push_back(entity);
+
+    for( Entity e : to_delete )
+        get().destroy( world, e );
+
+    get().flush_all(world);
+}

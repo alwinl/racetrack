@@ -34,7 +34,7 @@ void ResourceSystem::update( World &world, double dt )
 
     for( auto& [entity, event] : load_requests.all() ) {
         load( world, event.filename );
-        world.remove_entity<LoadRequestComponent>( entity );
+        world.remove_component<LoadRequestComponent>( entity );
     }
 }
 
@@ -48,14 +48,15 @@ void ResourceSystem::load( World& world, const std::string &filename )
     nlohmann::json data;
     datafile >> data;
 
-    world.clear_all_entities();
+    ComponentRegistry::clear_all( world );
+    world.reset_entity_ids();
 
     for( auto& ent : data["entities"] ) {
 
         Entity e = world.create_entity();
 
         for( auto [name, component_data] : ent["components"].items() )
-            ComponentRegistry::create( name, world, e, component_data );
+            ComponentRegistry::create( world, e, name, component_data );
     }
 }
 

@@ -20,56 +20,54 @@
 #pragma once
 
 #include <vector>
+#include <unordered_map>
+#include <cstdint>
 
-#include "entity.h"
-#include "components/component_storage.h"
+using Entity = std::uint32_t;
+const Entity INVALID_ENTRY = 0;
 
 class World
 {
+private:
+    template< typename T>
+    class Store
+    {
+    public:
+        using ComponentMap = std::unordered_map<Entity, T>;
+
+        T* add( Entity e, const T& component ) { components[e] = component; return &(components[e]); }
+        void remove( Entity e ) { components.erase(e); }
+        bool has(Entity e) const { return components.count(e); }
+
+        T* get( Entity e ) { auto it = components.find(e); return it != components.end() ? &it->second : nullptr; }
+        const T* get( Entity e ) const { auto it = components.find(e); return it != components.end() ? &it->second : nullptr; }
+
+        ComponentMap& all() { return components; }
+        const ComponentMap& all() const { return components; }
+
+    private:
+        ComponentMap components;
+    };
+
 public:
     Entity create_entity() { return next_id++; }
+    void reset_entity_ids() { next_id = 1; };
 
-    template<typename T>
-    void remove_entity( Entity e )
-        { removal_queue<T>().push_back(e); }
+    template<typename T> T& add_component( Entity e, const T& component ) { return *component_store<T>().add(e, component ); }
+    template<typename T> T* get_component( Entity e ) { return component_store<T>().get(e ); }
+    template<typename T> void remove_component( Entity e ) { removal_queue<T>().push_back(e); }
+    template<typename T> void flush_components();
 
-    template<typename T>
-    T& add_component( Entity e, const T& component )
-        { return *get_storage<T>().add(e, component ); }
-
-    template<typename T> 
-    T* get_component( Entity e )
-        { return get_storage<T>().get(e ); }
-
-    template<typename T>
-    ComponentStorage<T>& storage()
-        { return get_storage<T>(); }
-
-    template<typename T>
-    const ComponentStorage<T>& storage() const
-        { return get_storage<T>(); }
-
-    template<typename T>
-    void flush_components( ) 
-    {
-        auto& list = removal_queue<T>();
-        auto& store = get_storage<T>();
-
-        for( Entity e : list )
-            store.remove(e);
-
-        list.clear();
-    }
-
-    void clear_all_entities();
+    template<typename T> Store<T>& storage() { return component_store<T>(); }
+    template<typename T> const Store<T>& storage() const { return component_store<T>(); }
 
 private:
     Entity next_id = 1;
 
     template<typename T>
-    ComponentStorage<T>& get_storage() const
+    Store<T>& component_store() const
     {
-        static ComponentStorage<T> storage;
+        static Store<T> storage;
         return storage;
     }
 
@@ -80,3 +78,16 @@ private:
         return queue;
     }
 };
+
+template<typename T>
+void World::flush_components( ) 
+{
+    auto& list = removal_queue<T>();
+    auto& store = component_store<T>();
+
+    for( Entity e : list )
+        store.remove(e);
+
+    list.clear();
+}
+

@@ -26,12 +26,9 @@
 #include "systems/physics_system.h"
 #include "systems/geometry_system.h"
 
-#include "components/component_registry.h"
-
 void Engine::init()
 {
     make_systems();
-    force_component_registration();
 
     for( auto& system : systems )
         system->init();
