@@ -28,6 +28,9 @@
 class Engine
 {
 public:
+    Engine();
+    ~Engine();
+
     void init();
     void run();
     void shutdown();
@@ -37,11 +40,9 @@ public:
     template<typename T> T* get_system();
 
 private:
-    World world;
+    std::unique_ptr<World> world;
     std::vector<std::unique_ptr<ISystem>> systems;
     bool running = true;
-
-    void make_systems();
 };
 
 template<typename T>

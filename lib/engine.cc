@@ -27,10 +27,23 @@
 #include "systems/geometry_system.h"
 #include "systems/track_system.h"
 
+Engine::Engine() : world( std::make_unique<World>() )
+{
+    // push systems in the order you need
+    systems.push_back( std::make_unique<RenderSystem>( this ) );
+    systems.push_back( std::make_unique<TimeSystem>( this ) );
+    systems.push_back( std::make_unique<InputSystem>( this ) );
+    systems.push_back( std::make_unique<ResourceSystem>( this ) );
+    systems.push_back( std::make_unique<PhysicsSystem>( this ) );
+    systems.push_back( std::make_unique<GeometrySystem>( this ) );
+    systems.push_back( std::make_unique<TrackSystem>( this ) );
+}
+
+Engine::~Engine()       // need destructor in implementation file to properly destruct world
+{}
+
 void Engine::init()
 {
-    make_systems();
-
     for( auto& system : systems )
         system->init();
 }
@@ -42,13 +55,13 @@ void Engine::run()
     while( running ) {
 
         for( auto& system : systems )
-            system->update( world, time_system->delta() );
+            system->update( *world, time_system->delta() );
 
         for( auto& system : systems )
-            system->draw( world );
+            system->draw( *world );
 
         for( auto& system : systems )
-            system->flush( world );
+            system->flush( *world );
     }
 }
 
@@ -56,16 +69,4 @@ void Engine::shutdown()
 {
     for( auto& system : systems )
         system->shutdown();
-}
-
-void Engine::make_systems()
-{
-    // push systems in the order you need
-    systems.push_back( std::make_unique<RenderSystem>( this ) );
-    systems.push_back( std::make_unique<TimeSystem>( this ) );
-    systems.push_back( std::make_unique<InputSystem>( this ) );
-    systems.push_back( std::make_unique<ResourceSystem>( this ) );
-    systems.push_back( std::make_unique<PhysicsSystem>( this ) );
-    systems.push_back( std::make_unique<GeometrySystem>( this ) );
-    systems.push_back( std::make_unique<TrackSystem>( this ) );
 }
