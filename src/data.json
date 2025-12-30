@@ -2,72 +2,17 @@
     "entities" : [
         {
             "components": {
-                "Lake" : {
-                    "lake_axis_length": [ 15.0, 25.0 ],
-                    "lake_freq": 4.0,
-                    "lake_amp": 0.15,
-                    "island_radius": 6.0,
-                    "island_freq": 3.0,
-                    "island_amp": 0.25,
-                    "segments": 200
-                }
-            }
-        },
-        {
-            "components" : {
-                "Point" : {
-                    "colour" : [ 1.0, 0.0, 0.0]
-                },
-                "Transform" : {
-                    "translation" : [0.0, 0.0, 0.0]
-                },
-                "Velocity" : {
-                    "speed" : [1.0, 0.0, 0.0]
-                }
-            }
-        },
-        {
-            "components" : {
-                "Triangle" : {
-                    "v1" : [-1.0, 0.0, 0.0],
-                    "v2" : [1.0, 0.0, 0.0],
-                    "v3" : [0.0, 2.0, 0.0],
-                    "colour" : [ 0.0,  1.0, 0.0]
-                },
-                "Transform" : {
-                    "translation" : [0.5, 1.0, 0.0]
-                },
-                "Velocity" : {
-                    "speed" : [0.5, 1.0, 0.0]
-                }
-            }
-        },
-        {
-            "components" : {
-                "Triangle" : {
-                    "v1" : [1.0, 1.0, 0.0],
-                    "v2" : [1.0, 0.0, 0.0],
-                    "v3" : [0.0, 2.0, 0.0],
-                    "colour" : [ 1.0,  1.0, 1.0]
-                },
-                "Transform" : {
-                    "translation" : [0.5, -1.0, 0.0]
-                },
-                "Velocity" : {
-                    "speed" : [0.3, 0.2, 0.0]
-                }
-            }
-        },
-        {
-            "components": {
                 "Track": {
                     "points": [
-                        [0.0, 0.0, 0.0],
-                        [5.0, 0.0, 0.0],
-                        [10.0, 2.0, 0.0],
-                        [15.0, 5.0, 0.0],
-                        [20.0, 5.0, 0.0]
-                    ]
+                        [-10.0, 0.0, 0.0],
+                        [ -5.0, 2.0, 0.0],
+                        [ 0.0, 0.0, 0.0],
+                        [ 5.0, -2.0, 0.0],
+                        [ 10.0, 0.0, 0.0]
+                    ],
+                    "width": 10.0,
+                    "closed": false,
+                    "colour" : [ 0.0,  0.0, 0.0]
                 }
             }
         }

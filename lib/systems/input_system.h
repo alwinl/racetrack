@@ -36,4 +36,5 @@ private:
     void process_key( int key, int action );    
 
     bool load_level_0 = false;
+    bool load_level_1 = false;
 };

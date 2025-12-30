@@ -27,7 +27,6 @@
 
 #include "rendering/point_renderer.h"
 #include "rendering/triangle_renderer.h"
-#include "rendering/track_renderer.h"
 #include "rendering/lake_renderer.h"
 #include "rendering/mesh_renderer.h"
 
@@ -130,7 +129,6 @@ void RenderSystem::make_renderers()
 {
     // renderers will be drawn in the order of insertion
     renderers.push_back( std::make_unique<LakeRenderer>() );
-    renderers.push_back( std::make_unique<TrackRenderer>() );
     renderers.push_back( std::make_unique<PointRenderer>() );
     renderers.push_back( std::make_unique<TriangleRenderer>() );
     renderers.push_back( std::make_unique<MeshRenderer>() );

@@ -1,5 +1,5 @@
 /*
- * track.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * track_component.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,38 +27,30 @@
 
 struct TrackComponent
 {
-    std::vector<glm::vec3> centreline_points;
+    std::vector<glm::vec2> centreline;
+    float width = 1.0f;
+    bool closed = false;
+    glm::vec3 colour = {1.0, 1.0, 1.0};
+
+    bool dirty = false;
 
     void from_json( const nlohmann::json& json )
     {
-        centreline_points.clear();
-
         if( !json.contains("points") )
             throw std::runtime_error("JSON error: missing required key 'points'");
 
         if( !json["points"].is_array() )
             throw std::runtime_error("JSON error: 'points' must be an array");
 
+        width = json["width"];
+        closed = json["closed"];
+        colour = {json["colour"][0], json["colour"][1],json["colour"][2] };
+
+        centreline.clear();
         for( auto& p : json["points"] )
-            centreline_points.emplace_back( glm::vec3( p[0], p[1], p[2]) );
-    }
+            centreline.emplace_back( glm::vec2( p[0], p[1]) );
 
-    glm::vec3 lerp( float t ) const
-    {
-        if( centreline_points.empty() )
-            return glm::vec3(0);
-
-        t = glm::clamp( t, 0.0f, 1.0f );
-
-        float scaled = t * (centreline_points.size() - 1);
-        int i = (int)scaled;                    // get the start point
-
-        if( i >= (int)centreline_points.size() - 1 )
-            return centreline_points.back();
-
-        float f = scaled - i;                   // get the fraction between start and next point
-
-        return glm::mix(centreline_points[i], centreline_points[i+1], f);        
+        dirty = true;
     }
 
     static ComponentRegistrar<TrackComponent> registrar;

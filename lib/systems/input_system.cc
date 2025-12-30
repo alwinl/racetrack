@@ -58,6 +58,17 @@ void InputSystem::update( World &world, double dt )
 
         load_level_0 = false;
     }
+
+    if( load_level_1 ) {
+        Entity event = world.create_entity();
+
+        LoadRequestComponent comp;
+        comp.filename = "/home/alwin/Documents/Programming/Graphics/racetrack/src/data simple.json";
+
+        world.add_component( event, comp );
+
+        load_level_1 = false;
+    }
 }
 
 void InputSystem::process_key( int key, int action )
@@ -67,5 +78,8 @@ void InputSystem::process_key( int key, int action )
 
     if( key == GLFW_KEY_0 && action == GLFW_PRESS ) {
         load_level_0 = true;
+    }
+    if( key == GLFW_KEY_1 && action == GLFW_PRESS ) {
+        load_level_1 = true;
     }
 }

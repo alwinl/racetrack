@@ -29,32 +29,32 @@
 
 void GeometrySystem::update( World &world, double dt )
 {
-    auto& geometries = world.storage<GeometryComponent>();
+    // auto& geometries = world.storage<GeometryComponent>();
 
-    for( auto& [entity, geometry] : geometries.all() ) {
+    // for( auto& [entity, geometry] : geometries.all() ) {
 
-        if( ! geometry.generated ) {
+    //     if( ! geometry.generated ) {
 
-            Entity event = world.create_entity();
+    //         Entity event = world.create_entity();
 
-            MeshComponent mesh;
+    //         MeshComponent mesh;
 
-            float a = glm::max(geometry.axis_a, geometry.axis_b);
-            float b = glm::min(geometry.axis_a, geometry.axis_b);
+    //         float a = glm::max(geometry.axis_a, geometry.axis_b);
+    //         float b = glm::min(geometry.axis_a, geometry.axis_b);
 
-            for( int i = 0; i < geometry.segments; i++ ) {
+    //         for( int i = 0; i < geometry.segments; i++ ) {
 
-                float t = (float)i / geometry.segments * glm::two_pi<float>();
+    //             float t = (float)i / geometry.segments * glm::two_pi<float>();
 
-                mesh.outline.push_back( glm::vec3( a * cos(t), b * sin(t), 0.0f ) );
-            }
+    //             mesh.outline.push_back( glm::vec3( a * cos(t), b * sin(t), 0.0f ) );
+    //         }
 
-            mesh.colour = geometry.colour;
-            mesh.filled = geometry.filled;
+    //         mesh.colour = geometry.colour;
+    //         mesh.filled = geometry.filled;
 
-            world.add_component( event, mesh );
+    //         world.add_component( event, mesh );
 
-            geometry.generated = true;
-        }
-    }
+    //         geometry.generated = true;
+    //     }
+    // }
 }

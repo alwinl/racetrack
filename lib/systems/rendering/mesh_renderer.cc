@@ -27,6 +27,16 @@
 #include "../../components/mesh_component.h"
 
 
+std::unordered_map<MeshComponent::Topology, GLenum> topology_map = {
+    { MeshComponent::Topology::POINTS, GL_POINTS},
+    { MeshComponent::Topology::LINE_STRIP, GL_LINE_STRIP},
+    { MeshComponent::Topology::LINE_LOOP, GL_LINE_LOOP},
+    { MeshComponent::Topology::LINES, GL_LINES},
+    { MeshComponent::Topology::TRIANGLE_STRIP, GL_TRIANGLE_STRIP},
+    { MeshComponent::Topology::TRIANGLE_FAN, GL_TRIANGLE_FAN},
+    { MeshComponent::Topology::TRIANGLES, GL_TRIANGLES}
+};
+
 static const char* mesh_vs = R"(
 #version 330 core
 
@@ -53,17 +63,15 @@ void main() {
 }
 )";
 
-constexpr int max_objects = 10000;
-
 void MeshRenderer::init()
 {
     glGenVertexArrays( 1, &vao );
     glGenBuffers( 1, &vbo );
+    glGenBuffers( 1, &ibo );
 
     glBindVertexArray( vao );
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
-
-    glBufferData( GL_ARRAY_BUFFER, max_objects * sizeof(vertex), nullptr, GL_DYNAMIC_DRAW );
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibo );
 
     glEnableVertexAttribArray( 0 );
     glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof( vertex, position) );
@@ -78,35 +86,49 @@ void MeshRenderer::init()
 
 void MeshRenderer::upload( const World& world )
 {
-    cpu_outline_buffer.clear();
-    cpu_filled_buffer.clear();
+    std::vector<vertex> vertex_buffer;
+    std::vector<unsigned int> index_buffer;
+    size_t vertex_buffer_idx = 0;
 
-    const auto& shapes = world.storage<MeshComponent>();
+    draw_commands.clear();
 
-    for( const auto& [entity, shape] : shapes.all() )
+    const auto& meshes = world.storage<MeshComponent>();
+
+    for( const auto& [entity, mesh] : meshes.all() )
     {
-        if( !shape.filled || (shape.outline.size() < 3) ) {
-            for( const glm::vec2& p : shape.outline )
-                cpu_outline_buffer.push_back( { glm::vec3(p.x,p.y,0.0f), shape.colour } );
+        DrawCommand draw_command;
+
+        draw_command.mode = topology_map[mesh.topology];
+
+        assert(mesh.vertices.size() == mesh.colours.size());
+
+        for( int i = 0; i < mesh.vertices.size(); ++i )
+            vertex_buffer.push_back( { mesh.vertices[i], mesh.colours[i] });
+
+        if( !mesh.indices.empty() ) {
+
+            draw_command.indexed = true;
+            draw_command.start = index_buffer.size();
+            draw_command.count = mesh.indices.size();
+
+            std::transform( mesh.indices.begin(), mesh.indices.end(), std::back_inserter(index_buffer), [vertex_buffer_idx]( unsigned int index){ return index + vertex_buffer_idx; } );
         } else {
-
-            glm::vec3 p0(shape.outline[0].x, shape.outline[0].y, 0.0f);
-
-            for (size_t i = 1; i + 1 < shape.outline.size(); i++) {
-
-                glm::vec3 p1( shape.outline[i    ].x, shape.outline[i    ].y, 0.0f );
-                glm::vec3 p2( shape.outline[i + 1].x, shape.outline[i + 1].y, 0.0f );
-
-                cpu_filled_buffer.push_back( {p0, shape.colour} );
-                cpu_filled_buffer.push_back( {p1, shape.colour} );
-                cpu_filled_buffer.push_back( {p2, shape.colour} );
-            }
+            draw_command.start = vertex_buffer_idx;
+            draw_command.count = mesh.vertices.size();
         }
+
+        draw_commands.emplace_back( draw_command );
+
+        vertex_buffer_idx += mesh.vertices.size();
     }
 
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    glBufferSubData( GL_ARRAY_BUFFER, 0, cpu_filled_buffer.size() * sizeof(vertex), (void*)cpu_filled_buffer.data() );
-    glBufferSubData( GL_ARRAY_BUFFER, cpu_filled_buffer.size() * sizeof(vertex), cpu_outline_buffer.size() * sizeof(vertex), (void*)cpu_outline_buffer.data() );
+    glBufferData( GL_ARRAY_BUFFER, vertex_buffer.size() * sizeof(vertex), (void*)vertex_buffer.data(), GL_DYNAMIC_DRAW );
+
+    if( !index_buffer.empty() ) {
+        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibo );
+        glBufferData( GL_ELEMENT_ARRAY_BUFFER, index_buffer.size() * sizeof(unsigned int), (void*)index_buffer.data(), GL_DYNAMIC_DRAW );
+    }
 }
 
 void MeshRenderer::draw()
@@ -115,11 +137,12 @@ void MeshRenderer::draw()
 
     glBindVertexArray(vao);
 
-    if( cpu_filled_buffer.size() )
-        glDrawArrays( GL_TRIANGLES, 0, cpu_filled_buffer.size() );
-
-    if( cpu_outline_buffer.size() )
-        glDrawArrays( GL_LINE_LOOP, cpu_filled_buffer.size(), cpu_outline_buffer.size() );
+    for( auto draw_command : draw_commands ) {
+        if( draw_command.indexed )
+            glDrawElements( draw_command.mode, draw_command.count, GL_UNSIGNED_INT, (void *)(draw_command.start * sizeof(unsigned int)) );
+        else
+            glDrawArrays( draw_command.mode, draw_command.start, draw_command.count );
+    }
 
     glBindVertexArray(0);
 
@@ -132,6 +155,7 @@ void MeshRenderer::set_mvp( glm::mat4 &mvp )
 
 void MeshRenderer::destroy()
 {
+    if( ibo ) glDeleteBuffers( 1, &ibo );
     if( vbo ) glDeleteBuffers( 1, &vbo );
     if( vao ) glDeleteVertexArrays( 1, &vao );
 }

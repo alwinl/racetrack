@@ -28,7 +28,6 @@ add_library(
     systems/rendering/shader.cc
     systems/rendering/point_renderer.cc
     systems/rendering/triangle_renderer.cc
-    systems/rendering/track_renderer.cc
     systems/rendering/lake_renderer.cc
     systems/rendering/mesh_renderer.cc
     
@@ -38,6 +37,7 @@ add_library(
     systems/resource_system.cc
     systems/physics_system.cc
     systems/geometry_system.cc
+    systems/track_system.cc
 
     components/component_registry.cc
 )

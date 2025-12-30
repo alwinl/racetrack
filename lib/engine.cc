@@ -25,6 +25,7 @@
 #include "systems/resource_system.h"
 #include "systems/physics_system.h"
 #include "systems/geometry_system.h"
+#include "systems/track_system.h"
 
 void Engine::init()
 {
@@ -66,4 +67,5 @@ void Engine::make_systems()
     systems.push_back( std::make_unique<ResourceSystem>( this ) );
     systems.push_back( std::make_unique<PhysicsSystem>( this ) );
     systems.push_back( std::make_unique<GeometrySystem>( this ) );
+    systems.push_back( std::make_unique<TrackSystem>( this ) );
 }

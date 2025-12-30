@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vector>
+#include <unordered_map>
 
 #include <glm/glm.hpp>
 
@@ -40,12 +41,19 @@ private:
     Shader shader;
     unsigned vao = 0;
     unsigned vbo = 0;
+    unsigned ibo = 0;
 
     struct vertex {
         glm::vec3 position;
         glm::vec3 colour;
     };
 
-    std::vector<vertex> cpu_outline_buffer;
-    std::vector<vertex> cpu_filled_buffer;
+    struct DrawCommand {
+        unsigned int mode;
+        int start;
+        unsigned int count;
+        bool indexed = false;
+    };
+
+    std::vector<DrawCommand> draw_commands;
 };

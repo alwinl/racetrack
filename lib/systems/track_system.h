@@ -1,5 +1,5 @@
 /*
- * track_renderer.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * track_system.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,32 +19,19 @@
 
 #pragma once
 
-#include <vector>
+#include "base_system.h"
 
-#include <glm/glm.hpp>
+#include "../world.h"
 
-#include "base_renderer.h"
-#include "shader.h"
+struct TrackComponent;
 
-class TrackRenderer : public BaseRenderer
+class TrackSystem : public BaseSystem<TrackSystem>
 {
-public:
-    void init() override;
-    void destroy() override;
-    void upload( const World& world ) override;
-    void draw() override;
-
-    void set_mvp( glm::mat4& mvp ) override;
+public:    
+    TrackSystem( Engine* eng ) : BaseSystem<TrackSystem>( eng ) {};
+    
+    void update( World& world, double dt ) override;
 
 private:
-    Shader shader;
-    unsigned vao = 0;
-    unsigned vbo = 0;
-
-    struct vertex {
-        glm::vec3 position;
-        glm::vec3 colour;
-    };
-
-    std::vector<vertex> cpu_buffer;
+    void regenerate_mesh( World& world, Entity ent, TrackComponent& track );
 };

@@ -1,5 +1,5 @@
 /*
- * geometry_component.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * mesh_component.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,14 +27,16 @@
 
 struct MeshComponent
 {
-    std::vector<glm::vec3> outline;
-    glm::vec3 colour;
-    bool dirty = true;
+    enum class Topology { POINTS, LINES, LINE_STRIP, LINE_LOOP, TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN };
+
+    Topology topology;
+    std::vector<glm::vec3> vertices;
+    std::vector<uint32_t> indices;
+    std::vector<glm::vec3> colours;
+
     bool filled = true;
 
-    void from_json( const nlohmann::json& json )
-    {
-    }
+    void from_json( const nlohmann::json& json ) {}
 
     static ComponentRegistrar<MeshComponent> registrar;
 };
