@@ -55,6 +55,11 @@ void Engine::run()
     while( running ) {
 
         for( auto& system : systems )
+            system->input( *world );
+
+		process_commands();
+
+        for( auto& system : systems )
             system->update( *world, time_system->delta() );
 
         for( auto& system : systems )
