@@ -70,3 +70,13 @@ void Engine::shutdown()
     for( auto& system : systems )
         system->shutdown();
 }
+
+void Engine::process_commands( )
+{
+	auto command = commands.pop();
+
+	while( command ) {
+		command->execute( *this );
+		command = commands.pop();
+	}
+}

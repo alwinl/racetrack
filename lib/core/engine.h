@@ -22,6 +22,9 @@
 #include <vector>
 #include <memory>
 
+#include "commandqueue.h"
+#include "inputqueue.h"
+
 #include "../systems/base_system.h"
 #include "world.h"
 
@@ -39,10 +42,19 @@ public:
 
     template<typename T> T* get_system();
 
+	CommandQueue& command_list() { return commands; }
+	InputQueue& input() { return input_queue; }
+
 private:
     std::unique_ptr<World> world;
     std::vector<std::unique_ptr<ISystem>> systems;
     bool running = true;
+
+	CommandQueue commands;
+	InputQueue input_queue;
+
+	void process_commands();
+
 };
 
 template<typename T>
