@@ -23,8 +23,8 @@
 
 #include <glm/glm.hpp>
 
-#include "../../world.h"
-#include "../../components/lake_component.h"
+#include "../core/world.h"
+#include "../components/lake_component.h"
 
 
 static const char* lake_vs = R"(
@@ -89,7 +89,7 @@ void LakeRenderer::upload( const World& world )
         glm::vec3 lake_colour( 0.0f, 0.3f, 1.0f);
         glm::vec3 island_colour( 0.2f, 0.8f, 0.2f);
 
-#ifdef DRAW_OUTLINE      
+#ifdef DRAW_OUTLINE
         for( const glm::vec2& p : lake.lake_outline )
             cpu_buffer.push_back( { glm::vec3(p.x,p.y,0.0f), lake_colour } );
 

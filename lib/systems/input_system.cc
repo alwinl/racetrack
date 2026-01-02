@@ -21,7 +21,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "../engine.h"
+#include "../core/engine.h"
 #include "render_system.h"
 
 #include "../components/load_request_component.h"

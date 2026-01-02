@@ -22,7 +22,7 @@
 #include <vector>
 #include <memory>
 
-#include "systems/base_system.h"
+#include "../systems/base_system.h"
 #include "world.h"
 
 class Engine

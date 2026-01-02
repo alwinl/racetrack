@@ -20,9 +20,9 @@
 #pragma once
 
 #include <glm/glm.hpp>
-
-#include "component_registry.h"
 #include <glm/gtc/constants.hpp>
+
+#include "../core/registry.h"
 
 struct LakeComponent
 {
@@ -31,7 +31,7 @@ struct LakeComponent
 
     std::array<float,2> lake_axis_length = { 1.0f, 1.0f };
     float lake_freq = 4.0f;        // jaggedness frequency
-    float lake_amp  = 0.15f;       // jaggedness amount (15%)    
+    float lake_amp  = 0.15f;       // jaggedness amount (15%)
 
     float island_radius = 6.0f;
     float island_freq = 3.0f;
@@ -46,7 +46,7 @@ struct LakeComponent
         float v3 = sin(t * frequency * 2.1f + 1.3f);
         return (v1 + v2 + v3) * 0.33f * amplitude;
     }
-    
+
     void generate_lake()
     {
         lake_outline.clear();

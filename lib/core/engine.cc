@@ -19,13 +19,13 @@
 
 #include "engine.h"
 
-#include "systems/render_system.h"
-#include "systems/time_system.h"
-#include "systems/input_system.h"
-#include "systems/resource_system.h"
-#include "systems/physics_system.h"
-#include "systems/geometry_system.h"
-#include "systems/track_system.h"
+#include "../systems/render_system.h"
+#include "../systems/time_system.h"
+#include "../systems/input_system.h"
+#include "../systems/resource_system.h"
+#include "../systems/physics_system.h"
+#include "../systems/geometry_system.h"
+#include "../systems/track_system.h"
 
 Engine::Engine() : world( std::make_unique<World>() )
 {

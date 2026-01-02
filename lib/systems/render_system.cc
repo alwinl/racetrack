@@ -22,13 +22,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "render_system.h"
-#include "../world.h"
-#include "../engine.h"
+#include "../core/world.h"
+#include "../core/engine.h"
 
-#include "rendering/point_renderer.h"
-#include "rendering/triangle_renderer.h"
-#include "rendering/lake_renderer.h"
-#include "rendering/mesh_renderer.h"
+#include "../render_pipeline/point_renderer.h"
+#include "../render_pipeline/triangle_renderer.h"
+#include "../render_pipeline/lake_renderer.h"
+#include "../render_pipeline/mesh_renderer.h"
 
 void RenderSystem::init()
 {
@@ -85,7 +85,7 @@ void RenderSystem::begin_frame()
 
 void RenderSystem::end_frame()
 {
-    glfwSwapBuffers(window);        
+    glfwSwapBuffers(window);
 }
 
 void RenderSystem::set_camera( const glm::mat4 &view, const glm::mat4 &proj )

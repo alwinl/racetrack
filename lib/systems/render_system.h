@@ -25,7 +25,7 @@
 #include <glm/mat4x4.hpp>
 #include "base_system.h"
 
-#include "rendering/base_renderer.h"
+#include "../render_pipeline/base_renderer.h"
 
 struct GLFWwindow;
 class World;
@@ -47,7 +47,7 @@ public:
 private:
     GLFWwindow* window = nullptr;
     glm::mat4 mvp;
-    std::vector<std::unique_ptr<BaseRenderer>> renderers; 
+    std::vector<std::unique_ptr<BaseRenderer>> renderers;
 
     void begin_frame();
     void end_frame();

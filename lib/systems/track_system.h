@@ -21,15 +21,15 @@
 
 #include "base_system.h"
 
-#include "../world.h"
+#include "../core/world.h"
 
 struct TrackComponent;
 
 class TrackSystem : public BaseSystem<TrackSystem>
 {
-public:    
+public:
     TrackSystem( Engine* eng ) : BaseSystem<TrackSystem>( eng ) {};
-    
+
     void update( World& world, double dt ) override;
 
 private:

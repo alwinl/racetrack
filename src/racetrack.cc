@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-#include "engine.h"
+#include "core/engine.h"
 
 int main( int argc, char** argv )
 {

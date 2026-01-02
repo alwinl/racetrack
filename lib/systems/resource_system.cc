@@ -22,9 +22,9 @@
 #include <fstream>
 #include "nlohmann/json.hpp"
 
-#include "../world.h"
-#include "../engine.h"
-#include "../components/component_registry.h"
+#include "../core/world.h"
+#include "../core/engine.h"
+#include "../core/registry.h"
 
 #include "../components/load_request_component.h"
 

@@ -1,5 +1,5 @@
 /*
- * component_registry.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * registry.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,15 @@
  * MA 02110-1301, USA.
  */
 
-#include "point_component.h"
-#include "transform_component.h"
-#include "triangle_component.h"
-#include "velocity_component.h"
-#include "track_component.h"
-#include "lake_component.h"
-#include "load_request_component.h"
-#include "mesh_component.h"
-#include "geometry_component.h"
+#include "../components/point_component.h"
+#include "../components/transform_component.h"
+#include "../components/triangle_component.h"
+#include "../components/velocity_component.h"
+#include "../components/track_component.h"
+#include "../components/lake_component.h"
+#include "../components/load_request_component.h"
+#include "../components/mesh_component.h"
+#include "../components/geometry_component.h"
 
 ComponentRegistrar<PointComponent> PointComponent::registrar("Point");
 ComponentRegistrar<TriangleComponent> TriangleComponent::registrar("Triangle");
@@ -54,7 +54,7 @@ bool ComponentRegistry::create( World& world, Entity e, const std::string& name,
     if( it == creators_map.end() )
         return false;
 
-    auto& types_lookup = get().type_lookup; 
+    auto& types_lookup = get().type_lookup;
 
     auto it2 = types_lookup.find( name );
     if( it2 == types_lookup.end() )

@@ -1,5 +1,5 @@
 /*
- * component_registry.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * registry.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #include <functional>
 #include <typeindex>
 
-#include "../world.h"
+#include "world.h"
 
 #include "nlohmann/json.hpp"
 
@@ -41,7 +41,7 @@ public:
     static bool destroy( World& world, Entity e );
     static bool flush_all( World& world );
     static void clear_all( World& world );
-        
+
 private:
     std::unordered_map<std::string, ComponentCreator> creators;
     std::unordered_map<std::type_index, ComponentDestroyer> destroyers;
@@ -62,7 +62,7 @@ struct ComponentRegistrar
 {
     ComponentRegistrar( const std::string& name )
     {
-        auto create_func = 
+        auto create_func =
             []( World& world, Entity e, const nlohmann::json& json )
             {
                 T component;
@@ -70,13 +70,13 @@ struct ComponentRegistrar
                 world.add_component<T>(e, component);
             };
 
-        auto destroy_func = 
+        auto destroy_func =
             []( World& world, Entity e )
             {
                 world.remove_component<T>( e );
             };
 
-        auto flush_func = 
+        auto flush_func =
             []( World& world )
             {
                 world.flush_components<T>();

@@ -17,11 +17,11 @@
  * MA 02110-1301, USA.
  */
 
- #pragma once
+#pragma once
 
- #include <glm/glm.hpp>
+#include <glm/glm.hpp>
 
- #include "component_registry.h"
+#include "../core/registry.h"
 
  struct PointComponent
  {

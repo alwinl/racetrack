@@ -1,5 +1,5 @@
  /*
-  * pointrenderer.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+  * triangle_renderer.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
   *
   * This program is free software; you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,18 @@
   * MA 02110-1301, USA.
   */
 
-#include "point_renderer.h"
+#include "triangle_renderer.h"
 
 #include <glad/gl.h>
 
 #include <glm/glm.hpp>
 
-#include "../../world.h"
-#include "../../components/point_component.h"
-#include "../../components/transform_component.h"
+#include "../core/world.h"
+#include "../components/triangle_component.h"
+#include "../components/transform_component.h"
 
-static const char* point_vs = R"(
+
+static const char* triangle_vs = R"(
 #version 330 core
 
 layout(location = 0) in vec3 aPos;
@@ -38,12 +39,11 @@ out vec3 col;
 
 void main() {
     gl_Position = uMVP * vec4(aPos, 1.0);
-    gl_PointSize = 10.0;
     col = aCol;
 }
 )";
 
-static const char* point_fs = R"(
+static const char* triangle_fs = R"(
 #version 330 core
 
 in vec3 col;
@@ -56,7 +56,7 @@ void main() {
 
 constexpr int max_objects = 10000;
 
-void PointRenderer::init()
+void TriangleRenderer::init()
 {
     glGenVertexArrays( 1, &vao );
     glGenBuffers( 1, &vbo );
@@ -64,53 +64,55 @@ void PointRenderer::init()
     glBindVertexArray( vao );
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
 
-    glBufferData( GL_ARRAY_BUFFER, sizeof(vertex) * max_objects, nullptr, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, 3 * max_objects * sizeof(vertex), nullptr, GL_DYNAMIC_DRAW );
 
     glEnableVertexAttribArray( 0 );
-    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof( vertex, position ) );
+    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof( vertex, position) );
 
     glEnableVertexAttribArray( 1 );
-    glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof( vertex, colour ) );
+    glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof( vertex, colour) );
 
     glBindVertexArray( 0 );
 
-    glEnable(GL_PROGRAM_POINT_SIZE);
-    
-    shader.init( point_vs, point_fs );
+    shader.init(triangle_vs, triangle_fs);
 }
 
-void PointRenderer::upload( const World& world )
+void TriangleRenderer::upload( const World& world )
 {
     cpu_buffer.clear();
 
-    const auto& points = world.storage<PointComponent>();
+    const auto& tris = world.storage<TriangleComponent>();
     const auto& transforms = world.storage<TransformComponent>();
 
-    for( const auto& [entity, point] : points.all() ) {
+    for( const auto& [entity, tri] : tris.all() )
+    {
+        if( const auto* transform = transforms.get(entity) ) {
 
-        if( const auto* transform = transforms.get(entity) )
-            cpu_buffer.push_back( {transform->translation, point.colour } );
+            for( int i = 0; i < 3; i++ )
+                cpu_buffer.push_back( {tri.vertices[i] + transform->translation, tri.colour } );
+        }
     }
 
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
-    glBufferSubData( GL_ARRAY_BUFFER, 0, cpu_buffer.size() * sizeof( vertex ), (void*)cpu_buffer.data() );
+    glBufferSubData( GL_ARRAY_BUFFER, 0, cpu_buffer.size() * sizeof(vertex), (void*)cpu_buffer.data() );
 }
 
-void PointRenderer::draw()
+void TriangleRenderer::draw()
 {
     shader.activate();
 
-    glBindVertexArray( vao );
-    glDrawArrays( GL_POINTS, 0, cpu_buffer.size() );
-    glBindVertexArray( 0 );
+    glBindVertexArray(vao);
+    glDrawArrays( GL_TRIANGLES, 0, cpu_buffer.size() );
+    glBindVertexArray(0);
+
 }
 
-void PointRenderer::set_mvp( glm::mat4 &mvp )
+void TriangleRenderer::set_mvp( glm::mat4 &mvp )
 {
     shader.set_uniform( "uMVP", mvp );
 }
 
-void PointRenderer::destroy()
+void TriangleRenderer::destroy()
 {
     if( vbo ) glDeleteBuffers( 1, &vbo );
     if( vao ) glDeleteVertexArrays( 1, &vao );

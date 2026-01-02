@@ -23,7 +23,7 @@
 
 #include <glm/glm.hpp>
 
-#include "component_registry.h"
+#include "../core/registry.h"
 
 struct GeometryComponent
 {

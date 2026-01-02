@@ -22,15 +22,10 @@ find_package( glfw3 )
 add_library(
     racetrack_lib
 
-    engine.cc
-    world.cc
+    core/engine.cc
+    core/world.cc
+    core/registry.cc
 
-    systems/rendering/shader.cc
-    systems/rendering/point_renderer.cc
-    systems/rendering/triangle_renderer.cc
-    systems/rendering/lake_renderer.cc
-    systems/rendering/mesh_renderer.cc
-    
     systems/render_system.cc
     systems/time_system.cc
     systems/input_system.cc
@@ -39,7 +34,11 @@ add_library(
     systems/geometry_system.cc
     systems/track_system.cc
 
-    components/component_registry.cc
+    render_pipeline/shader.cc
+    render_pipeline/point_renderer.cc
+    render_pipeline/triangle_renderer.cc
+    render_pipeline/lake_renderer.cc
+    render_pipeline/mesh_renderer.cc
 )
 
 target_link_libraries(racetrack_lib PRIVATE glad glfw)

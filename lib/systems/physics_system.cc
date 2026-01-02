@@ -19,7 +19,7 @@
 
 #include "physics_system.h"
 
-#include "../world.h"
+#include "../core/world.h"
 
 #include "../components/transform_component.h"
 #include "../components/velocity_component.h"

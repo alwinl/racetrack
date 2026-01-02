@@ -23,8 +23,8 @@
 
 #include <glm/glm.hpp>
 
-#include "../../world.h"
-#include "../../components/mesh_component.h"
+#include "../core/world.h"
+#include "../components/mesh_component.h"
 
 
 std::unordered_map<MeshComponent::Topology, GLenum> topology_map = {

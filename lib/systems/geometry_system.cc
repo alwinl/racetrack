@@ -22,7 +22,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
-#include "../world.h"
+#include "../core/world.h"
 
 #include "../components/geometry_component.h"
 #include "../components/mesh_component.h"
