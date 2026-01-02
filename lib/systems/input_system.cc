@@ -44,9 +44,11 @@ void InputSystem::init()
     load_level_0 = true;
 }
 
-void InputSystem::update( World &world, double dt )
+void InputSystem::update( double elapsed )
 {
     glfwPollEvents();
+
+	auto& world = engine->get_world();
 
     if( load_level_0 ) {
         Entity event = world.create_entity();

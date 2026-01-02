@@ -20,13 +20,16 @@
 #include "physics_system.h"
 
 #include "../core/world.h"
+#include "../core/engine.h"
 
 #include "../components/transform_component.h"
 #include "../components/velocity_component.h"
 
 
-void PhysicsSystem::update( World &world, double dt )
+void PhysicsSystem::update( double elapsed )
 {
+	auto& world = engine->get_world();
+
     auto& transforms = world.storage<TransformComponent>();
     auto& velocities = world.storage<VelocityComponent>();
 
@@ -34,7 +37,7 @@ void PhysicsSystem::update( World &world, double dt )
     for( auto& [entity, v] : velocities.all() ) {
 
         if( auto* transform = transforms.get(entity) )
-            transform->translation += v.speed * (float)dt;
+            transform->translation += v.speed * (float)elapsed;
 
     }
 }

@@ -29,11 +29,11 @@ public:
     InputSystem( Engine* eng ) : BaseSystem<InputSystem>( eng ) {};
 
     void init() override;
-    void update( World& world, double dt ) override;
+    void update( double elapsed ) override;
 
 private:
     GLFWwindow* window;
-    void process_key( int key, int action );    
+    void process_key( int key, int action );
 
     bool load_level_0 = false;
     bool load_level_1 = false;

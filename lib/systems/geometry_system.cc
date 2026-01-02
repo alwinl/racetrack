@@ -27,7 +27,7 @@
 #include "../components/geometry_component.h"
 #include "../components/mesh_component.h"
 
-void GeometrySystem::update( World &world, double dt )
+void GeometrySystem::update( double elapsed )
 {
     // auto& geometries = world.storage<GeometryComponent>();
 

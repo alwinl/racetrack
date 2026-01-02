@@ -25,12 +25,12 @@
 
 class ResourceSystem : public BaseSystem<ResourceSystem>
 {
-public:    
+public:
     ResourceSystem( Engine* eng ) : BaseSystem<ResourceSystem>( eng ) {};
 
-    void update( World& world, double dt ) override;
-    void flush( World& world ) override;
+    void update( double elapsed ) override;
+    void flush() override;
 
-private:    
+private:
     void load( World& world, const std::string &filename );
 };

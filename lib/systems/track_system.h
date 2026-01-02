@@ -30,7 +30,7 @@ class TrackSystem : public BaseSystem<TrackSystem>
 public:
     TrackSystem( Engine* eng ) : BaseSystem<TrackSystem>( eng ) {};
 
-    void update( World& world, double dt ) override;
+    void update( double dt ) override;
 
 private:
     void regenerate_mesh( World& world, Entity ent, TrackComponent& track );

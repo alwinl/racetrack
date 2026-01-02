@@ -56,18 +56,20 @@ void RenderSystem::shutdown()
     glfwTerminate();
 }
 
-void RenderSystem::update( World& world, double dt )
+void RenderSystem::update( double elapsed )
 {
     if( glfwWindowShouldClose(window) ) {
         engine->stop_running();
         return;
     }
 
+	auto& world = engine->get_world();
+
     for( auto& renderer : renderers )
         renderer->upload( world );
 }
 
-void RenderSystem::draw( World& world )
+void RenderSystem::draw()
 {
     begin_frame();
 

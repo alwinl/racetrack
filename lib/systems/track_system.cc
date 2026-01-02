@@ -19,11 +19,15 @@
 
 #include "track_system.h"
 
+#include "../core/world.h"
+#include "../core/engine.h"
+
 #include "../components/track_component.h"
 #include "../components/mesh_component.h"
 
-void TrackSystem::update( World &world, double dt )
+void TrackSystem::update( double dt )
 {
+	auto& world = engine->get_world();
     auto& tracks = world.storage<TrackComponent>();
 
     for( auto& [entity, track] : tracks.all() ) {
@@ -40,7 +44,7 @@ void TrackSystem::update( World &world, double dt )
 void TrackSystem::regenerate_mesh( World &world, Entity ent, TrackComponent &track )
 {
     MeshComponent mesh;
-    
+
     mesh.filled = false;
     mesh.topology = MeshComponent::Topology::TRIANGLES;
 

@@ -55,18 +55,18 @@ void Engine::run()
     while( running ) {
 
         for( auto& system : systems )
-            system->input( *world );
+            system->input();
 
 		process_commands();
 
         for( auto& system : systems )
-            system->update( *world, time_system->delta() );
+            system->update( time_system->delta() );
 
         for( auto& system : systems )
-            system->draw( *world );
+            system->draw();
 
         for( auto& system : systems )
-            system->flush( *world );
+            system->flush();
     }
 }
 

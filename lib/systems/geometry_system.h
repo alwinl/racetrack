@@ -26,5 +26,5 @@ class GeometrySystem : public BaseSystem<GeometrySystem>
 public:
     GeometrySystem( Engine* eng ) : BaseSystem<GeometrySystem>( eng ) {};
 
-    void update( World& world, double dt ) override;
+    void update(double elapsed ) override;
 };

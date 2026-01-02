@@ -40,11 +40,12 @@ public:
 
     void stop_running() { running = false; }
 
-    template<typename T> T* get_system();
+	World& get_world() const { return *world.get(); }
 
 	CommandQueue& command_list() { return commands; }
 	InputQueue& input() { return input_queue; }
 
+    template<typename T> T* get_system();
 private:
     std::unique_ptr<World> world;
     std::vector<std::unique_ptr<ISystem>> systems;

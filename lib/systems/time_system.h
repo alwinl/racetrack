@@ -28,7 +28,7 @@ public:
 
     void init() override;
 
-    void update( World& world, double ) override;
+    void update( double ) override;
 
     double delta() { return dt; }
 

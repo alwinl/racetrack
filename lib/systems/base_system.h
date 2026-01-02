@@ -32,10 +32,10 @@ public:
     virtual std::type_index type() const = 0;
 
     virtual void init() = 0;
-    virtual void input( World& world ) = 0;
-    virtual void update( World& world, double dt ) = 0;
-    virtual void draw( World& world ) = 0;
-    virtual void flush( World& world ) = 0;
+    virtual void input() = 0;
+    virtual void update( double elapsed ) = 0;
+    virtual void draw() = 0;
+    virtual void flush() = 0;
     virtual void shutdown() = 0;
 };
 
@@ -48,10 +48,10 @@ public:
     std::type_index type() const override { return typeid(T); }
 
     void init() override {}
-    void input( World& world ) override {}
-    void update( World& world, double dt ) override {}
-    void draw( World& world ) override {}
-    void flush( World& world ) override { }
+    void input() override {}
+    void update( double elapsed ) override {}
+    void draw() override {}
+    void flush() override { }
     void shutdown() override {}
 
 protected:

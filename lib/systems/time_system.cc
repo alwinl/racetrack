@@ -26,7 +26,7 @@ void TimeSystem::init()
     last = glfwGetTime();
 }
 
-void TimeSystem::update( World &world, double )
+void TimeSystem::update( double )
 {
     double now = glfwGetTime();
 

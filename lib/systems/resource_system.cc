@@ -28,8 +28,9 @@
 
 #include "../components/load_request_component.h"
 
-void ResourceSystem::update( World &world, double dt )
+void ResourceSystem::update( double elapsed )
 {
+	auto& world = engine->get_world();
     auto& load_requests = world.storage<LoadRequestComponent>();
 
     for( auto& [entity, event] : load_requests.all() ) {
@@ -60,7 +61,8 @@ void ResourceSystem::load( World& world, const std::string &filename )
     }
 }
 
-void ResourceSystem::flush( World& world )
+void ResourceSystem::flush()
 {
+	auto& world = engine->get_world();
     world.flush_components<LoadRequestComponent>();
 }

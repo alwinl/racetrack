@@ -37,8 +37,8 @@ public:
 
     void init() override;
     void shutdown() override;
-    void update( World& world, double dt ) override;
-    void draw( World& world ) override;
+    void update( double elapsed ) override;
+    void draw() override;
 
     GLFWwindow * get_window() { return window; };
 
