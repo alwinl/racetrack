@@ -19,12 +19,14 @@
 
 #pragma once
 
+#include <any>
+#include <typeindex>
 #include <vector>
 #include <unordered_map>
 #include <cstdint>
 
 using Entity = std::uint32_t;
-const Entity INVALID_ENTRY = 0;
+constexpr uint32_t InvalidEntity = (uint32_t)-1;
 
 class World
 {
@@ -51,18 +53,23 @@ private:
 
 public:
     Entity create_entity() { return next_id++; }
-    void reset_entity_ids() { next_id = 1; };
+    void reset_entity_ids() { next_id = 0; };
 
     template<typename T> T& add_component( Entity e, const T& component ) { return *component_store<T>().add(e, component ); }
     template<typename T> T* get_component( Entity e ) { return component_store<T>().get(e ); }
     template<typename T> void remove_component( Entity e ) { removal_queue<T>().push_back(e); }
     template<typename T> void flush_components();
 
+	template<typename T> void set_resource( T resource ) { resources.insert( {typeid(T), std::move(resource)} ); }
+	template<typename T> T& get_resource( ) { return std::any_cast<T&>( resources.at(typeid(T)) ); }
+	template<typename T> bool has_resource( ) { return resources.contains( typeid(T) ); }
+
     template<typename T> Store<T>& storage() { return component_store<T>(); }
     template<typename T> const Store<T>& storage() const { return component_store<T>(); }
 
 private:
-    Entity next_id = 1;
+    Entity next_id = 0;
+	std::unordered_map<std::type_index, std::any> resources;
 
     template<typename T>
     Store<T>& component_store() const
@@ -80,14 +87,13 @@ private:
 };
 
 template<typename T>
-void World::flush_components( ) 
+void World::flush_components( )
 {
-    auto& list = removal_queue<T>();
     auto& store = component_store<T>();
 
-    for( Entity e : list )
+    for( Entity e : removal_queue<T>() )
         store.remove(e);
 
-    list.clear();
+    removal_queue<T>().clear();
 }
 
