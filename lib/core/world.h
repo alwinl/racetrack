@@ -54,6 +54,7 @@ private:
 public:
     Entity create_entity() { return next_id++; }
     void reset_entity_ids() { next_id = 0; };
+	void remove_entity( Entity e ) {};
 
     template<typename T> T& add_component( Entity e, const T& component ) { return *component_store<T>().add(e, component ); }
     template<typename T> T* get_component( Entity e ) { return component_store<T>().get(e ); }

@@ -26,6 +26,7 @@
 #include "../components/load_request_component.h"
 #include "../components/mesh_component.h"
 #include "../components/geometry_component.h"
+#include "registry.h"
 
 ComponentRegistrar<PointComponent> PointComponent::registrar("Point");
 ComponentRegistrar<TriangleComponent> TriangleComponent::registrar("Triangle");
@@ -37,89 +38,148 @@ ComponentRegistrar<LoadRequestComponent> LoadRequestComponent::registrar("Level"
 ComponentRegistrar<MeshComponent> MeshComponent::registrar("mesh");
 ComponentRegistrar<GeometryComponent> GeometryComponent::registrar("polygon");
 
-void ComponentRegistry::register_funcs( const std::string& name, std::type_index t, ComponentCreator creator, ComponentDestroyer destroyer, ComponentFlusher flusher )
+void ComponentRegistry::register_funcs( const std::string& name, std::type_index type, Funcs funcs )
 {
-    get().creators.insert({name, creator});
-    get().destroyers.insert({t, destroyer});
-    get().flushers.insert({t, flusher});
-
-    get().type_lookup.insert({name, t});
+	get().type_lookup.insert( {name, type} );
+	get().func_map.insert( {type, funcs} );
 }
 
-bool ComponentRegistry::create( World& world, Entity e, const std::string& name, const nlohmann::json& data)
+Entity ComponentRegistry::create_entity( World& world )
 {
-    auto& creators_map = get().creators;
+	Entity e = world.create_entity();
 
-    auto it = creators_map.find(name);
-    if( it == creators_map.end() )
+	get().entity_typelist.insert( {e, std::vector<std::type_index>()} );
+
+	return e;
+}
+
+void ComponentRegistry::remove_entity( World& world, Entity e )
+{
+	auto it = get().entity_typelist.find( e );
+	if( it == get().entity_typelist.end() )
+		return;
+
+	auto typelist = it->second;
+
+	for( auto& type : typelist )
+		get().remove_component( world, e, type );
+
+	world.remove_entity( e );
+
+	get().entity_typelist.erase( e );
+}
+
+bool ComponentRegistry::create_component( World &world, Entity e, const std::string &name, const nlohmann::json &data )
+{
+    auto it = get().type_lookup.find( name );
+    if( it == get().type_lookup.end() )
         return false;
 
-    auto& types_lookup = get().type_lookup;
+	auto type = it->second;
 
-    auto it2 = types_lookup.find( name );
-    if( it2 == types_lookup.end() )
+	auto it2 = get().func_map.find( type );
+    if( it2 == get().func_map.end() )
         return false;
 
-    {
-        auto [_,creator] = *it;
-        creator( world, e, data );
-    }
-    {
-        auto [_,type] = *it2;
-        get().entity_typelist[e].push_back( type );
-    }
+	auto funcs = it2->second;
+
+	funcs.create(world, e, data );
+
+	auto& typelist = get().entity_typelist.at(e);
+
+	if( !std::count( typelist.begin(), typelist.end(), type ) )
+		typelist.push_back( type );
 
     return true;
 }
 
-bool ComponentRegistry::destroy( World& world, Entity e )
+bool ComponentRegistry::remove_component( World& world, Entity e, const std::string& name )
 {
-    auto& typelist_map = get().entity_typelist;
-
-    auto it = typelist_map.find(e);
-    if( it == typelist_map.end() )
+    auto it = get().type_lookup.find( name );
+    if( it == get().type_lookup.end() )
         return false;
 
-    auto [_,type_list] = *it;
+	auto type = it->second;
 
-    auto& destroyers_map = get().destroyers;
+	auto it2 = get().func_map.find( type );
+    if( it2 == get().func_map.end() )
+        return false;
 
-    for( auto& type : type_list ) {
+	auto funcs = it2->second;
 
-        auto it = destroyers_map.find( type );
-        if( it == destroyers_map.end() )
-            continue;
+	funcs.remove( world, e );
 
-        auto [_,destroyer] = *it;
+	auto& typelist_map = get().entity_typelist;
 
-        destroyer( world, e );
-    }
+    auto it3 = typelist_map.find(e);
+    if( it3 == typelist_map.end() )
+        return false;
 
-    typelist_map.erase( it );
+	auto& typelist = it3->second;
+
+	auto it4 = std::find(typelist.begin(), typelist.end(), type );
+    if (it4 != typelist.end()) {
+		*it4 = typelist.back();
+		typelist.pop_back();
+	}
+
     return true;
 }
 
-bool ComponentRegistry::flush_all( World& world )
+bool ComponentRegistry::flush( World& world )
 {
-    for( auto [_, flush_type] : get().flushers )
-        flush_type( world );
+    for( auto [_, funcs] : get().func_map )
+        funcs.flush( world );
 
     return true;
 }
 
 void ComponentRegistry::clear_all( World& world )
 {
-    auto& typelist = get().entity_typelist;
+    auto& typelist_map = get().entity_typelist;
 
     // We copy keys because destroy() mutates the typelist map
     std::vector<Entity> to_delete;
-    to_delete.reserve( typelist.size() );
+    to_delete.reserve( typelist_map.size() );
 
-    for( auto& [entity, types] : typelist )
+    for( auto& [entity, types] : typelist_map ) {
         to_delete.push_back(entity);
 
-    for( Entity e : to_delete )
-        get().destroy( world, e );
+		// remove all components of this entity
+		for( auto type : types )
+			get().remove_component( world, entity, type );
+	}
 
-    get().flush_all(world);
+    for( Entity e : to_delete ) {
+        get().remove_entity( world, e );
+	}
+
+    // get().flush(world);
+}
+
+bool ComponentRegistry::remove_component( World& world, Entity e, std::type_index type )
+{
+	auto it2 = get().func_map.find( type );
+    if( it2 == get().func_map.end() )
+        return false;
+
+	auto funcs = it2->second;
+
+	funcs.remove( world, e );
+
+	auto& typelist_map = get().entity_typelist;
+
+    auto it3 = typelist_map.find(e);
+    if( it3 == typelist_map.end() )
+        return false;
+
+	auto& typelist = it3->second;
+
+	auto it4 = std::find(typelist.begin(), typelist.end(), type );
+    if (it4 != typelist.end()) {
+		*it4 = typelist.back();
+		typelist.pop_back();
+	}
+
+	return true;
 }

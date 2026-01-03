@@ -57,7 +57,7 @@ void ResourceSystem::load( World& world, const std::string &filename )
         Entity e = world.create_entity();
 
         for( auto [name, component_data] : ent["components"].items() )
-            ComponentRegistry::create( world, e, name, component_data );
+            ComponentRegistry::create_component( world, e, name, component_data );
     }
 }
 
