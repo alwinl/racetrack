@@ -20,7 +20,6 @@
 #include "engine.h"
 
 #include "../systems/render_system.h"
-#include "../systems/time_system.h"
 #include "../systems/input_system.h"
 #include "../systems/resource_system.h"
 #include "../systems/physics_system.h"
@@ -50,9 +49,9 @@ void Engine::init()
 
 void Engine::run()
 {
-    TimeSystem * time_system = get_system<TimeSystem>();
-
     while( running ) {
+
+		double elapsed = timer.elapsed();
 
         for( auto& system : systems )
             system->input();
@@ -60,7 +59,7 @@ void Engine::run()
 		process_commands();
 
         for( auto& system : systems )
-            system->update( time_system->delta() );
+            system->update( elapsed );
 
         for( auto& system : systems )
             system->draw();

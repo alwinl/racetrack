@@ -26,8 +26,8 @@ add_library(
     core/world.cc
     core/registry.cc
 	core/inputqueue.cc
+	core/timing.cc
 
-    systems/render_system.cc
     systems/time_system.cc
     systems/input_system.cc
     systems/resource_system.cc

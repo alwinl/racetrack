@@ -1,5 +1,5 @@
 /*
- * time_system.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * timing.cc Copyright 2026 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,22 +17,21 @@
  * MA 02110-1301, USA.
  */
 
-#pragma once
+#include "timing.h"
 
-#include "base_system.h"
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
 
-class TimeSystem : public BaseSystem<TimeSystem>
+Timing::Timing() : last_time( glfwGetTime() )
+{ }
+
+double Timing::elapsed()
 {
-public:
-    TimeSystem( Engine* eng ) : BaseSystem<TimeSystem>( eng ) {};
+	double now = glfwGetTime();
 
-    void init() override;
+	time_elapsed = now - last_time;
 
-    void update( double ) override;
+	last_time = now;
 
-    double delta() { return dt; }
-
-private:
-    double last = 0.0;
-    double dt = 0.0;
-};
+	return time_elapsed;
+}

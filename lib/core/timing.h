@@ -1,5 +1,5 @@
 /*
- * system_physics.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * timing.h Copyright 2026 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,19 +17,16 @@
  * MA 02110-1301, USA.
  */
 
-#include "time_system.h"
+#pragma once
 
-#include <GLFW/glfw3.h>
-
-void TimeSystem::init()
+class Timing
 {
-    last = glfwGetTime();
-}
+public:
+	Timing();
 
-void TimeSystem::update( double )
-{
-    double now = glfwGetTime();
+	double elapsed();
 
-    dt = now - last;
-    last = now;
-}
+private:
+	double time_elapsed;
+	double last_time;
+};

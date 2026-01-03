@@ -22,6 +22,7 @@
 #include <vector>
 #include <memory>
 
+#include "timing.h"
 #include "commandqueue.h"
 #include "inputqueue.h"
 
@@ -47,10 +48,10 @@ public:
 
     template<typename T> T* get_system();
 private:
+    bool running = true;
     std::unique_ptr<World> world;
     std::vector<std::unique_ptr<ISystem>> systems;
-    bool running = true;
-
+	Timing timer;
 	CommandQueue commands;
 	InputQueue input_queue;
 
