@@ -24,6 +24,7 @@
 #include <glm/glm.hpp>
 
 #include "../core/world.h"
+#include "../core/view.h"
 #include "../components/triangle_component.h"
 #include "../components/transform_component.h"
 
@@ -81,14 +82,11 @@ void TriangleRenderer::upload( const World& world )
 {
     cpu_buffer.clear();
 
-	world.for_each_component<TriangleComponent>( [&]( Entity entity, const TriangleComponent& tri )
+	for( auto [entity, tri, transform] : world.view<TriangleComponent, TransformComponent>() )
     {
-        if( const auto* transform = world.get_component<TransformComponent>( entity ) ) {
-
-            for( int i = 0; i < 3; i++ )
-                cpu_buffer.push_back( {tri.vertices[i] + transform->translation, tri.colour } );
-        }
-    } );
+		for( int i = 0; i < 3; i++ )
+			cpu_buffer.push_back( {tri.vertices[i] + transform.translation, tri.colour } );
+    };
 
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
     glBufferSubData( GL_ARRAY_BUFFER, 0, cpu_buffer.size() * sizeof(vertex), (void*)cpu_buffer.data() );

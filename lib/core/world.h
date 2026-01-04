@@ -73,8 +73,8 @@ public:
     template<typename T> T& add_component( Entity e, const T& component ) { return *component_store<T>().add(e, component ); }
     template<typename T> T* get_component( Entity e ) { return component_store<T>().get(e ); }
     template<typename T> T* get_component( Entity e ) const { return component_store<T>().get(e ); }
-	template<typename T, typename Fn> void for_each_component( Fn&& fn ) const { component_store<T>().for_each( fn ); };
-	template<typename T, typename Fn> void for_each_component( Fn&& fn ) { component_store<T>().for_each( fn ); };
+	// template<typename T, typename Fn> void for_each_component( Fn&& fn ) const { component_store<T>().for_each( fn ); };
+	// template<typename T, typename Fn> void for_each_component( Fn&& fn ) { component_store<T>().for_each( fn ); };
     template<typename T> void remove_component( Entity e ) { component_store<T>().remove(e); }
     template<typename T> void flush_components() { component_store<T>().flush(); };
 

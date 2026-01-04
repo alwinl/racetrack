@@ -24,6 +24,7 @@
 #include <glm/glm.hpp>
 
 #include "../core/world.h"
+#include "../core/view.h"
 #include "../components/mesh_component.h"
 
 
@@ -92,7 +93,7 @@ void MeshRenderer::upload( const World& world )
 
     draw_commands.clear();
 
-	world.for_each_component<MeshComponent>( [&]( Entity entity, const MeshComponent& mesh )
+	for( auto [entity, mesh] : world.view<MeshComponent>() )
     {
         DrawCommand draw_command;
 
@@ -118,7 +119,7 @@ void MeshRenderer::upload( const World& world )
         draw_commands.emplace_back( draw_command );
 
         vertex_buffer_idx += mesh.vertices.size();
-    });
+    };
 
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
     glBufferData( GL_ARRAY_BUFFER, vertex_buffer.size() * sizeof(vertex), (void*)vertex_buffer.data(), GL_DYNAMIC_DRAW );

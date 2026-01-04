@@ -85,12 +85,6 @@ void PointRenderer::upload( const World& world )
 {
     cpu_buffer.clear();
 
-	// world.for_each_component<PointComponent>( [&]( Entity entity, const PointComponent& point )
-	// {
-    //     if( auto* transform = world.get_component<TransformComponent>( entity ) )
-    //         cpu_buffer.push_back( {transform->translation, point.colour } );
-    // });
-
 	for( const auto [entity, point, transform] : world.view<PointComponent,TransformComponent>() )
         cpu_buffer.push_back( {transform.translation, point.colour } );
 

@@ -21,6 +21,7 @@
 
 #include "../core/world.h"
 #include "../core/engine.h"
+#include "../core/view.h"
 
 #include "../components/track_component.h"
 #include "../components/mesh_component.h"
@@ -29,13 +30,11 @@ void TrackSystem::update( double dt )
 {
 	auto& world = engine->get_world();
 
-	world.for_each_component<TrackComponent>( [&]( Entity entity, TrackComponent& track )
-	{
+	for( auto [entity, track] : world.view<TrackComponent>() )
         if( track.dirty ) {
 			regenerate_mesh( world, entity, track );
 			track.dirty = false;
 		}
-    });
 }
 
 void TrackSystem::regenerate_mesh( World &world, Entity ent, TrackComponent &track )

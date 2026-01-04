@@ -21,6 +21,7 @@
 
 #include "../core/world.h"
 #include "../core/engine.h"
+#include "../core/view.h"
 
 #include "../components/transform_component.h"
 #include "../components/velocity_component.h"
@@ -30,11 +31,6 @@ void PhysicsSystem::update( double elapsed )
 {
 	auto& world = engine->get_world();
 
-	world.for_each_component<VelocityComponent>( [&]( Entity entity, const VelocityComponent& v )
-	{
-
-        if( auto* transform = world.get_component<TransformComponent>( entity ) )
-            transform->translation += v.speed * (float)elapsed;
-
-    });
+	for( auto [entity, v, transform] : world.view<VelocityComponent,TransformComponent>() )
+        transform.translation += v.speed * (float)elapsed;
 }
