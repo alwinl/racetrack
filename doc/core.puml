@@ -1,0 +1,95 @@
+@startuml core.puml
+title Core - Racetrack Core Class Diagram
+
+class Engine
+{
+	+init()
+	+run()
+	+shutdown()
+}
+
+class World
+{
+	+for_each_entity<T,Fn>( Fn&& fn )
+	+get_component<T>( Entity e )
+	+view<Ts...>() : View
+}
+
+class Registry
+{
+	-World& world
+
+	+create_entity() : Entity
+	+remove_entity( Entity )
+
+	+register_component<T>( const std::string& )
+    +create_component( Entity, const std::string& ) : bool
+	+with_component( Entity, const std::string&, std::function<void(void*)>&& ) : bool
+    +remove_component( Entity, const std::string& ) : bool
+
+    +flush() : bool
+    +clear()
+}
+
+Engine *--- World
+Engine *--- Registry
+
+Registry -> World : references
+
+struct View::Iterator
+{
+	operator*()
+	operator++()
+	operator!=()
+}
+
+class View
+{
+	-const World&
+
+	+begin() : View::Iterator
+	+end() : View::Iterator
+}
+
+View *- View::Iterator
+World <-- View : references
+
+class Timing
+{
+	+elapsed() : double
+}
+
+class CommandQueue
+{
+	+push()
+	+pop()
+	+empty()
+}
+
+struct KeyEvent
+{
+	int key
+	int action
+	int mods
+}
+
+class InputQueue
+{
+	+push_key_event( KeyEvent )
+	+poll( KeyEvent& ) : bool
+}
+
+InputQueue o-- "0..*" KeyEvent
+
+interface ICommand
+interface ISystems
+
+CommandQueue o-- "0..*" ICommand
+
+Engine o-- "0..*" ISystems
+
+Timing -* Engine
+Engine *- CommandQueue
+Engine *- InputQueue
+
+@enduml
