@@ -71,7 +71,8 @@ void Registry::register_component( const std::string &name )
 	Funcs funcs = {
 		.create = []( World& world, Entity e ) { world.add_component<T>(e, T());},
 		.remove = []( World& world, Entity e ) { world.remove_component<T>( e ); },
-		.dispatch = []( World& world, Entity e, std::function<void(void*)> fn ) { if( auto * c= world.get_component<T>(e) ) fn( static_cast<void*>(c)); },
+		.dispatch = []( World& world, Entity e, std::function<void(void*)> fn )
+						{ fn( static_cast<void*>( world.get_component<T>(e) )); },
 		.flush = []( World& world ) { world.flush_components<T>(); }
 	};
 

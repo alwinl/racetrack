@@ -183,7 +183,13 @@ void LoadRequest::execute( Engine &engine )
 			auto loader = it2->second;
 
             registry.create_component( e, type_name );
-			registry.with_component( e, type_name, [&](void *ptr) { loader( ptr, component_data ); } );
+			registry.with_component( e, type_name, [&](void *ptr)
+			{
+				if( !ptr )		// worthy of an exception
+					return;
+
+				loader( ptr, component_data );
+			} );
 		}
     }
 }
