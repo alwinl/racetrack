@@ -40,10 +40,10 @@ using TypeLookupMap = std::unordered_map<std::string, std::type_index>;
 using FunctionMap = std::unordered_map<std::type_index, Funcs>;
 using TypeListMap = std::unordered_map<Entity, std::vector<std::type_index>>;
 
-class ComponentRegistry
+class Registry
 {
 public:
-	ComponentRegistry( World& world ) : world(world) {}
+	Registry( World& world ) : world(world) {}
 
     template<typename T> void register_component( const std::string& component_name );
 
@@ -67,7 +67,7 @@ private:
 };
 
 template <typename T>
-void ComponentRegistry::register_component( const std::string &component_name )
+void Registry::register_component( const std::string &component_name )
 {
 	Funcs funcs = {
 		.create = []( World& world, Entity e ) { world.add_component<T>(e, T());},

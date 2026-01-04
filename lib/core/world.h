@@ -29,7 +29,7 @@
 using Entity = std::uint32_t;
 constexpr uint32_t InvalidEntity = (uint32_t)-1;
 
-class ComponentRegistry;
+class Registry;
 template<typename... Ts> class View;
 
 class World
@@ -97,7 +97,7 @@ private:
         return static_cast<Store<T>&>(*store_ptr);
     }
 
-	friend ComponentRegistry;
+	friend Registry;
 
     Entity create_entity() { return next_id++; }
 	void remove_entity( Entity e ) {};

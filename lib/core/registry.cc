@@ -21,7 +21,7 @@
 #include "world.h"
 #include <algorithm>
 
-Entity ComponentRegistry::create_entity()
+Entity Registry::create_entity()
 {
 	Entity e = world.create_entity();
 
@@ -30,7 +30,7 @@ Entity ComponentRegistry::create_entity()
 	return e;
 }
 
-void ComponentRegistry::remove_entity( Entity e )
+void Registry::remove_entity( Entity e )
 {
 	auto it = entity_typelist.find( e );
 	if( it == entity_typelist.end() )
@@ -46,7 +46,7 @@ void ComponentRegistry::remove_entity( Entity e )
 	entity_typelist.erase( e );
 }
 
-bool ComponentRegistry::create_component( Entity e, const std::string &name )
+bool Registry::create_component( Entity e, const std::string &name )
 {
     auto it = type_lookup.find( name );
     if( it == type_lookup.end() )
@@ -70,7 +70,7 @@ bool ComponentRegistry::create_component( Entity e, const std::string &name )
     return true;
 }
 
-bool ComponentRegistry::with_component( Entity e, const std::string &name, std::function<void( void * )> &&fn )
+bool Registry::with_component( Entity e, const std::string &name, std::function<void( void * )> &&fn )
 {
     auto it = type_lookup.find( name );
     if( it == type_lookup.end() )
@@ -89,7 +89,7 @@ bool ComponentRegistry::with_component( Entity e, const std::string &name, std::
 	return false;
 }
 
-bool ComponentRegistry::remove_component( Entity e, const std::string& name )
+bool Registry::remove_component( Entity e, const std::string& name )
 {
     auto it = type_lookup.find( name );
     if( it == type_lookup.end() )
@@ -122,7 +122,7 @@ bool ComponentRegistry::remove_component( Entity e, const std::string& name )
     return true;
 }
 
-bool ComponentRegistry::flush()
+bool Registry::flush()
 {
     for( auto [_, funcs] : func_map )
         funcs.flush( world );
@@ -130,13 +130,13 @@ bool ComponentRegistry::flush()
     return true;
 }
 
-void ComponentRegistry::clear()
+void Registry::clear()
 {
 	entity_typelist.clear();
 	world.clear();
 }
 
-bool ComponentRegistry::remove_component( Entity e, std::type_index type )
+bool Registry::remove_component( Entity e, std::type_index type )
 {
 	auto component_funcs_it = func_map.find( type );
     auto entity_types_it = entity_typelist.find(e);

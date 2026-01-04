@@ -43,7 +43,7 @@ public:
     void stop_running() { running = false; }
 
 	World& get_world() { return world; }
-	ComponentRegistry& get_registry() { return registry; }
+	Registry& get_registry() { return registry; }
 
 	CommandQueue& command_list() { return commands; }
 	InputQueue& input() { return input_queue; }
@@ -51,7 +51,7 @@ public:
 private:
     bool running = true;
     World world;
-	ComponentRegistry registry {world};
+	Registry registry {world};
     std::vector<std::unique_ptr<ISystem>> systems;
 	Timing timer;
 	CommandQueue commands;
