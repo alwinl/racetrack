@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <any>
+// #include <any>
 #include <typeindex>
 #include <vector>
 #include <unordered_map>
@@ -66,28 +66,22 @@ private:
 
 public:
     Entity create_entity() { return next_id++; }
-    void reset_entity_ids() { next_id = 0; };
 	void remove_entity( Entity e ) {};
 	template<typename T, typename Fn> void for_each_entity( Fn&& fn ) const { component_store<T>().for_each( [&]( Entity e, const T& ) { fn(e); } ); };
 
     template<typename T> T& add_component( Entity e, const T& component ) { return *component_store<T>().add(e, component ); }
     template<typename T> T* get_component( Entity e ) { return component_store<T>().get(e ); }
     template<typename T> T* get_component( Entity e ) const { return component_store<T>().get(e ); }
-	// template<typename T, typename Fn> void for_each_component( Fn&& fn ) const { component_store<T>().for_each( fn ); };
-	// template<typename T, typename Fn> void for_each_component( Fn&& fn ) { component_store<T>().for_each( fn ); };
     template<typename T> void remove_component( Entity e ) { component_store<T>().remove(e); }
     template<typename T> void flush_components() { component_store<T>().flush(); };
-
-	template<typename T> void set_resource( T resource ) { resources.insert( {typeid(T), std::move(resource)} ); }
-	template<typename T> T& get_resource( ) { return std::any_cast<T&>( resources.at(typeid(T)) ); }
-	template<typename T> bool has_resource( ) { return resources.contains( typeid(T) ); }
 
 	template<typename... Ts> View<Ts...> view();					// defined in view.h
 	template<typename... Ts> View<const Ts...> view() const;		// defined in view.h
 
+	void clear() { next_id = 0; for( auto& [_,store] : stores) if( store ) store->clear(); };
+
 private:
     Entity next_id = 0;
-	std::unordered_map<std::type_index, std::any> resources;
 	mutable std::unordered_map<std::type_index, std::unique_ptr<IStore>> stores;
 
     template<typename T>

@@ -111,21 +111,10 @@ bool ComponentRegistry::flush()
     return true;
 }
 
-void ComponentRegistry::clear_all()
+void ComponentRegistry::clear()
 {
-    auto& typelist_map = entity_typelist;
-
-    // We copy keys because destroy() mutates the typelist map
-    std::vector<Entity> to_delete;
-    to_delete.reserve( entity_typelist.size() );
-
-    for( auto& [entity, _] : entity_typelist )
-        to_delete.push_back(entity);
-
-    for( Entity e : to_delete )
-        remove_entity( e );		// removing the entity removes all its associated components
-
-    // flush(world);
+	entity_typelist.clear();
+	world.clear();
 }
 
 bool ComponentRegistry::remove_component( Entity e, std::type_index type )

@@ -29,6 +29,8 @@
 
 void LoadRequest::execute( Engine &engine )
 {
+	auto& registry = engine.get_registry();
+
     std::ifstream datafile( filename );
 
     if( !datafile.is_open() )
@@ -37,16 +39,15 @@ void LoadRequest::execute( Engine &engine )
     nlohmann::json data;
     datafile >> data;
 
-	engine.get_registry().clear_all();
-    engine.get_world().reset_entity_ids();
+	registry.clear();
 
     for( auto& ent : data["entities"] ) {
 
-        Entity e = engine.get_registry().create_entity();
+        Entity e = registry.create_entity();
 
         for( auto [name, component_data] : ent["components"].items() ) {
-            engine.get_registry().create_component( e, name );
-			// engine.get_world().set_component_data( e, component_data);
+            registry.create_component( e, name );
+			// registry.set_component_data<JSON>( e, component_data);
 		}
     }
 }

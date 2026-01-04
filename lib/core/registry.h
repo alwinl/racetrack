@@ -53,7 +53,7 @@ public:
     bool remove_component( Entity e, const std::string& name );
 
     bool flush();
-    void clear_all();
+    void clear();
 
 private:
 	World& world;

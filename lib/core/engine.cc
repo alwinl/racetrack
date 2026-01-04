@@ -56,7 +56,6 @@ Engine::Engine()
 	registry.register_component<VelocityComponent>("VelocityComponent");
 	registry.register_component<MeshComponent>("MeshComponent");
 	registry.register_component<GeometryComponent>("GeometryComponent");
-
 }
 
 void Engine::init()
