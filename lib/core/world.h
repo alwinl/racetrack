@@ -66,20 +66,13 @@ private:
     };
 
 public:
-    // Entity create_entity() { return next_id++; }
-	// void remove_entity( Entity e ) {};
 	template<typename T, typename Fn> void for_each_entity( Fn&& fn ) const { component_store<T>().for_each( [&]( Entity e, const T& ) { fn(e); } ); };
 
-    // template<typename T> T& add_component( Entity e, const T& component ) { return *component_store<T>().add(e, component ); }
     template<typename T> T* get_component( Entity e ) { return component_store<T>().get(e ); }
     template<typename T> T* get_component( Entity e ) const { return component_store<T>().get(e ); }
-    // template<typename T> void remove_component( Entity e ) { component_store<T>().remove(e); }
-    // template<typename T> void flush_components() { component_store<T>().flush(); };
 
 	template<typename... Ts> View<Ts...> view();					// defined in view.h
 	template<typename... Ts> View<const Ts...> view() const;		// defined in view.h
-
-	// void clear() { next_id = 0; for( auto& [_,store] : stores) if( store ) store->clear(); };
 
 private:
     Entity next_id = 0;
