@@ -23,38 +23,72 @@
 #include <glm/gtc/constants.hpp>
 
 #include "../core/world.h"
+#include "../core/engine.h"
+#include "../core/view.h"
 
 #include "../components/geometry_component.h"
 #include "../components/mesh_component.h"
 
 void GeometrySystem::update( double elapsed )
 {
-    // auto& geometries = world.storage<GeometryComponent>();
+	auto& world = engine->get_world();
 
-    // for( auto& [entity, geometry] : geometries.all() ) {
+	for( auto [entity, geometry] : world.view<GeometryComponent>() )
+		if( geometry.dirty ) {
+			regenerate_mesh(  world, entity, geometry );
+			geometry.dirty = false;
+		}
+}
 
-    //     if( ! geometry.generated ) {
+void GeometrySystem::regenerate_mesh( World &world, Entity ent, GeometryComponent &geometry )
+{
+	auto * mesh = world.get_component<MeshComponent>(ent);
 
-    //         Entity event = world.create_entity();
+	if( !mesh ) {
+		engine->get_registry().create_component(ent, "MeshComponent" );
+		mesh = world.get_component<MeshComponent>(ent);
+	}
 
-    //         MeshComponent mesh;
+    mesh->topology = geometry.filled ? MeshComponent::Topology::TRIANGLE_FAN : MeshComponent::Topology::LINE_LOOP;
+	mesh->vertices.clear();
+	mesh->colours.clear();
+	mesh->indices.clear();
 
-    //         float a = glm::max(geometry.axis_a, geometry.axis_b);
-    //         float b = glm::min(geometry.axis_a, geometry.axis_b);
+	float a = glm::max(geometry.axis_a, geometry.axis_b);
+	float b = glm::min(geometry.axis_a, geometry.axis_b);
 
-    //         for( int i = 0; i < geometry.segments; i++ ) {
+	std::vector<glm::vec3> points;
+	for( int i = 0; i < geometry.segments; i++ ) {
 
-    //             float t = (float)i / geometry.segments * glm::two_pi<float>();
+		float t = (float)i / geometry.segments * glm::two_pi<float>();
+		points.push_back( glm::vec3( a * cos(t), b * sin(t), 0.0f ) );
+	}
 
-    //             mesh.outline.push_back( glm::vec3( a * cos(t), b * sin(t), 0.0f ) );
-    //         }
+	if( geometry.filled ) {
 
-    //         mesh.colour = geometry.colour;
-    //         mesh.filled = geometry.filled;
+		glm::vec3 center(0.0f, 0.0f, 0.0f);
+        mesh->vertices.push_back(center);
+        mesh->colours.push_back(geometry.colour);
 
-    //         world.add_component( event, mesh );
+		for (int i = 0; i < geometry.segments; i++)
+		{
+            int next = (i + 1) % geometry.segments;
 
-    //         geometry.generated = true;
-    //     }
-    // }
+            mesh->vertices.push_back(points[i]);
+            mesh->colours.push_back(geometry.colour);
+
+            mesh->vertices.push_back(points[next]);
+            mesh->colours.push_back(geometry.colour);
+        }
+	} else {
+
+        for( auto &p : points ) {
+
+            mesh->vertices.push_back(p);
+            mesh->colours.push_back(geometry.colour);
+        }
+
+        mesh->vertices.push_back(points[0]);
+        mesh->colours.push_back(geometry.colour);
+    }
 }

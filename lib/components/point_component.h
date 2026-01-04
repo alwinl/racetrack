@@ -20,7 +20,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "nlohmann/json.hpp"
+#include "../vendor/nlohmann/json.hpp"
 
 #include "../core/registry.h"
 
@@ -28,10 +28,5 @@
  {
     glm::vec3 colour {1.0f};
 
-    void from_json( const nlohmann::json& json )
-    {
-        auto [r,g,b] = json.value( "colour", std::array<float,3> {1.0f, 0.0f, 0.0f} );
-        colour = glm::vec3( r, g, b );
-    }
  };
 

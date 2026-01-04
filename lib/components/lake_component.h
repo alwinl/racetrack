@@ -21,7 +21,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
-#include "nlohmann/json.hpp"
+#include "../vendor/nlohmann/json.hpp"
 
 #include "../core/registry.h"
 
@@ -73,16 +73,5 @@ struct LakeComponent
         }
     }
 
-    void from_json( const nlohmann::json& json )
-    {
-        lake_axis_length = { json.value( "lake_axis_length", std::array<float,2> {15.0f, 25.0f} ) };
-        lake_freq = json.value("lake_freq", 4.0f );
-        lake_amp  = json.value("lake_amp", 0.15f );
-        island_radius = json.value("island_radius", 6.0f );
-        island_freq = json.value("island_freq", 3.0f );
-        island_amp  = json.value("island_amp", 0.25f );
-        segments = json.value("segments", 200);
-
-        generate_lake();
-    }
 };
+

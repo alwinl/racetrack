@@ -20,7 +20,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "nlohmann/json.hpp"
+#include "../vendor/nlohmann/json.hpp"
 
 #include "../core/registry.h"
 
@@ -28,9 +28,5 @@ struct VelocityComponent
 {
     glm::vec3 speed {0.0f};
 
-    void from_json( const nlohmann::json& json )
-    {
-        auto [vx,vy,vz] = json.value( "speed", std::array<float, 3>{0.0f, 0.0f, 0.0f} );
-        speed = glm::vec3( vx, vy, vz );
-    }
 };
+

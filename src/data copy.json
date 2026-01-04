@@ -70,7 +70,7 @@
                     ],
                     "width": 1.0,
                     "closed": false,
-                    "colour" : [ 1.0,  1.0, 1.0]
+                    "colour" : [ 0.0,  0.0, 0.0]
                 }
             }
         }

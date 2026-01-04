@@ -22,7 +22,7 @@
 #include <vector>
 
 #include <glm/glm.hpp>
-#include "nlohmann/json.hpp"
+#include "../vendor/nlohmann/json.hpp"
 
 #include "../core/registry.h"
 
@@ -34,23 +34,6 @@ struct TrackComponent
     glm::vec3 colour = {1.0, 1.0, 1.0};
 
     bool dirty = false;
-
-    void from_json( const nlohmann::json& json )
-    {
-        if( !json.contains("points") )
-            throw std::runtime_error("JSON error: missing required key 'points'");
-
-        if( !json["points"].is_array() )
-            throw std::runtime_error("JSON error: 'points' must be an array");
-
-        width = json["width"];
-        closed = json["closed"];
-        colour = {json["colour"][0], json["colour"][1],json["colour"][2] };
-
-        centreline.clear();
-        for( auto& p : json["points"] )
-            centreline.emplace_back( glm::vec2( p[0], p[1]) );
-
-        dirty = true;
-    }
 };
+
+

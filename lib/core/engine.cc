@@ -17,6 +17,10 @@
  * MA 02110-1301, USA.
  */
 
+#define STR(x) #x
+#define XSTR(x) STR(x)
+#define CAT(a,b) a##b
+
 #include "world.h"
 #include "engine.h"
 
@@ -38,24 +42,16 @@
 
 
 
+
 Engine::Engine()
 {
-    // push systems in the order you need
-    systems.push_back( std::make_unique<RenderSystem>( this ) );
-    systems.push_back( std::make_unique<InputSystem>( this ) );
-    systems.push_back( std::make_unique<ResourceSystem>( this ) );
-    systems.push_back( std::make_unique<PhysicsSystem>( this ) );
-    systems.push_back( std::make_unique<GeometrySystem>( this ) );
-    systems.push_back( std::make_unique<TrackSystem>( this ) );
+#define X(Name) systems.push_back( std::make_unique<CAT(Name,System)>( this ) );
+	#include "../systems/systems.def"
+#undef X
 
-	registry.register_component<PointComponent>("PointComponent");
-	registry.register_component<TriangleComponent>("TriangleComponent");
-	registry.register_component<TrackComponent>("TrackComponent");
-	registry.register_component<LakeComponent>("LakeComponent");
-	registry.register_component<TransformComponent>("TransformComponent");
-	registry.register_component<VelocityComponent>("VelocityComponent");
-	registry.register_component<MeshComponent>("MeshComponent");
-	registry.register_component<GeometryComponent>("GeometryComponent");
+#define X(Name) registry.register_component<CAT(Name,Component)>(XSTR(CAT(Name,Component)));
+	#include "../components/components.def"
+#undef X
 }
 
 void Engine::init()

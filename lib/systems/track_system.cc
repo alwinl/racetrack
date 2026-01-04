@@ -39,10 +39,15 @@ void TrackSystem::update( double dt )
 
 void TrackSystem::regenerate_mesh( World &world, Entity ent, TrackComponent &track )
 {
-    MeshComponent mesh;
+	auto * mesh = world.get_component<MeshComponent>(ent);
 
-    mesh.filled = false;
-    mesh.topology = MeshComponent::Topology::TRIANGLES;
+	if( !mesh ) {
+		engine->get_registry().create_component(ent, "MeshComponent" );
+		mesh = world.get_component<MeshComponent>(ent);
+	}
+
+    mesh->filled = false;
+    mesh->topology = MeshComponent::Topology::TRIANGLES;
 
     float half_width = track.width * 0.5f;
 
@@ -57,11 +62,11 @@ void TrackSystem::regenerate_mesh( World &world, Entity ent, TrackComponent &tra
         glm::vec2 left  = current + normal * half_width;
         glm::vec2 right = current - normal * half_width;
 
-        mesh.vertices.push_back( glm::vec3(left, 0.0) );
-        mesh.colours.push_back( track.colour );
+        mesh->vertices.push_back( glm::vec3(left, 0.0) );
+        mesh->colours.push_back( track.colour );
 
-        mesh.vertices.push_back( glm::vec3(right, 0.0) );
-        mesh.colours.push_back( track.colour );
+        mesh->vertices.push_back( glm::vec3(right, 0.0) );
+        mesh->colours.push_back( track.colour );
     }
 
     glm::vec2 current = track.centreline[track.centreline.size() - 1];
@@ -73,24 +78,22 @@ void TrackSystem::regenerate_mesh( World &world, Entity ent, TrackComponent &tra
     glm::vec2 left  = current + normal * half_width;
     glm::vec2 right = current - normal * half_width;
 
-    mesh.vertices.push_back( glm::vec3(left, 0.0) );
-    mesh.colours.push_back( track.colour );
+    mesh->vertices.push_back( glm::vec3(left, 0.0) );
+    mesh->colours.push_back( track.colour );
 
-    mesh.vertices.push_back( glm::vec3(right, 0.0) );
-    mesh.colours.push_back( track.colour );
+    mesh->vertices.push_back( glm::vec3(right, 0.0) );
+    mesh->colours.push_back( track.colour );
 
     // each pair of vertices is a left and right vertex of the track, thus two pairs create a quad, which is two triangles
     // the triangle vertices of each are 0, 1, 3 and 1, 2, 3
     for( size_t i = 0; i < track.centreline.size() - 1; ++i )
     {
-        mesh.indices.push_back( 0 + 2 * i );
-        mesh.indices.push_back( 1 + 2 * i );
-        mesh.indices.push_back( 3 + 2 * i );
+        mesh->indices.push_back( 0 + 2 * i );
+        mesh->indices.push_back( 1 + 2 * i );
+        mesh->indices.push_back( 3 + 2 * i );
 
-        mesh.indices.push_back( 0 + 2 * i );
-        mesh.indices.push_back( 2 + 2 * i );
-        mesh.indices.push_back( 3 + 2 * i );
+        mesh->indices.push_back( 0 + 2 * i );
+        mesh->indices.push_back( 2 + 2 * i );
+        mesh->indices.push_back( 3 + 2 * i );
     }
-
-    world.add_component<MeshComponent>( ent, mesh );
 }

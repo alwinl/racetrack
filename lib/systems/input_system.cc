@@ -47,6 +47,11 @@ void InputSystem::input()
 				) );
 				break;
 
+			case GLFW_KEY_2:
+				engine->command_list().push( std::make_unique<LoadRequest>(
+					"/home/alwin/Documents/Programming/Graphics/racetrack/src/data copy.json"
+				) );
+				break;
 			default:
 				break;
 			}

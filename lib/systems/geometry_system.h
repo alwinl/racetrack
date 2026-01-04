@@ -21,10 +21,17 @@
 
 #include "base_system.h"
 
+#include "../core/world.h"
+
+struct GeometryComponent;
+
 class GeometrySystem : public BaseSystem<GeometrySystem>
 {
 public:
     GeometrySystem( Engine* eng ) : BaseSystem<GeometrySystem>( eng ) {};
 
     void update(double elapsed ) override;
+
+private:
+    void regenerate_mesh( World& world, Entity ent, GeometryComponent& track );
 };

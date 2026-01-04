@@ -32,6 +32,7 @@ struct Funcs
 {
 	std::function<void(World&, Entity)> create;
 	std::function<void(World&, Entity)> remove;
+	std::function<void(World&, Entity, std::function<void(void*)>)> dispatch;
 	std::function<void(World&)> flush;
 };
 
@@ -50,6 +51,7 @@ public:
 	void remove_entity( Entity e );
 
     bool create_component( Entity e, const std::string& name );
+	bool with_component( Entity e, const std::string& name, std::function<void(void*)>&& fn );
     bool remove_component( Entity e, const std::string& name );
 
     bool flush();
@@ -70,6 +72,7 @@ void ComponentRegistry::register_component( const std::string &component_name )
 	Funcs funcs = {
 		.create = []( World& world, Entity e ) { world.add_component<T>(e, T());},
 		.remove = []( World& world, Entity e ) { world.remove_component<T>( e ); },
+		.dispatch = []( World& world, Entity e, std::function<void(void*)> fn ) { if( auto * c= world.get_component<T>(e) ) fn( static_cast<void*>(c)); },
 		.flush = []( World& world ) { world.flush_components<T>(); }
 	};
 

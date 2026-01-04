@@ -22,7 +22,7 @@
 #include <vector>
 
 #include <glm/glm.hpp>
-#include "nlohmann/json.hpp"
+#include "../vendor/nlohmann/json.hpp"
 
 #include "../core/registry.h"
 
@@ -35,19 +35,6 @@ struct GeometryComponent
     bool filled;
     glm::vec3 colour;
 
-    bool generated = true;
-
-    void from_json( const nlohmann::json& json )
-    {
-        axis_a = json.value( "axis_a", 1.0f );
-        axis_b = json.value( "axis_b", 1.0f );
-        segments = json.value( "segments", 4.0f );
-        closed = json.value( "closed", true );
-        filled = json.value( "filled", true );
-
-        auto [r,g,b] = json.value( "colour", std::array<float,3> {1.0f, 0.0f, 0.0f} );
-        colour = glm::vec3( r, g, b );
-
-        generated = false;
-    }
+    bool dirty = false;
 };
+

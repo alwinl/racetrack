@@ -70,6 +70,25 @@ bool ComponentRegistry::create_component( Entity e, const std::string &name )
     return true;
 }
 
+bool ComponentRegistry::with_component( Entity e, const std::string &name, std::function<void( void * )> &&fn )
+{
+    auto it = type_lookup.find( name );
+    if( it == type_lookup.end() )
+        return false;
+
+	auto type = it->second;
+
+	auto it2 = func_map.find( type );
+    if( it2 == func_map.end() )
+        return false;
+
+	auto funcs = it2->second;
+
+	funcs.dispatch( world, e, fn);
+
+	return false;
+}
+
 bool ComponentRegistry::remove_component( Entity e, const std::string& name )
 {
     auto it = type_lookup.find( name );

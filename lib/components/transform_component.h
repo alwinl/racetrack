@@ -20,7 +20,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "nlohmann/json.hpp"
+#include "../vendor/nlohmann/json.hpp"
 
 #include "../core/registry.h"
 
@@ -30,15 +30,5 @@ struct TransformComponent
     glm::vec3 rotation {0.0f};
     glm::vec3 scale {1.0f};
 
-    void from_json( const nlohmann::json& json )
-    {
-        auto [tx,ty,tz] = json.value( "translation", std::array<float, 3>{0.0f, 0.0f, 0.0f} );
-        translation = glm::vec3( tx, ty, tz );
-
-        auto [rx,ry,rz] = json.value( "rotation", std::array<float, 3>{0.0f, 0.0f, 0.0f} );
-        rotation = glm::vec3( rx, ry, rz );
-
-        auto [sx,sy,sz] = json.value( "scale", std::array<float, 3>{1.0f, 1.0f, 1.0f} );
-        scale = glm::vec3( sx, sy, sz );
-    }
 };
+
