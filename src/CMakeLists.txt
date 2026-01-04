@@ -24,3 +24,5 @@ add_executable(
 )
 
 target_link_libraries( racetrack PRIVATE racetrack_lib )
+
+add_dependencies(racetrack copy_data)

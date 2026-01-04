@@ -29,6 +29,13 @@ set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
+add_custom_target( copy_data
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_CURRENT_SOURCE_DIR}/data/"
+    "${CMAKE_CURRENT_BINARY_DIR}/data"
+    COMMENT "Copying data files to build directory"
+)
+
 add_subdirectory(vendor)
 add_subdirectory(lib)
 add_subdirectory(src)

@@ -38,18 +38,18 @@ void InputSystem::input()
 				break;
 			case GLFW_KEY_0:
 				engine->command_list().push( std::make_unique<LoadRequest>(
-					"/home/alwin/Documents/Programming/Graphics/racetrack/src/data.json"
+					"../data/data.json"
 				) );
 				break;
 			case GLFW_KEY_1:
 				engine->command_list().push( std::make_unique<LoadRequest>(
-					"/home/alwin/Documents/Programming/Graphics/racetrack/src/data simple.json"
+					"../data/data simple.json"
 				) );
 				break;
 
 			case GLFW_KEY_2:
 				engine->command_list().push( std::make_unique<LoadRequest>(
-					"/home/alwin/Documents/Programming/Graphics/racetrack/src/data copy.json"
+					"../data/data copy.json"
 				) );
 				break;
 			default:
