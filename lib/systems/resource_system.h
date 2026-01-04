@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <string>
-
 #include "base_system.h"
 
 class ResourceSystem : public BaseSystem<ResourceSystem>
@@ -28,9 +26,5 @@ class ResourceSystem : public BaseSystem<ResourceSystem>
 public:
     ResourceSystem( Engine* eng ) : BaseSystem<ResourceSystem>( eng ) {};
 
-    void update( double elapsed ) override;
-    void flush() override;
-
 private:
-    void load( World& world, const std::string &filename );
 };

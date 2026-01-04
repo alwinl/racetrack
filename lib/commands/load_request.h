@@ -1,5 +1,5 @@
 /*
- * load_request_component.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * load_request.h Copyright 2026 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,18 +19,17 @@
 
 #pragma once
 
-#include <glm/glm.hpp>
+#include <string>
 
-#include "../core/registry.h"
+#include "command.h"
 
-struct LoadRequestComponent
+class LoadRequest : public ICommand
 {
-    std::string filename;
+public:
+	LoadRequest( std::string filename ) : filename( filename ) {}
 
-    void from_json( const nlohmann::json& json )
-    {
-        filename = json.value( "filename", "" );
-    }
+	void execute( Engine& engine ) override;
 
-    static ComponentRegistrar<LoadRequestComponent> registrar;
+private:
+	std::string filename;
 };

@@ -1,5 +1,5 @@
 /*
- * component_transform.h Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * load_request.cc Copyright 2026 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,36 @@
  * MA 02110-1301, USA.
  */
 
-#pragma once
+#include "load_request.h"
 
-#include <glm/glm.hpp>
-#include "nlohmann/json.hpp"
-
+#include "../core/engine.h"
+#include "../core/world.h"
 #include "../core/registry.h"
 
-struct TransformComponent
+#include <fstream>
+
+#include "nlohmann/json.hpp"
+
+void LoadRequest::execute( Engine &engine )
 {
-    glm::vec3 translation {0.0f};
-    glm::vec3 rotation {0.0f};
-    glm::vec3 scale {1.0f};
+    std::ifstream datafile( filename );
 
-    void from_json( const nlohmann::json& json )
-    {
-        auto [tx,ty,tz] = json.value( "translation", std::array<float, 3>{0.0f, 0.0f, 0.0f} );
-        translation = glm::vec3( tx, ty, tz );
+    if( !datafile.is_open() )
+        return;
 
-        auto [rx,ry,rz] = json.value( "rotation", std::array<float, 3>{0.0f, 0.0f, 0.0f} );
-        rotation = glm::vec3( rx, ry, rz );
+    nlohmann::json data;
+    datafile >> data;
 
-        auto [sx,sy,sz] = json.value( "scale", std::array<float, 3>{1.0f, 1.0f, 1.0f} );
-        scale = glm::vec3( sx, sy, sz );
+	engine.get_registry().clear_all();
+    engine.get_world().reset_entity_ids();
+
+    for( auto& ent : data["entities"] ) {
+
+        Entity e = engine.get_registry().create_entity();
+
+        for( auto [name, component_data] : ent["components"].items() ) {
+            engine.get_registry().create_component( e, name );
+			// engine.get_world().set_component_data( e, component_data);
+		}
     }
-};
+}

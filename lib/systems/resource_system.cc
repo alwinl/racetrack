@@ -19,50 +19,6 @@
 
 #include "resource_system.h"
 
-#include <fstream>
-#include "nlohmann/json.hpp"
-
 #include "../core/world.h"
 #include "../core/engine.h"
 #include "../core/registry.h"
-
-#include "../components/load_request_component.h"
-
-void ResourceSystem::update( double elapsed )
-{
-	auto& world = engine->get_world();
-    auto& load_requests = world.storage<LoadRequestComponent>();
-
-    for( auto& [entity, event] : load_requests.all() ) {
-        load( world, event.filename );
-        world.remove_component<LoadRequestComponent>( entity );
-    }
-}
-
-void ResourceSystem::load( World& world, const std::string &filename )
-{
-    std::ifstream datafile( filename );
-
-    if( !datafile.is_open() )
-        return;
-
-    nlohmann::json data;
-    datafile >> data;
-
-    ComponentRegistry::clear_all( world );
-    world.reset_entity_ids();
-
-    for( auto& ent : data["entities"] ) {
-
-        Entity e = world.create_entity();
-
-        for( auto [name, component_data] : ent["components"].items() )
-            ComponentRegistry::create_component( world, e, name, component_data );
-    }
-}
-
-void ResourceSystem::flush()
-{
-	auto& world = engine->get_world();
-    world.flush_components<LoadRequestComponent>();
-}

@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <glm/glm.hpp>
+#include "nlohmann/json.hpp"
 
 #include "../core/registry.h"
 
@@ -37,6 +38,4 @@ struct MeshComponent
     bool filled = true;
 
     void from_json( const nlohmann::json& json ) {}
-
-    static ComponentRegistrar<MeshComponent> registrar;
 };

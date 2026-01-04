@@ -19,15 +19,17 @@
 
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "timing.h"
 #include "commandqueue.h"
 #include "inputqueue.h"
 
 #include "../systems/base_system.h"
-#include "world.h"
+
+class World;
+class ComponentRegistry;
 
 class Engine
 {
@@ -42,31 +44,19 @@ public:
     void stop_running() { running = false; }
 
 	World& get_world() const { return *world.get(); }
+	ComponentRegistry& get_registry() const { return *registry.get(); }
 
 	CommandQueue& command_list() { return commands; }
 	InputQueue& input() { return input_queue; }
 
-    template<typename T> T* get_system();
 private:
     bool running = true;
     std::unique_ptr<World> world;
+	std::unique_ptr<ComponentRegistry> registry;
     std::vector<std::unique_ptr<ISystem>> systems;
 	Timing timer;
 	CommandQueue commands;
 	InputQueue input_queue;
 
 	void process_commands();
-
 };
-
-template<typename T>
-T* Engine::get_system()
-{
-    for( auto& sys : systems ) {
-        if( sys->type() == typeid(T) )
-            return static_cast<T*>(sys.get());
-    }
-
-    return nullptr;
-}
-

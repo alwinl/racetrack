@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <glm/glm.hpp>
+#include "nlohmann/json.hpp"
 
 #include "../core/registry.h"
 
@@ -49,6 +50,4 @@ struct GeometryComponent
 
         generated = false;
     }
-
-    static ComponentRegistrar<GeometryComponent> registrar;
 };

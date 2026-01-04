@@ -28,12 +28,14 @@ add_library(
 	core/inputqueue.cc
 	core/timing.cc
 
-    systems/time_system.cc
+    systems/render_system.cc
     systems/input_system.cc
     systems/resource_system.cc
     systems/physics_system.cc
     systems/geometry_system.cc
     systems/track_system.cc
+
+	commands/load_request.cc
 
     render_pipeline/shader.cc
     render_pipeline/point_renderer.cc

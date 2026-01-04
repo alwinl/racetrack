@@ -21,6 +21,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
+#include "nlohmann/json.hpp"
 
 #include "../core/registry.h"
 
@@ -84,6 +85,4 @@ struct LakeComponent
 
         generate_lake();
     }
-
-    static ComponentRegistrar<LakeComponent> registrar;
 };

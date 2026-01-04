@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <glm/glm.hpp>
+#include "nlohmann/json.hpp"
 
 #include "../core/registry.h"
 
@@ -52,6 +53,4 @@ struct TrackComponent
 
         dirty = true;
     }
-
-    static ComponentRegistrar<TrackComponent> registrar;
 };

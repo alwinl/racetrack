@@ -22,66 +22,34 @@
 #include <GLFW/glfw3.h>
 
 #include "../core/engine.h"
-#include "render_system.h"
 
-#include "../components/load_request_component.h"
+#include "../commands/load_request.h"
 
-void InputSystem::init()
+void InputSystem::input()
 {
-    RenderSystem * renderer = engine->get_system<RenderSystem>();
-    if( !renderer )
-        return;
+	InputQueue::KeyEvent event;
 
-    window = renderer->get_window();
+	while( engine->input().poll( event ) ) {
+		if( event.action == GLFW_PRESS ) {
+			switch (event.key)
+			{
+			case GLFW_KEY_ESCAPE:
+				engine->stop_running();
+				break;
+			case GLFW_KEY_0:
+				engine->command_list().push( std::make_unique<LoadRequest>(
+					"/home/alwin/Documents/Programming/Graphics/racetrack/src/data.json"
+				) );
+				break;
+			case GLFW_KEY_1:
+				engine->command_list().push( std::make_unique<LoadRequest>(
+					"/home/alwin/Documents/Programming/Graphics/racetrack/src/data simple.json"
+				) );
+				break;
 
-    glfwSetKeyCallback( window, [](GLFWwindow* win, int key, int scancode, int action, int mods)
-    {
-        Engine* eng = static_cast<Engine*>(glfwGetWindowUserPointer(win));
-        InputSystem* system = eng->get_system<InputSystem>();
-        system->process_key(key, action);
-    });
-
-    load_level_0 = true;
-}
-
-void InputSystem::update( double elapsed )
-{
-    glfwPollEvents();
-
-	auto& world = engine->get_world();
-
-    if( load_level_0 ) {
-        Entity event = world.create_entity();
-
-        LoadRequestComponent comp;
-        comp.filename = "/home/alwin/Documents/Programming/Graphics/racetrack/src/data.json";
-
-        world.add_component( event, comp );
-
-        load_level_0 = false;
-    }
-
-    if( load_level_1 ) {
-        Entity event = world.create_entity();
-
-        LoadRequestComponent comp;
-        comp.filename = "/home/alwin/Documents/Programming/Graphics/racetrack/src/data simple.json";
-
-        world.add_component( event, comp );
-
-        load_level_1 = false;
-    }
-}
-
-void InputSystem::process_key( int key, int action )
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose( window, GLFW_TRUE );
-
-    if( key == GLFW_KEY_0 && action == GLFW_PRESS ) {
-        load_level_0 = true;
-    }
-    if( key == GLFW_KEY_1 && action == GLFW_PRESS ) {
-        load_level_1 = true;
-    }
+			default:
+				break;
+			}
+		}
+	}
 }

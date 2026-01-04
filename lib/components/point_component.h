@@ -20,6 +20,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "nlohmann/json.hpp"
 
 #include "../core/registry.h"
 
@@ -32,7 +33,5 @@
         auto [r,g,b] = json.value( "colour", std::array<float,3> {1.0f, 0.0f, 0.0f} );
         colour = glm::vec3( r, g, b );
     }
-
-    static ComponentRegistrar<PointComponent> registrar;
  };
 

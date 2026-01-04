@@ -36,6 +36,7 @@ public:
     RenderSystem( Engine* eng ) : BaseSystem<RenderSystem>( eng ) {};
 
     void init() override;
+    void input() override;
     void shutdown() override;
     void update( double elapsed ) override;
     void draw() override;

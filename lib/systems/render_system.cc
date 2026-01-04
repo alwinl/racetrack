@@ -45,6 +45,11 @@ void RenderSystem::init()
     set_camera( glm::mat4( 0.5f ), glm::ortho( -20.f, 20.f, -20.f, 20.f ) );
 }
 
+void RenderSystem::input()
+{
+	glfwPollEvents();
+}
+
 void RenderSystem::shutdown()
 {
     for( auto& renderer : renderers )
@@ -124,7 +129,13 @@ bool RenderSystem::make_window()
         glViewport( 0, 0, width, height );
     });
 
-    return true;
+	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		Engine * engine = static_cast<Engine*>( glfwGetWindowUserPointer( window ) );
+		engine->input().push_key_event( InputQueue::KeyEvent(key, action, mods) );
+	});
+
+	return true;
 }
 
 void RenderSystem::make_renderers()

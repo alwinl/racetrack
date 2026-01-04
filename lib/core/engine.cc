@@ -17,6 +17,7 @@
  * MA 02110-1301, USA.
  */
 
+#include "world.h"
 #include "engine.h"
 
 #include "../systems/render_system.h"
@@ -26,16 +27,36 @@
 #include "../systems/geometry_system.h"
 #include "../systems/track_system.h"
 
-Engine::Engine() : world( std::make_unique<World>() )
+#include "../components/point_component.h"
+#include "../components/transform_component.h"
+#include "../components/triangle_component.h"
+#include "../components/velocity_component.h"
+#include "../components/track_component.h"
+#include "../components/lake_component.h"
+#include "../components/mesh_component.h"
+#include "../components/geometry_component.h"
+
+
+
+Engine::Engine() : world( std::make_unique<World>() ), registry( std::make_unique<ComponentRegistry>(get_world()))
 {
     // push systems in the order you need
     systems.push_back( std::make_unique<RenderSystem>( this ) );
-    systems.push_back( std::make_unique<TimeSystem>( this ) );
     systems.push_back( std::make_unique<InputSystem>( this ) );
     systems.push_back( std::make_unique<ResourceSystem>( this ) );
     systems.push_back( std::make_unique<PhysicsSystem>( this ) );
     systems.push_back( std::make_unique<GeometrySystem>( this ) );
     systems.push_back( std::make_unique<TrackSystem>( this ) );
+
+	registry->register_component<PointComponent>("PointComponent");
+	registry->register_component<TriangleComponent>("TriangleComponent");
+	registry->register_component<TrackComponent>("TrackComponent");
+	registry->register_component<LakeComponent>("LakeComponent");
+	registry->register_component<TransformComponent>("TransformComponent");
+	registry->register_component<VelocityComponent>("VelocityComponent");
+	registry->register_component<MeshComponent>("MeshComponent");
+	registry->register_component<GeometryComponent>("GeometryComponent");
+
 }
 
 Engine::~Engine()       // need destructor in implementation file to properly destruct world
@@ -64,8 +85,7 @@ void Engine::run()
         for( auto& system : systems )
             system->draw();
 
-        for( auto& system : systems )
-            system->flush();
+		registry->flush();
     }
 }
 
