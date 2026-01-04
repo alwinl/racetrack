@@ -25,17 +25,16 @@
 #include "timing.h"
 #include "commandqueue.h"
 #include "inputqueue.h"
+#include "registry.h"
 
 #include "../systems/base_system.h"
 
 class World;
-class ComponentRegistry;
 
 class Engine
 {
 public:
     Engine();
-    ~Engine();
 
     void init();
     void run();
@@ -43,16 +42,16 @@ public:
 
     void stop_running() { running = false; }
 
-	World& get_world() const { return *world.get(); }
-	ComponentRegistry& get_registry() const { return *registry.get(); }
+	World& get_world() { return world; }
+	ComponentRegistry& get_registry() { return registry; }
 
 	CommandQueue& command_list() { return commands; }
 	InputQueue& input() { return input_queue; }
 
 private:
     bool running = true;
-    std::unique_ptr<World> world;
-	std::unique_ptr<ComponentRegistry> registry;
+    World world;
+	ComponentRegistry registry {world};
     std::vector<std::unique_ptr<ISystem>> systems;
 	Timing timer;
 	CommandQueue commands;

@@ -38,7 +38,7 @@
 
 
 
-Engine::Engine() : world( std::make_unique<World>() ), registry( std::make_unique<ComponentRegistry>(get_world()))
+Engine::Engine()
 {
     // push systems in the order you need
     systems.push_back( std::make_unique<RenderSystem>( this ) );
@@ -48,19 +48,16 @@ Engine::Engine() : world( std::make_unique<World>() ), registry( std::make_uniqu
     systems.push_back( std::make_unique<GeometrySystem>( this ) );
     systems.push_back( std::make_unique<TrackSystem>( this ) );
 
-	registry->register_component<PointComponent>("PointComponent");
-	registry->register_component<TriangleComponent>("TriangleComponent");
-	registry->register_component<TrackComponent>("TrackComponent");
-	registry->register_component<LakeComponent>("LakeComponent");
-	registry->register_component<TransformComponent>("TransformComponent");
-	registry->register_component<VelocityComponent>("VelocityComponent");
-	registry->register_component<MeshComponent>("MeshComponent");
-	registry->register_component<GeometryComponent>("GeometryComponent");
+	registry.register_component<PointComponent>("PointComponent");
+	registry.register_component<TriangleComponent>("TriangleComponent");
+	registry.register_component<TrackComponent>("TrackComponent");
+	registry.register_component<LakeComponent>("LakeComponent");
+	registry.register_component<TransformComponent>("TransformComponent");
+	registry.register_component<VelocityComponent>("VelocityComponent");
+	registry.register_component<MeshComponent>("MeshComponent");
+	registry.register_component<GeometryComponent>("GeometryComponent");
 
 }
-
-Engine::~Engine()       // need destructor in implementation file to properly destruct world
-{}
 
 void Engine::init()
 {
@@ -85,7 +82,7 @@ void Engine::run()
         for( auto& system : systems )
             system->draw();
 
-		registry->flush();
+		registry.flush();
     }
 }
 
