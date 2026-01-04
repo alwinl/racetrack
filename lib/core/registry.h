@@ -45,11 +45,10 @@ class Registry
 public:
 	Registry( World& world ) : world(world) {}
 
-    template<typename T> void register_component( const std::string& component_name );
-
 	Entity create_entity();
 	void remove_entity( Entity e );
 
+    template<typename T> void register_component( const std::string& name );
     bool create_component( Entity e, const std::string& name );
 	bool with_component( Entity e, const std::string& name, std::function<void(void*)>&& fn );
     bool remove_component( Entity e, const std::string& name );
@@ -67,7 +66,7 @@ private:
 };
 
 template <typename T>
-void Registry::register_component( const std::string &component_name )
+void Registry::register_component( const std::string &name )
 {
 	Funcs funcs = {
 		.create = []( World& world, Entity e ) { world.add_component<T>(e, T());},
@@ -76,6 +75,6 @@ void Registry::register_component( const std::string &component_name )
 		.flush = []( World& world ) { world.flush_components<T>(); }
 	};
 
-	type_lookup.insert( {component_name, typeid(T)} );
+	type_lookup.insert( {name, typeid(T)} );
 	func_map.insert( {typeid(T), funcs} );
 }
