@@ -17,10 +17,6 @@
  * MA 02110-1301, USA.
  */
 
-#define STR(x) #x
-#define XSTR(x) STR(x)
-#define CAT(a,b) a##b
-
 #include "world.h"
 #include "engine.h"
 
@@ -40,8 +36,9 @@
 #include "../components/mesh_component.h"
 #include "../components/geometry_component.h"
 
-
-
+#define STR(x) #x
+#define XSTR(x) STR(x)
+#define CAT(a,b) a##b
 
 Engine::Engine()
 {
