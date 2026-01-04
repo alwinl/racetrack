@@ -92,9 +92,7 @@ void MeshRenderer::upload( const World& world )
 
     draw_commands.clear();
 
-    const auto& meshes = world.storage<MeshComponent>();
-
-    for( const auto& [entity, mesh] : meshes.all() )
+	world.for_each_component<MeshComponent>( [&]( Entity entity, const MeshComponent& mesh )
     {
         DrawCommand draw_command;
 
@@ -120,7 +118,7 @@ void MeshRenderer::upload( const World& world )
         draw_commands.emplace_back( draw_command );
 
         vertex_buffer_idx += mesh.vertices.size();
-    }
+    });
 
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
     glBufferData( GL_ARRAY_BUFFER, vertex_buffer.size() * sizeof(vertex), (void*)vertex_buffer.data(), GL_DYNAMIC_DRAW );

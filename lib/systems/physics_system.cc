@@ -30,14 +30,11 @@ void PhysicsSystem::update( double elapsed )
 {
 	auto& world = engine->get_world();
 
-    auto& transforms = world.storage<TransformComponent>();
-    auto& velocities = world.storage<VelocityComponent>();
+	world.for_each_component<VelocityComponent>( [&]( Entity entity, const VelocityComponent& v )
+	{
 
-    // Move all entities that have both Transform and Velocity
-    for( auto& [entity, v] : velocities.all() ) {
-
-        if( auto* transform = transforms.get(entity) )
+        if( auto* transform = world.get_component<TransformComponent>( entity ) )
             transform->translation += v.speed * (float)elapsed;
 
-    }
+    });
 }

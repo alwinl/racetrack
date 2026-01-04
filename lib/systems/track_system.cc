@@ -28,17 +28,14 @@
 void TrackSystem::update( double dt )
 {
 	auto& world = engine->get_world();
-    auto& tracks = world.storage<TrackComponent>();
 
-    for( auto& [entity, track] : tracks.all() ) {
-
-        if( !track.dirty )
-            continue;
-
-        regenerate_mesh( world, entity, track );
-
-        track.dirty = false;
-    }
+	world.for_each_component<TrackComponent>( [&]( Entity entity, TrackComponent& track )
+	{
+        if( track.dirty ) {
+			regenerate_mesh( world, entity, track );
+			track.dirty = false;
+		}
+    });
 }
 
 void TrackSystem::regenerate_mesh( World &world, Entity ent, TrackComponent &track )

@@ -26,7 +26,6 @@
 #include "../core/world.h"
 #include "../components/lake_component.h"
 
-
 static const char* lake_vs = R"(
 #version 330 core
 
@@ -82,9 +81,7 @@ void LakeRenderer::upload( const World& world )
 {
     cpu_buffer.clear();
 
-    const auto& lakes = world.storage<LakeComponent>();
-
-    for( const auto& [entity, lake] : lakes.all() )
+	world.for_each_component<LakeComponent>( [this]( Entity entity, const LakeComponent& lake )
     {
         glm::vec3 lake_colour( 0.0f, 0.3f, 1.0f);
         glm::vec3 island_colour( 0.2f, 0.8f, 0.2f);
@@ -129,7 +126,7 @@ void LakeRenderer::upload( const World& world )
             }
         }
 #endif
-    }
+    });
 
     glBindBuffer( GL_ARRAY_BUFFER, vbo );
     glBufferSubData( GL_ARRAY_BUFFER, 0, cpu_buffer.size() * sizeof(vertex), (void*)cpu_buffer.data() );
