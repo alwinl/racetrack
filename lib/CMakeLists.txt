@@ -29,7 +29,6 @@ add_library(
 	core/timing.cc
 
     systems/render_system.cc
-    systems/input_system.cc
     systems/resource_system.cc
     systems/physics_system.cc
     systems/geometry_system.cc

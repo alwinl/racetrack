@@ -21,7 +21,6 @@
 #include "engine.h"
 
 #include "../systems/render_system.h"
-#include "../systems/input_system.h"
 #include "../systems/resource_system.h"
 #include "../systems/physics_system.h"
 #include "../systems/geometry_system.h"
