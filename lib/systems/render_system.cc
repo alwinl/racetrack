@@ -30,6 +30,9 @@
 #include "../render_pipeline/lake_renderer.h"
 #include "../render_pipeline/mesh_renderer.h"
 
+#include "../events/key_event.h"
+#include "../events/mouse_event.h"
+
 void RenderSystem::init()
 {
     if( !make_window() ) {
@@ -129,11 +132,37 @@ bool RenderSystem::make_window()
         glViewport( 0, 0, width, height );
     });
 
-	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+	glfwSetKeyCallback( window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		Engine * engine = static_cast<Engine*>( glfwGetWindowUserPointer( window ) );
-		engine->push_key_event( key, scancode, action, mods);
+		// engine->push_key_event( key, scancode, action, mods);
+		engine->push_event( std::make_unique<KeyEvent>( key, scancode, action, mods) );
 	});
+
+	glfwSetCursorPosCallback(window, []( GLFWwindow* window, double xpos, double ypos )
+	{
+		Engine * engine = static_cast<Engine*>( glfwGetWindowUserPointer( window ) );
+		// engine->push_mouse_event( xpos, ypos, -1, -1, -1 );
+
+		engine->push_event( std::make_unique<MouseEvent>(xpos, ypos, -1, -1, -1) );
+	});
+
+	glfwSetMouseButtonCallback(window, []( GLFWwindow* window, int button, int action, int mods )
+	{
+		Engine * engine = static_cast<Engine*>( glfwGetWindowUserPointer( window ) );
+
+		double xpos;
+		double ypos;
+		glfwGetCursorPos( window, &xpos, &ypos );
+
+		engine->push_event( std::make_unique<MouseEvent>(xpos, ypos, button, action, mods) );
+		// engine->push_mouse_event( xpos, ypos, button, action, mods );
+	});
+
+	// glfwSetCharCallback( window, [](GLFWwindow* window, unsigned int codepoint)
+	// {
+	// 	Engine * engine = static_cast<Engine*>( glfwGetWindowUserPointer( window ) );
+	// });
 
 	return true;
 }

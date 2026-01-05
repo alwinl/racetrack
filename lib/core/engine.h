@@ -29,6 +29,7 @@
 #include "world.h"
 
 class ISystem;
+class IEvent;
 
 
 class Engine
@@ -46,11 +47,8 @@ public:
 	World& get_world() { return world; }
 	Registry& get_registry() { return registry; }
 
-	void push_key_event( int key, int scancode, int action, int mods );
-	bool poll_event( InputQueue::KeyEvent& event );
-
-	void push_command( std::unique_ptr<ICommand> cmd );
-
+	void push_event( std::unique_ptr<IEvent> event ) { input_queue.push( std::move(event) ); }
+	void push_command( std::unique_ptr<ICommand> cmd ) { command_queue.push( std::move(cmd) ); }
 
 private:
     bool running = true;
@@ -58,6 +56,6 @@ private:
 	Registry registry {world};
     std::vector<std::unique_ptr<ISystem>> systems;
 	Timing timer;
-	CommandQueue commands;
+	CommandQueue command_queue;
 	InputQueue input_queue;
 };

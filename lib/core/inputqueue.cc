@@ -19,15 +19,15 @@
 
 #include "inputqueue.h"
 
-void InputQueue::push_key_event( KeyEvent event )
+void InputQueue::push_key_event( OldKeyEvent event )
 {
 	events.push( event );
 }
 
-bool InputQueue::poll( KeyEvent &out )
+bool InputQueue::poll( OldKeyEvent &out )
 {
 	if( events.empty())
-		return false;	
+		return false;
 
 	out = events.front();
 	events.pop();

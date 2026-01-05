@@ -37,6 +37,9 @@ add_library(
 
 	commands/load_request.cc
 
+	events/key_event.cc
+	events/mouse_event.cc
+
     render_pipeline/shader.cc
     render_pipeline/point_renderer.cc
     render_pipeline/triangle_renderer.cc

@@ -1,5 +1,5 @@
 /*
- * input.cc Copyright 2025 Alwin Leerling dna.leerling@gmail.com
+ * key_event.cc Copyright 2026 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,41 +17,39 @@
  * MA 02110-1301, USA.
  */
 
-#include "input_system.h"
-
-#include <GLFW/glfw3.h>
+#include "key_event.h"
 
 #include "../core/engine.h"
 
+#include <memory>
 #include "../commands/load_request.h"
 
-void InputSystem::input()
+#include <GLFW/glfw3.h>
+
+void KeyEvent::process( Engine &engine )
 {
-	// InputQueue::OldKeyEvent event;
+	if( action == GLFW_PRESS ) {
+		switch( key )
+		{
+		case GLFW_KEY_ESCAPE:
+			engine.stop_running();
+			break;
 
-	// while( engine->poll_event( event ) ) {
-	// 	if( event.action == GLFW_PRESS ) {
-	// 		switch (event.key)
-	// 		{
-	// 		case GLFW_KEY_ESCAPE:
-	// 			engine->stop_running();
-	// 			break;
+		case GLFW_KEY_0:
+			engine.push_command( std::make_unique<LoadRequest>( "../data/data.json" ) );
+			break;
 
-	// 		case GLFW_KEY_0:
-	// 			engine->push_command( std::make_unique<LoadRequest>( "../data/data.json" ) );
-	// 			break;
+		case GLFW_KEY_1:
+			engine.push_command( std::make_unique<LoadRequest>( "../data/data simple.json" ) );
+			break;
 
-	// 		case GLFW_KEY_1:
-	// 			engine->push_command( std::make_unique<LoadRequest>( "../data/data simple.json" ) );
-	// 			break;
+		case GLFW_KEY_2:
+			engine.push_command( std::make_unique<LoadRequest>( "../data/data copy.json" ) );
+			break;
 
-	// 		case GLFW_KEY_2:
-	// 			engine->push_command( std::make_unique<LoadRequest>( "../data/data copy.json" ) );
-	// 			break;
+		default:
+			break;
+		}
+	}
 
-	// 		default:
-	// 			break;
-	// 		}
-	// 	}
-	// }
 }

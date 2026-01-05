@@ -69,7 +69,8 @@ void Engine::run()
         for( auto& system : systems )
             system->input();
 
-		commands.process( *this );
+		input_queue.process( *this );
+		command_queue.process( *this );
 
         for( auto& system : systems )
             system->update( elapsed );
@@ -87,17 +88,3 @@ void Engine::shutdown()
         system->shutdown();
 }
 
-void Engine::push_key_event( int key, int scancode, int action, int mods )
-{
-	input_queue.push_key_event( InputQueue::KeyEvent( key, action, mods ) );
-}
-
-bool Engine::poll_event( InputQueue::KeyEvent &event )
-{
-	return input_queue.poll( event );
-}
-
-void Engine::push_command( std::unique_ptr<ICommand> cmd )
-{
-	commands.push( std::move(cmd) );
-}

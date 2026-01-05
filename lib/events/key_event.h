@@ -1,5 +1,5 @@
 /*
- * inputqueue.h Copyright 2025 Alwin Leerling <dna.leerling@gmail.com>
+ * key_event.h Copyright 2026 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,50 +19,19 @@
 
 #pragma once
 
-#include <memory>
-#include <queue>
+#include "event.h"
 
-#include "../events/event.h"
-
-class InputQueue
+class KeyEvent : public IEvent
 {
 public:
-	struct OldKeyEvent
-	{
-		int key;
-		int action;
-		int mods;
-	};
+	KeyEvent( int key, int scancode, int action, int mods ) : key(key), scancode(scancode), action(action), mods(mods)
+	{}
 
-	void push_key_event( OldKeyEvent event );
-	bool poll( OldKeyEvent& out );
-
-	void push( std::unique_ptr<IEvent> event )
-		{ i_events.push( std::move(event) ); }
-
-	std::unique_ptr<IEvent> pop()
-	{
-		if( i_events.empty() )
-			return nullptr;
-
-		auto event = std::move(i_events.front());
-		i_events.pop();
-		return event;
-	}
-
-	void process( Engine& engine )
-	{
-		auto event = pop();
-
-		while( event ) {
-			event->process( engine );
-			event = pop();
-		}
-	}
-
+	void process( Engine& engine ) override;
 
 private:
-	std::queue<OldKeyEvent> events;
-
-	std::queue<std::unique_ptr<IEvent>> i_events;
+	int key;
+	int scancode;
+	int action;
+	int mods;
 };
