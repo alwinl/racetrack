@@ -25,7 +25,6 @@ add_library(
     core/engine.cc
     core/world.cc
     core/registry.cc
-	core/inputqueue.cc
 	core/timing.cc
 
     systems/render_system.cc

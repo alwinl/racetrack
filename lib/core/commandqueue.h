@@ -28,19 +28,7 @@ class CommandQueue
 {
 public:
 	void push( std::unique_ptr<ICommand> cmd )
-		{ command_queue.push( std::move(cmd) ); }
-
-	std::unique_ptr<ICommand> pop()
-	{
-		if( empty() )
-			return nullptr;
-
-		auto cmd = std::move(command_queue.front());
-		command_queue.pop();
-		return cmd;
-	}
-
-	bool empty() const { return command_queue.empty(); };
+		{ commands.push( std::move(cmd) ); }
 
 	void process( Engine& engine )
 	{
@@ -52,7 +40,16 @@ public:
 		}
 	}
 
-
 private:
-	std::queue<std::unique_ptr<ICommand>> command_queue;
+	std::queue<std::unique_ptr<ICommand>> commands;
+
+	std::unique_ptr<ICommand> pop()
+	{
+		if( commands.empty() )
+			return nullptr;
+
+		auto cmd = std::move(commands.front());
+		commands.pop();
+		return cmd;
+	}
 };

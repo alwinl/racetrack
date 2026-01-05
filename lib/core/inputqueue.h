@@ -27,28 +27,8 @@
 class InputQueue
 {
 public:
-	struct OldKeyEvent
-	{
-		int key;
-		int action;
-		int mods;
-	};
-
-	void push_key_event( OldKeyEvent event );
-	bool poll( OldKeyEvent& out );
-
 	void push( std::unique_ptr<IEvent> event )
-		{ i_events.push( std::move(event) ); }
-
-	std::unique_ptr<IEvent> pop()
-	{
-		if( i_events.empty() )
-			return nullptr;
-
-		auto event = std::move(i_events.front());
-		i_events.pop();
-		return event;
-	}
+		{ events.push( std::move(event) ); }
 
 	void process( Engine& engine )
 	{
@@ -60,9 +40,16 @@ public:
 		}
 	}
 
-
 private:
-	std::queue<OldKeyEvent> events;
+	std::queue<std::unique_ptr<IEvent>> events;
 
-	std::queue<std::unique_ptr<IEvent>> i_events;
+	std::unique_ptr<IEvent> pop()
+	{
+		if( events.empty() )
+			return nullptr;
+
+		auto event = std::move(events.front());
+		events.pop();
+		return event;
+	}
 };
