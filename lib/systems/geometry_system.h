@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "base_system.h"
+#include "../core/system.h"
 
 #include "../core/world.h"
 

@@ -22,7 +22,7 @@
 #include <memory>
 #include <queue>
 
-#include "../commands/command.h"
+#include "command.h"
 
 class CommandQueue
 {

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "event.h"
+#include "../core/event.h"
 
 class KeyEvent : public IEvent
 {

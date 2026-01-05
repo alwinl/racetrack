@@ -22,7 +22,7 @@
 #include <memory>
 #include <queue>
 
-#include "../events/event.h"
+#include "event.h"
 
 class InputQueue
 {

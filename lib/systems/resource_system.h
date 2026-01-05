@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "base_system.h"
+#include "../core/system.h"
 
 class ResourceSystem : public BaseSystem<ResourceSystem>
 {

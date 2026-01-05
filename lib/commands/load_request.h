@@ -21,7 +21,7 @@
 
 #include <string>
 
-#include "command.h"
+#include "../core/command.h"
 
 class LoadRequest : public ICommand
 {
