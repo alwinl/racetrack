@@ -42,6 +42,17 @@ public:
 
 	bool empty() const { return command_queue.empty(); };
 
+	void process( Engine& engine )
+	{
+		auto command = pop();
+
+		while( command ) {
+			command->execute( engine );
+			command = pop();
+		}
+	}
+
+
 private:
 	std::queue<std::unique_ptr<ICommand>> command_queue;
 };

@@ -29,29 +29,26 @@ void InputSystem::input()
 {
 	InputQueue::KeyEvent event;
 
-	while( engine->input().poll( event ) ) {
+	while( engine->poll_event( event ) ) {
 		if( event.action == GLFW_PRESS ) {
 			switch (event.key)
 			{
 			case GLFW_KEY_ESCAPE:
 				engine->stop_running();
 				break;
+
 			case GLFW_KEY_0:
-				engine->command_list().push( std::make_unique<LoadRequest>(
-					"../data/data.json"
-				) );
+				engine->push_command( std::make_unique<LoadRequest>( "../data/data.json" ) );
 				break;
+
 			case GLFW_KEY_1:
-				engine->command_list().push( std::make_unique<LoadRequest>(
-					"../data/data simple.json"
-				) );
+				engine->push_command( std::make_unique<LoadRequest>( "../data/data simple.json" ) );
 				break;
 
 			case GLFW_KEY_2:
-				engine->command_list().push( std::make_unique<LoadRequest>(
-					"../data/data copy.json"
-				) );
+				engine->push_command( std::make_unique<LoadRequest>( "../data/data copy.json" ) );
 				break;
+
 			default:
 				break;
 			}

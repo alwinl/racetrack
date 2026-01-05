@@ -51,6 +51,9 @@ Engine::Engine()
 #undef X
 }
 
+Engine::~Engine()		// needs to be in implementation file for the compiler to know the size of ISystem
+{}
+
 void Engine::init()
 {
     for( auto& system : systems )
@@ -66,7 +69,7 @@ void Engine::run()
         for( auto& system : systems )
             system->input();
 
-		process_commands();
+		commands.process( *this );
 
         for( auto& system : systems )
             system->update( elapsed );
@@ -84,12 +87,17 @@ void Engine::shutdown()
         system->shutdown();
 }
 
-void Engine::process_commands( )
+void Engine::push_key_event( int key, int scancode, int action, int mods )
 {
-	auto command = commands.pop();
+	input_queue.push_key_event( InputQueue::KeyEvent( key, action, mods ) );
+}
 
-	while( command ) {
-		command->execute( *this );
-		command = commands.pop();
-	}
+bool Engine::poll_event( InputQueue::KeyEvent &event )
+{
+	return input_queue.poll( event );
+}
+
+void Engine::push_command( std::unique_ptr<ICommand> cmd )
+{
+	commands.push( std::move(cmd) );
 }

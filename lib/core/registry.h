@@ -23,10 +23,9 @@
 #include <string>
 #include <functional>
 #include <typeindex>
+#include <cstdint>
 
 #include "world.h"
-
-// #include "nlohmann/json.hpp"
 
 struct Funcs
 {

@@ -26,15 +26,16 @@
 #include "commandqueue.h"
 #include "inputqueue.h"
 #include "registry.h"
+#include "world.h"
 
-#include "../systems/base_system.h"
+class ISystem;
 
-class World;
 
 class Engine
 {
 public:
     Engine();
+	~Engine();
 
     void init();
     void run();
@@ -45,8 +46,11 @@ public:
 	World& get_world() { return world; }
 	Registry& get_registry() { return registry; }
 
-	CommandQueue& command_list() { return commands; }
-	InputQueue& input() { return input_queue; }
+	void push_key_event( int key, int scancode, int action, int mods );
+	bool poll_event( InputQueue::KeyEvent& event );
+
+	void push_command( std::unique_ptr<ICommand> cmd );
+
 
 private:
     bool running = true;
@@ -56,6 +60,4 @@ private:
 	Timing timer;
 	CommandQueue commands;
 	InputQueue input_queue;
-
-	void process_commands();
 };

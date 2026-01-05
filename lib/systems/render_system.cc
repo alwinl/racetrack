@@ -132,7 +132,7 @@ bool RenderSystem::make_window()
 	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		Engine * engine = static_cast<Engine*>( glfwGetWindowUserPointer( window ) );
-		engine->input().push_key_event( InputQueue::KeyEvent(key, action, mods) );
+		engine->push_key_event( key, scancode, action, mods);
 	});
 
 	return true;
