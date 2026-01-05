@@ -19,7 +19,6 @@
 
 #pragma once
 
-// #include <any>
 #include <typeindex>
 #include <vector>
 #include <unordered_map>

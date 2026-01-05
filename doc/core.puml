@@ -31,18 +31,6 @@ class Registry
     +clear()
 }
 
-Engine *--- World
-Engine *--- Registry
-
-Registry -> World : references
-
-struct View::Iterator
-{
-	operator*()
-	operator++()
-	operator!=()
-}
-
 class View
 {
 	-const World&
@@ -51,8 +39,12 @@ class View
 	+end() : View::Iterator
 }
 
-View *- View::Iterator
-World <-- View : references
+struct View::Iterator
+{
+	operator*()
+	operator++()
+	operator!=()
+}
 
 class Timing
 {
@@ -61,33 +53,31 @@ class Timing
 
 class CommandQueue
 {
-	+push()
-	+pop()
-	+empty()
-}
-
-struct KeyEvent
-{
-	int key
-	int action
-	int mods
+	+push( std::unique_ptr<ICommand> )
+	+execute( Engine& )
 }
 
 class InputQueue
 {
-	+push_key_event( KeyEvent )
-	+poll( KeyEvent& ) : bool
+	+push( std::unique_ptr<IEvent> )
+	+process( Engine& )
 }
 
-InputQueue o-- "0..*" KeyEvent
-
+interface IEvent
 interface ICommand
-interface ISystems
+interface ISystem
 
+Registry -> World : references
+
+View *- View::Iterator
+World <-- View : references
+
+InputQueue o-- "0..*" IEvent
 CommandQueue o-- "0..*" ICommand
+Engine o-- "0..*" ISystem
 
-Engine o-- "0..*" ISystems
-
+Engine *--- World
+Engine *--- Registry
 Timing -* Engine
 Engine *- CommandQueue
 Engine *- InputQueue
