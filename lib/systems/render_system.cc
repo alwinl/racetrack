@@ -127,7 +127,7 @@ bool RenderSystem::make_window()
 
     glfwSetWindowUserPointer( window, engine );
 
-    glfwSetWindowSizeCallback( window, [](GLFWwindow* window, int width, int height )
+    glfwSetFramebufferSizeCallback 	( window, [](GLFWwindow* window, int width, int height )
     {
         glViewport( 0, 0, width, height );
     });
@@ -135,14 +135,12 @@ bool RenderSystem::make_window()
 	glfwSetKeyCallback( window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		Engine * engine = static_cast<Engine*>( glfwGetWindowUserPointer( window ) );
-		// engine->push_key_event( key, scancode, action, mods);
 		engine->push_event( std::make_unique<KeyEvent>( key, scancode, action, mods) );
 	});
 
 	glfwSetCursorPosCallback(window, []( GLFWwindow* window, double xpos, double ypos )
 	{
 		Engine * engine = static_cast<Engine*>( glfwGetWindowUserPointer( window ) );
-		// engine->push_mouse_event( xpos, ypos, -1, -1, -1 );
 
 		engine->push_event( std::make_unique<MouseEvent>(xpos, ypos, -1, -1, -1) );
 	});
@@ -156,7 +154,6 @@ bool RenderSystem::make_window()
 		glfwGetCursorPos( window, &xpos, &ypos );
 
 		engine->push_event( std::make_unique<MouseEvent>(xpos, ypos, button, action, mods) );
-		// engine->push_mouse_event( xpos, ypos, button, action, mods );
 	});
 
 	// glfwSetCharCallback( window, [](GLFWwindow* window, unsigned int codepoint)
