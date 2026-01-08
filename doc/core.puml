@@ -6,6 +6,12 @@ class Engine
 	+init()
 	+run()
 	+shutdown()
+
+	+get_world() : World&
+	+get_registry() : Registry&
+
+	+push_event( unique_ptr<IEvent>)
+	+push_command( unique_ptr<ICommand>)
 }
 
 class World
@@ -22,10 +28,10 @@ class Registry
 	+create_entity() : Entity
 	+remove_entity( Entity )
 
-	+register_component<T>( const std::string& )
-    +create_component( Entity, const std::string& ) : bool
-	+with_component( Entity, const std::string&, std::function<void(void*)>&& ) : bool
-    +remove_component( Entity, const std::string& ) : bool
+	+register_component<T>( const string& )
+    +create_component( Entity, const string& ) : bool
+	+with_component( Entity, const string&, std::function<void(void*)>&& ) : bool
+    +remove_component( Entity, const string& ) : bool
 
     +flush() : bool
     +clear()
@@ -54,13 +60,15 @@ class Timing
 class CommandQueue
 {
 	+push( std::unique_ptr<ICommand> )
-	+execute( Engine& )
+	+process( Engine& )
+	-pop()
 }
 
 class InputQueue
 {
 	+push( std::unique_ptr<IEvent> )
 	+process( Engine& )
+	-pop()
 }
 
 interface IEvent
