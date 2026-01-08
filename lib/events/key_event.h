@@ -21,17 +21,30 @@
 
 #include "../core/event.h"
 
-class KeyEvent : public IEvent
+class KeyPressEvent : public IEvent
 {
 public:
-	KeyEvent( int key, int scancode, int action, int mods ) : key(key), scancode(scancode), action(action), mods(mods)
+	KeyPressEvent( char key, int scancode, int mods ) : key(key), scancode(scancode), mods(mods)
 	{}
 
 	void process( Engine& engine ) override;
 
 private:
-	int key;
+	char key;
 	int scancode;
-	int action;
+	int mods;
+};
+
+class KeyReleaseEvent : public IEvent
+{
+public:
+	KeyReleaseEvent( char key, int scancode, int mods ) : key(key), scancode(scancode), mods(mods)
+	{}
+
+	void process( Engine& engine ) override;
+
+private:
+	char key;
+	int scancode;
 	int mods;
 };

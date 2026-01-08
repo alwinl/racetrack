@@ -41,8 +41,6 @@ public:
     void update( double elapsed ) override;
     void draw() override;
 
-    GLFWwindow * get_window() { return window; };
-
     void set_camera( const glm::mat4& view, const glm::mat4& proj );
 
 private:

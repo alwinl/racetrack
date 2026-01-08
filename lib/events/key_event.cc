@@ -24,32 +24,22 @@
 #include <memory>
 #include "../commands/load_request.h"
 
-#include <GLFW/glfw3.h>
+#include <unordered_map>
 
-void KeyEvent::process( Engine &engine )
+void KeyPressEvent::process( Engine &engine )
 {
-	if( action == GLFW_PRESS ) {
-		switch( key )
-		{
-		case GLFW_KEY_ESCAPE:
-			engine.stop_running();
-			break;
+}
 
-		case GLFW_KEY_0:
-			engine.push_command( std::make_unique<LoadRequest>( "../data/data.json" ) );
-			break;
+void KeyReleaseEvent::process( Engine &engine )
+{
+	std::unordered_map<char,std::function<void()>> despatchers = {
+		{ 0x1B, [&](){engine.stop_running();} },				//escape
+		{ '0', [&](){engine.push_command( std::make_unique<LoadRequest>( "../data/data.json" ) );}},
+		{ '1', [&](){engine.push_command( std::make_unique<LoadRequest>( "../data/data simple.json" ) );}},
+		{ '2', [&](){engine.push_command( std::make_unique<LoadRequest>( "../data/data copy.json" ) );}}
+	};
 
-		case GLFW_KEY_1:
-			engine.push_command( std::make_unique<LoadRequest>( "../data/data simple.json" ) );
-			break;
-
-		case GLFW_KEY_2:
-			engine.push_command( std::make_unique<LoadRequest>( "../data/data copy.json" ) );
-			break;
-
-		default:
-			break;
-		}
-	}
-
+	auto it = despatchers.find( key);
+	if( it != despatchers.end() )
+		(it->second)();
 }
