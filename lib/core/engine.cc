@@ -26,14 +26,7 @@
 #include "../systems/geometry_system.h"
 #include "../systems/track_system.h"
 
-#include "../components/point_component.h"
-#include "../components/transform_component.h"
-#include "../components/triangle_component.h"
-#include "../components/velocity_component.h"
-#include "../components/track_component.h"
-#include "../components/lake_component.h"
-#include "../components/mesh_component.h"
-#include "../components/geometry_component.h"
+#include "../components/components.h"
 
 #define STR(x) #x
 #define XSTR(x) STR(x)

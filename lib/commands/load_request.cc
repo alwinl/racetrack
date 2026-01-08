@@ -25,14 +25,7 @@
 
 #include <fstream>
 
-#include "../components/geometry_component.h"
-#include "../components/lake_component.h"
-#include "../components/mesh_component.h"
-#include "../components/point_component.h"
-#include "../components/track_component.h"
-#include "../components/transform_component.h"
-#include "../components/triangle_component.h"
-#include "../components/velocity_component.h"
+#include "../components/components.h"
 
 void load_from_json( PointComponent& comp, const nlohmann::json& json )
 {
@@ -67,11 +60,6 @@ void load_from_json( LakeComponent& comp, const nlohmann::json& json )
 	comp.generate_lake();
 }
 
-void load_from_json( MeshComponent& comp, const nlohmann::json& json )
-{
-
-}
-
 void load_from_json( TrackComponent& track, const nlohmann::json& json )
 {
 	if( !json.contains("points") )
@@ -90,6 +78,7 @@ void load_from_json( TrackComponent& track, const nlohmann::json& json )
 
 	track.dirty = true;
 }
+
 void load_from_json( TransformComponent& comp, const nlohmann::json& json )
 {
 	auto [tx,ty,tz] = json.value( "translation", std::array<float, 3>{0.0f, 0.0f, 0.0f} );
@@ -125,30 +114,30 @@ void load_from_json( VelocityComponent& comp, const nlohmann::json& json )
 	comp.speed = glm::vec3( vx, vy, vz );
 }
 
-using JsonLoaderFn = void(*)(void*, const nlohmann::json&);
-
-#define X(Name) \
-    { #Name, [](void* ptr, const nlohmann::json& j) { \
-        load_from_json(*static_cast<Name##Component*>(ptr), j); \
-    } },
-
-
-const std::unordered_map<std::string, JsonLoaderFn> json_loaders =
-{
-	#include "../components/components.def"
-};
-
-#undef X
-
 #define STR(x) #x
 #define XSTR(x) STR(x)
 #define CAT(a,b) a##b
 
-#define X(Name) { STR(Name), XSTR(CAT(Name,Component)) },
-
-const std::unordered_map<std::string, std::string> name_to_component =
+using JsonLoaderFn = void(*)(void*, const nlohmann::json&);
+struct JsonData
 {
-	#include "../components/components.def"
+	std::string type_name;
+	JsonLoaderFn loader;
+};
+
+#define X(Name) \
+    { STR(Name),\
+		{\
+			XSTR(CAT(Name,Component)), \
+			[](void* ptr, const nlohmann::json& j)\
+				{ load_from_json(*static_cast<Name##Component*>(ptr), j); }\
+		}\
+	},
+
+
+const std::unordered_map<std::string, JsonData> json_loaders =
+{
+	#include "../components/loadable_components.def"
 };
 
 #undef X
@@ -173,14 +162,13 @@ void LoadRequest::execute( Engine &engine )
 
         for( auto [name, component_data] : ent["components"].items() )
 		{
-			auto it = name_to_component.find( name );
-			auto it2 = json_loaders.find( name );
+			auto it = json_loaders.find( name );
 
-			if( (it == name_to_component.end()) || ( it2 == json_loaders.end() ) )
+			if( ( it == json_loaders.end() ) )
 				continue;
 
-			auto type_name = it->second;
-			auto loader = it2->second;
+			auto type_name = it->second.type_name;
+			auto loader = it->second.loader;
 
             registry.create_component( e, type_name );
 			registry.with_component( e, type_name, [&](void *ptr)
