@@ -1,5 +1,5 @@
 /*
- * mouse_event.cc Copyright 2026 Alwin Leerling dna.leerling@gmail.com
+ * test_platform.cc Copyright 2026 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,14 +17,17 @@
  * MA 02110-1301, USA.
  */
 
-#include "mouse_event.h"
+ // #include <chrono>
 
-void MouseMoveEvent::process( Engine &engine )
-{
+// class ChronoClock : public IClock
+// {
+// public:
+// 	virtual double now() const override
+// 	{
+// 		using clock = std::chrono::steady_clock;
 
-}
+//         return std::chrono::duration<double>( clock::now().time_since_epoch() ).count();
+//     };
+// };
 
-void MouseButtonEvent::process( Engine &engine )
-{
 
-}

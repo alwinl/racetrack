@@ -1,0 +1,33 @@
+@startuml commands
+title Commands - Racetrack Command Class Diagram
+
+class CommandQueue
+{
+	+push( unique_ptr<IEvent>& )
+}
+
+interface ICommand
+{
+	+{abstract} execute( Engine& engine )
+}
+
+class LoadRequest
+{
+	+execute( Engine& engine )
+}
+
+Engine *- CommandQueue
+CommandQueue o-- "0..*" ICommand
+
+ICommand <|-- LoadRequest
+
+LoadRequest --> PointComponent
+LoadRequest --> GeometryComponent
+LoadRequest --> LakeComponent
+LoadRequest --> TrackComponent
+LoadRequest --> TransformComponent
+LoadRequest --> TriangleComponent
+LoadRequest --> VelocityComponent
+
+
+@enduml

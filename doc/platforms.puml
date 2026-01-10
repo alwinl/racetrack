@@ -1,0 +1,32 @@
+@startuml platforms
+title Platforms - Racetrack Platform Class Diagram
+
+interface IPlatform
+{
+	 +{abstract} create_window( InputQueue& ) : bool
+	 +{abstract} destroy_window() : void
+
+	 +{abstract} begin_render() : void
+	 +{abstract} present_frame() : void
+
+	 +{abstract} get_time() : double
+	 +{abstract} poll_events() : void
+	 +{abstract} should_close() : bool
+}
+
+class GLFWPlatform
+{
+	 +create_window( InputQueue& ) : bool
+	 +destroy_window() : void
+
+	 +begin_render() : void
+	 +present_frame() : void
+
+	 +get_time() : double
+	 +poll_events() : void
+	 +should_close() : bool
+}
+
+IPlatform <|-- GLFWPlatform
+
+@enduml

@@ -18,10 +18,12 @@
  */
 
 #include "core/engine.h"
+#include "platforms/glfw_platform.h"
 
 int main( int argc, char** argv )
 {
-    Engine engine;
+	GLFWPlatform platform;
+    Engine engine( platform );
 
     engine.init();
     engine.run();

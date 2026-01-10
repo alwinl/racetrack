@@ -22,6 +22,8 @@ include(GoogleTest)
 add_executable(
     racetrack_tests
 
+	test_platform.cc
+
     gtest_engine.cc
 )
 

@@ -1,5 +1,5 @@
 /*
- * timing.h Copyright 2026 Alwin Leerling dna.leerling@gmail.com
+ * platform.h Copyright 2026 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,14 +19,20 @@
 
 #pragma once
 
-class Timing
+class InputQueue;
+
+class IPlatform
 {
 public:
-	Timing();
+	virtual ~IPlatform() = default;
 
-	double elapsed();
+	virtual bool create_window( InputQueue& ) = 0;
+	virtual void destroy_window() = 0;
 
-private:
-	double time_elapsed;
-	double last_time;
+	virtual void begin_render() = 0;
+	virtual void present_frame() = 0;
+
+	virtual double get_time() = 0;
+	virtual void poll_events() = 0;
+	virtual bool should_close() = 0;
 };

@@ -21,10 +21,10 @@
 
 #include "../core/event.h"
 
-class MouseEvent : public IEvent
+class MouseButtonEvent : public IEvent
 {
 public:
-	MouseEvent( double xpos, double ypos, int button, int action, int mods ) :
+	MouseButtonEvent( double xpos, double ypos, int button, int action, int mods ) :
 		xpos(xpos), ypos(ypos), button(button), action(action), mods(mods) {}
 
 	void process( Engine& engine ) override;
@@ -35,4 +35,17 @@ private:
 	int button;
 	int action;
 	int mods;
+};
+
+class MouseMoveEvent : public IEvent
+{
+public:
+	MouseMoveEvent( double xpos, double ypos ) :
+		xpos(xpos), ypos(ypos) {}
+
+	void process( Engine& engine ) override;
+
+private:
+	double xpos;
+	double ypos;
 };

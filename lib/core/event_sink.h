@@ -1,5 +1,5 @@
 /*
- * mouse_event.cc Copyright 2026 Alwin Leerling dna.leerling@gmail.com
+ * event_sink.h Copyright 2026 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,14 +17,16 @@
  * MA 02110-1301, USA.
  */
 
-#include "mouse_event.h"
+#pragma once
 
-void MouseMoveEvent::process( Engine &engine )
+#include <memory>
+
+class IEvent;
+
+class IEventSink
 {
+public:
+	virtual ~IEventSink() = default;
 
-}
-
-void MouseButtonEvent::process( Engine &engine )
-{
-
-}
+	virtual void push( std::unique_ptr<IEvent> event ) = 0;
+};

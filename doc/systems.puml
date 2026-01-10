@@ -1,0 +1,59 @@
+@startuml systems
+title Systems - Racetrack System Class Diagram
+
+interface ISystem
+{
+    +{abstract} type() : const type_index
+
+    +{abstract} init()
+    +{abstract} input()
+    +{abstract} update( double elapsed )
+    +{abstract} draw()
+    +{abstract} flush()
+    +{abstract} shutdown()
+}
+
+class BaseSystem<T>
+{
+    +type() : const type_index
+
+    +init()
+    +input()
+    +update( double elapsed )
+    +draw()
+    +flush()
+    +shutdown()
+
+
+    Engine * eng
+}
+
+class RenderSystem
+{
+
+}
+
+Engine o- "0..*" ISystem
+ISystem <|-- BaseSystem
+
+BaseSystem <|-- GeometrySystem
+BaseSystem <|-- PhysicsSystem
+BaseSystem <|-- RenderSystem
+BaseSystem <|-- ResourceSystem
+BaseSystem <|-- TrackSystem
+
+RenderSystem --> LakeComponent
+RenderSystem --> PointComponent
+RenderSystem --> TriangleComponent
+RenderSystem --> MeshComponent
+
+TrackSystem --> TrackComponent
+TrackSystem --> MeshComponent
+
+GeometrySystem --> GeometryComponent
+GeometrySystem --> MeshComponent
+
+PhysicsSystem --> TransformComponent
+PhysicsSystem --> VelocityComponent
+
+@enduml

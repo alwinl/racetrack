@@ -1,0 +1,43 @@
+@startuml event.puml
+title Event - Racetrack Event Class Diagram
+
+interface IEvent
+{
+	+{abstract} process( Engine& )
+}
+
+class InputQueue
+{
+	+push( unique_ptr<IEvent>& )
+}
+
+class KeyPressEvent
+{
+	+process( Engine& )
+}
+
+class KeyReleaseEvent
+{
+	+process( Engine& )
+}
+
+class MouseButtonEvent
+{
+	+process( Engine& )
+}
+
+class MouseMoveEvent
+{
+	+process( Engine& )
+}
+
+Engine *- InputQueue
+
+InputQueue o-- "0..*" IEvent
+IEvent <|-- KeyPressEvent
+IEvent <|-- KeyReleaseEvent
+IEvent <|-- MouseButtonEvent
+IEvent <|-- MouseMoveEvent
+
+
+@enduml

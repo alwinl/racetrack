@@ -36,7 +36,6 @@ public:
     RenderSystem( Engine* eng ) : BaseSystem<RenderSystem>( eng ) {};
 
     void init() override;
-    void input() override;
     void shutdown() override;
     void update( double elapsed ) override;
     void draw() override;
@@ -48,8 +47,5 @@ private:
     glm::mat4 mvp;
     std::vector<std::unique_ptr<BaseRenderer>> renderers;
 
-    void begin_frame();
-    void end_frame();
-    bool make_window();
     void make_renderers();
 };

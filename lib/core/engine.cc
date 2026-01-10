@@ -19,6 +19,7 @@
 
 #include "world.h"
 #include "engine.h"
+#include "platform.h"
 
 #include "../systems/render_system.h"
 #include "../systems/resource_system.h"
@@ -32,7 +33,7 @@
 #define XSTR(x) STR(x)
 #define CAT(a,b) a##b
 
-Engine::Engine()
+Engine::Engine( IPlatform& platform ) : platform(platform)
 {
 #define X(Name) systems.push_back( std::make_unique<CAT(Name,System)>( this ) );
 	#include "../systems/systems.def"
@@ -48,27 +49,45 @@ Engine::~Engine()		// needs to be in implementation file for the compiler to kno
 
 void Engine::init()
 {
+	if( ! platform.create_window( input_queue ) )
+		running = false;
+
     for( auto& system : systems )
         system->init();
 }
 
 void Engine::run()
 {
+	double last_time = platform.get_time();
+
     while( running ) {
 
-		double elapsed = timer.elapsed();
+		double now = platform.get_time();
+		double elapsed = now - last_time;
+		last_time = now;
 
         for( auto& system : systems )
             system->input();
 
-		input_queue.process( *this );
-		command_queue.process( *this );
+		platform.poll_events();
+
+		running = !platform.should_close();
+
+		while( auto event = input_queue.pop() )
+			event->process( *this );
+
+		while( auto command = command_queue.pop() )
+			command->execute( *this );
 
         for( auto& system : systems )
             system->update( elapsed );
 
+		platform.begin_render();
+
         for( auto& system : systems )
             system->draw();
+
+		platform.present_frame();
 
 		registry.flush();
     }
@@ -78,5 +97,7 @@ void Engine::shutdown()
 {
     for( auto& system : systems )
         system->shutdown();
+
+	platform.destroy_window();
 }
 

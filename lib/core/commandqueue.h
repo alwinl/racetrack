@@ -30,19 +30,6 @@ public:
 	void push( std::unique_ptr<ICommand> cmd )
 		{ commands.push( std::move(cmd) ); }
 
-	void process( Engine& engine )
-	{
-		auto command = pop();
-
-		while( command ) {
-			command->execute( engine );
-			command = pop();
-		}
-	}
-
-private:
-	std::queue<std::unique_ptr<ICommand>> commands;
-
 	std::unique_ptr<ICommand> pop()
 	{
 		if( commands.empty() )
@@ -50,6 +37,10 @@ private:
 
 		auto cmd = std::move(commands.front());
 		commands.pop();
+
 		return cmd;
 	}
+
+private:
+	std::queue<std::unique_ptr<ICommand>> commands;
 };

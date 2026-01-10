@@ -22,7 +22,6 @@
 #include <memory>
 #include <vector>
 
-#include "timing.h"
 #include "commandqueue.h"
 #include "inputqueue.h"
 #include "registry.h"
@@ -30,12 +29,13 @@
 
 class ISystem;
 class IEvent;
+class IPlatform;
 
 
 class Engine
 {
 public:
-    Engine();
+    Engine( IPlatform& platform );
 	~Engine();
 
     void init();
@@ -47,15 +47,14 @@ public:
 	World& get_world() { return world; }
 	Registry& get_registry() { return registry; }
 
-	void push_event( std::unique_ptr<IEvent> event ) { input_queue.push( std::move(event) ); }
 	void push_command( std::unique_ptr<ICommand> cmd ) { command_queue.push( std::move(cmd) ); }
 
 private:
     bool running = true;
+	IPlatform & platform;
     World world;
 	Registry registry {world};
     std::vector<std::unique_ptr<ISystem>> systems;
-	Timing timer;
 	CommandQueue command_queue;
 	InputQueue input_queue;
 };

@@ -25,7 +25,8 @@ add_library(
     core/engine.cc
     core/world.cc
     core/registry.cc
-	core/timing.cc
+
+	platforms/glfw_platform.cc
 
     systems/render_system.cc
     systems/resource_system.cc

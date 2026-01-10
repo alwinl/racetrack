@@ -30,19 +30,6 @@ public:
 	void push( std::unique_ptr<IEvent> event )
 		{ events.push( std::move(event) ); }
 
-	void process( Engine& engine )
-	{
-		auto event = pop();
-
-		while( event ) {
-			event->process( engine );
-			event = pop();
-		}
-	}
-
-private:
-	std::queue<std::unique_ptr<IEvent>> events;
-
 	std::unique_ptr<IEvent> pop()
 	{
 		if( events.empty() )
@@ -50,6 +37,10 @@ private:
 
 		auto event = std::move(events.front());
 		events.pop();
+
 		return event;
 	}
+
+private:
+	std::queue<std::unique_ptr<IEvent>> events;
 };

@@ -1,5 +1,5 @@
 /*
- * timing.cc Copyright 2026 Alwin Leerling dna.leerling@gmail.com
+ * glfw_platform.h Copyright 2026 Alwin Leerling dna.leerling@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,21 +17,31 @@
  * MA 02110-1301, USA.
  */
 
-#include "timing.h"
+#pragma once
 
-#include <glad/gl.h>
-#include <GLFW/glfw3.h>
+#include "../core/platform.h"
 
-Timing::Timing() : last_time( glfwGetTime() )
-{ }
+struct GLFWwindow;
+class InputQueue;
 
-double Timing::elapsed()
+class GLFWPlatform : public IPlatform
 {
-	double now = glfwGetTime();
+	bool create_window( InputQueue& sink ) override;
+	void destroy_window() override;
 
-	time_elapsed = now - last_time;
+	void begin_render() override;
+	void present_frame() override;
 
-	last_time = now;
+	double get_time() override;
+	void poll_events() override;
+	bool should_close() override;
 
-	return time_elapsed;
-}
+private:
+    GLFWwindow* window = nullptr;
+	InputQueue * event_sink = nullptr;
+
+	void handle_key( int key, int scancode, int action, int mods );
+	void handle_mouse_move( double xpos, double ypos );
+	void handle_mouse_button( int button, int action, int mods );
+};
+
